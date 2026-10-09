@@ -6,17 +6,35 @@ const browser=await chromium.launch({channel:'msedge',headless:true,args:['--ena
 const context=await browser.newContext({viewport:{width:1600,height:1000}}),page=await context.newPage(),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 const report={checkedAt:new Date().toISOString(),browser:'Microsoft Edge, headless, clean ephemeral profile',screenshotsTaken:0};
+async function settledNavigation(peers){
+  const started=Date.now();let previous,quietSince=0;
+  while(Date.now()-started<30000){
+    const host=await page.evaluate(()=>({epoch:ReviewApp.viewer.epoch,revision:ReviewApp.viewer.revision,view:ReviewApp.viewer.getView()}));
+    const states=await Promise.all(peers.map(peer=>peer.evaluate(()=>({epoch:DendriticBridge.epoch,revision:DendriticBridge.revision,position:viewer.state.toJSON().position,crossSectionScale:viewer.state.toJSON().crossSectionScale}))));
+    const key=JSON.stringify([host,states]),acknowledged=states.every(state=>state.epoch===host.epoch&&state.revision===host.revision);
+    if(key!==previous||!acknowledged){previous=key;quietSince=Date.now();}
+    // Native input is debounced by110ms; two peers may normalize Float32 cameras
+    // after receiving the host snapshot. Require their acknowledgments and a
+    // quiet interval, rather than treating the prepared EM plane as peer ready.
+    if(acknowledged&&Date.now()-quietSince>=750)return {revision:host.revision,quietMs:Date.now()-quietSince,elapsedMs:Date.now()-started,peers:states.length};
+    await new Promise(resolve=>setTimeout(resolve,100));
+  }
+  throw new Error('Native peers did not acknowledge and settle navigation before evidence capture');
+}
 try {
   await page.goto(process.env.REVIEW_URL||'http://127.0.0.1:8874/');
   await page.waitForFunction(()=>window.ReviewApp?.viewer.plane?.complete,{timeout:120000});
   report.initial=await page.evaluate(()=>({taskId:ReviewApp.current.id,complete:ReviewApp.viewer.plane.complete,width:ReviewApp.viewer.plane.width,height:ReviewApp.viewer.plane.height,firstUsefulMs:ReviewApp.viewer.plane.firstUsefulMs,elapsedMs:ReviewApp.viewer.plane.elapsedMs,networkBytes:ReviewApp.viewer.source.networkBytes}));
   console.log('Native plane complete',report.initial);
   await page.evaluate(()=>{window.syncTraffic=[];const c=new BroadcastChannel('dendritic-arbor-v2:'+ReviewApp.viewer.session);c.onmessage=({data:m})=>{window.syncTraffic.push({time:performance.now(),peer:m.peer,type:m.type,revision:m.revision,hostRevision:m.hostRevision,position:m.state?.position,scale:m.state?.crossSectionScale});if(window.syncTraffic.length>150)window.syncTraffic.shift();};ReviewApp.viewer.ensureNative();});
+  await page.evaluate(()=>location.hash='neuroglancer');
   await page.waitForFunction(()=>document.querySelector('#ngFrame').contentWindow?.DendriticBridge,undefined,{timeout:60000});
   const frame=page.frames().find(f=>f.url().includes('/vendor/neuroglancer/'));
   await frame.waitForFunction(()=>window.DendriticBridge,{timeout:60000});
   report.position=await frame.evaluate(()=>viewer.state.toJSON().position);assert.deepEqual(report.position,[94120,80824,21466]);
+  await frame.waitForFunction(()=>{const layer=viewer.layerManager.managedLayers.find(layer=>layer.name==='seg_m1300')?.layer;if(!layer)return false;const value=layer.getValueAt(viewer.position.value,{pickedRenderLayer:null});return typeof value==='bigint'&&value!==0n;},undefined,{timeout:60000});
   report.nativePick=await frame.evaluate(()=>{const l=viewer.layerManager.managedLayers.find(l=>l.name==='seg_m1300').layer;const v=l.getValueAt(viewer.position.value,{pickedRenderLayer:null});return {value:String(v),type:typeof v};});
+  assert.equal(report.nativePick.type,'bigint');assert.notEqual(report.nativePick.value,'0');
   console.log('Actual native spatial sample',report.nativePick);
   if(report.nativePick.type==='bigint'&&report.nativePick.value!=='0'){
     await frame.evaluate(id=>viewer.layerManager.managedLayers.find(l=>l.name==='seg_m1300').layer.displayState.segmentationGroupState.value.restoreState({segments:[id]}),report.nativePick.value);
@@ -40,6 +58,7 @@ try {
   report.nativeArrowCharacters=await detached.evaluate(()=>[...new Set(document.body.innerText.match(/[\u2190-\u21ff\u27f0-\u27ff\u2900-\u297f]/g)||[])]);assert.deepEqual(report.nativeArrowCharacters,[]);
   await page.evaluate(async()=>{await ReviewApp.viewer.setView({...ReviewApp.viewer.getView(),plane:'xz',spanNm:1024});});
   await page.waitForFunction(()=>ReviewApp.viewer.plane?.complete&&ReviewApp.viewer.plane.plane==='xz',{timeout:90000});
+  report.preExportSynchronization=await settledNavigation([frame,detached]);
   report.export=await page.evaluate(async()=>{
     const out=await ReviewApp.viewer.exportPlane(),native=out.files.find(f=>f.name==='raw-native.png'),image=await createImageBitmap(native.blob),canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);const data=ctx.getImageData(0,0,image.width,image.height).data;let mismatch=0;for(let i=0;i<ReviewApp.viewer.plane.pixels.length;i++)if(data[i*4]!==ReviewApp.viewer.plane.pixels[i])mismatch++;return{files:out.files.map(f=>({name:f.name,bytes:f.blob.size})),plane:out.metadata.plane,annotated:out.metadata.annotated,scaleBar:out.metadata.scaleBar,losslessPixelMismatches:mismatch};
   });

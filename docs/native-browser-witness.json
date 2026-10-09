@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-09T13:01:50.124Z",
+  "checkedAt": "2026-10-09T13:55:21.636Z",
   "browser": "Microsoft Edge, headless, clean ephemeral profile",
   "screenshotsTaken": 0,
   "initial": {
@@ -7,8 +7,8 @@
     "complete": true,
     "width": 512,
     "height": 512,
-    "firstUsefulMs": 94.09999999403954,
-    "elapsedMs": 94.09999999403954,
+    "firstUsefulMs": 90,
+    "elapsedMs": 90,
     "networkBytes": 0
   },
   "position": [
@@ -17,11 +17,50 @@
     21466
   ],
   "nativePick": {
-    "value": "undefined",
-    "type": "undefined"
+    "value": "864691136389585015",
+    "type": "bigint",
+    "persistedCandidate": [
+      {
+        "id": "864691136389585015",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "positionVoxel": [
+            94120,
+            80824,
+            21466
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+          "recipientId": "MC298937"
+        },
+        "label": "864691136389585015",
+        "note": ""
+      }
+    ]
   },
   "warmedNextSlice": {
-    "elapsedMs": 15.099999994039536,
+    "elapsedMs": 11.900000005960464,
     "networkBytes": 0
   },
   "hostToDetached": true,
@@ -30,6 +69,12 @@
   "pendingNativeZoomSurvivesAcknowledgment": true,
   "detachedCtrlS": true,
   "nativeArrowCharacters": [],
+  "preExportSynchronization": {
+    "revision": 15,
+    "quietMs": 774,
+    "elapsedMs": 779,
+    "peers": 2
+  },
   "export": {
     "files": [
       {
@@ -46,7 +91,7 @@
       },
       {
         "name": "figure-metadata.json",
-        "bytes": 8731
+        "bytes": 8994
       }
     ],
     "plane": {
@@ -106,11 +151,11 @@
     "files": [
       {
         "name": "navigation-neuroglancer.png",
-        "bytes": 113190
+        "bytes": 882182
       },
       {
         "name": "navigation-metadata.json",
-        "bytes": 5865
+        "bytes": 5894
       }
     ],
     "dimensions": [

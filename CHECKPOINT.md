@@ -1,6 +1,6 @@
 # Checkpoint — 2026-10-09
 
-Status: CUTOUT CAMERA, 50% OPACITY AND DURABLE ASSET CACHE IMPLEMENTED; PUBLIC DEPLOYMENT VERIFICATION PENDING. The previous public code commit is `9d995624a48171dfc596794d71ab99a4bc2523de`. The current correction passes 73 Node tests, 16 review/exchange checks, 11 camera/rendering checks and six durable-cache browser checks. See `docs/cutout-and-cache.md`, `docs/cutout-camera-browser-witness.json` and `docs/cache-revisit-witness.json`.
+Status: CUTOUT CAMERA, 50% OPACITY AND DURABLE ASSET CACHE LIVE AND VERIFIED. Code commit `76cba0729ecdc915120a52bdaf651b459b2bd879` deployed successfully through [run 37939970809](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37939970809). All 31 anonymous asset checks returned HTTP 200 and exact checkout bytes. The six live cache workflows passed, including browser restart with all source downloads blocked and HTTP caching disabled: zero source requests/bytes after warming. Local validation passes 73 Node tests, 16 review/exchange checks, 11 camera/rendering checks, six durable-cache checks and the full native integration suite. See `docs/cutout-and-cache.md` and `docs/live-cache-revisit-witness.json`.
 
 Source: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review (main). Live public website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. Previous version is preserved by tag `before-original-interface-restoration`. Existing browser IndexedDB namespace, schemas, task IDs and ZIP/JSON formats are unchanged. Originals, original website/deployment, collection archive and scientific judgments remain untouched.
 
@@ -26,4 +26,4 @@ Prepared EM assets total 669,479,702 bytes; the complete static build is about 6
 
 Public performance: the first complete plane appeared in 3,468.4 ms and automatic branches in 3,445.7 ms. The source-plane operation took 682.2 ms, using a 151,694-byte starter. All 64 section moves had exact independently checked pixels and no BossDB/GCS requests or hidden Neuroglancer; median latency was about 17.5 ms, maximum 749.7 ms while a pack completed. The sixth move took 184.7 ms; negative-direction moves peaked at 23.9 ms. The first anchor's prepared offsets are −42 through +37. These public measurements are distinct from the local witness above and are not latency guarantees.
 
-The preceding first-load correction is deployed. The latest camera/cache correction is locally verified and pending its public deployment check.
+Implementation and public verification are complete for the camera/cache follow-up. New source regions and browser-evicted assets still require downloads; reviewer work remains separate.
