@@ -15,7 +15,7 @@ export function nmToNg(nm) { return nm.map((n, i) => n / RESOLUTION_NM[i]); }
 export function ngToNm(voxel) { return voxel.map((n, i) => n * RESOLUTION_NM[i]); }
 export function normalizeView(view = {}, fallback = [752960, 646592, 858640]) {
   return {...view, centerNm: validPoint(view.centerNm) ? [...view.centerNm] : [...fallback],
-    plane: PLANES[view.plane] ? view.plane : 'xy', spanNm: Math.min(8192, Math.max(512, Number(view.spanNm) || 4096)),
+    plane: PLANES[view.plane] ? view.plane : 'xy', spanNm: Math.min(12288, Math.max(512, Number(view.spanNm) || 4096)),
     resolutionNm: [...RESOLUTION_NM],nativeOblique:!!view.nativeOblique};
 }
 export function planePlan(view, scale) {

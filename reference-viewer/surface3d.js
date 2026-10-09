@@ -1,6 +1,7 @@
 /* Russian online adaptation of the supplied MICrONS mesh viewer. */
 (() => {
   'use strict';
+  const MAX_ZOOM=18;
   const $ = id => document.getElementById(id);
   const vec = {
     add:(a,b)=>a.map((n,i)=>n+b[i]), sub:(a,b)=>a.map((n,i)=>n-b[i]),
@@ -445,8 +446,8 @@
       if(!this.volume||!camera||typeof camera!=='object')throw new Error('Нет объёма для синхронизации 3D-вида.');
       const current=this.getNavigationState(),next={...current,...camera};
       const basis=camera.right||camera.up||camera.eye_direction||camera.eyeDirection||camera.direction?cameraBasis(camera):null;
-      if(camera.physical_height_nm!==undefined){if(!Number.isFinite(camera.physical_height_nm)||camera.physical_height_nm<=0)throw new Error('Неверный физический масштаб 3D-вида.');next.zoom=camera.physical_height_nm/next.frame_height_nm;if(next.zoom<.08||next.zoom>12){next.frame_height_nm=camera.physical_height_nm;next.zoom=1;}}
-      if(!finite3(next.center_nm)||!['yaw','pitch','zoom','frame_height_nm','radius_nm'].every(k=>Number.isFinite(next[k]))||Math.abs(next.pitch)>1.48||next.zoom<.08||next.zoom>12||next.frame_height_nm<=0||next.radius_nm<=0)throw new Error('Неверные координаты синхронизированного 3D-вида.');
+      if(camera.physical_height_nm!==undefined){if(!Number.isFinite(camera.physical_height_nm)||camera.physical_height_nm<=0)throw new Error('Неверный физический масштаб 3D-вида.');next.zoom=camera.physical_height_nm/next.frame_height_nm;if(next.zoom<.08||next.zoom>MAX_ZOOM){next.frame_height_nm=camera.physical_height_nm;next.zoom=1;}}
+      if(!finite3(next.center_nm)||!['yaw','pitch','zoom','frame_height_nm','radius_nm'].every(k=>Number.isFinite(next[k]))||Math.abs(next.pitch)>1.48||next.zoom<.08||next.zoom>MAX_ZOOM||next.frame_height_nm<=0||next.radius_nm<=0)throw new Error('Неверные координаты синхронизированного 3D-вида.');
       this.yaw=next.yaw;this.pitch=next.pitch;this.zoom=next.zoom;this.center=[...next.center_nm];this.frameHeight=next.frame_height_nm;this.radius=next.radius_nm;if(basis)this.cameraBasis=basis;else if(camera.yaw!==undefined||camera.pitch!==undefined)this.cameraBasis=null;this.navigationChanged('remote',emit);this.schedule();return this.getNavigationState();
     }
     bind() {
@@ -468,8 +469,8 @@
         else{this.yaw-=dx*.007;this.pitch=Math.max(-1.48,Math.min(1.48,this.pitch+dy*.007));}this.navigationChanged(drag.pan?'pan':'rotate');this.schedule();});
       this.stage.addEventListener('pointerup',e=>{if(!drag||drag.pointerId!==e.pointerId)return;const click=!drag.moved&&!drag.pan&&drag.button===0;drag=null;if(this.stage.hasPointerCapture(e.pointerId))this.stage.releasePointerCapture(e.pointerId);if(click)this.annotationClick(e);});
       for(const event of ['pointercancel','lostpointercapture'])this.stage.addEventListener(event,()=>{drag=null;});
-      this.stage.addEventListener('wheel',e=>{if(!this.volume||!this.gl)return;e.preventDefault();this.zoom=Math.max(.08,Math.min(12,this.zoom*Math.exp(Math.max(-150,Math.min(150,e.deltaY))*.002)));this.navigationChanged('zoom');this.schedule();},{passive:false});
-      this.stage.addEventListener('keydown',e=>{if(!this.volume||!this.gl)return;if(e.key==='r'||e.key==='R'){e.preventDefault();e.stopPropagation();this.reset();}if(e.key==='+'||e.key==='='||e.key==='-'){e.preventDefault();e.stopPropagation();this.zoom=Math.max(.08,Math.min(12,this.zoom*(e.key==='-'?1.15:1/1.15)));this.navigationChanged('zoom');this.schedule();}});
+      this.stage.addEventListener('wheel',e=>{if(!this.volume||!this.gl)return;e.preventDefault();this.zoom=Math.max(.08,Math.min(MAX_ZOOM,this.zoom*Math.exp(Math.max(-150,Math.min(150,e.deltaY))*.002)));this.navigationChanged('zoom');this.schedule();},{passive:false});
+      this.stage.addEventListener('keydown',e=>{if(!this.volume||!this.gl)return;if(e.key==='r'||e.key==='R'){e.preventDefault();e.stopPropagation();this.reset();}if(e.key==='+'||e.key==='='||e.key==='-'){e.preventDefault();e.stopPropagation();this.zoom=Math.max(.08,Math.min(MAX_ZOOM,this.zoom*(e.key==='-'?1.15:1/1.15)));this.navigationChanged('zoom');this.schedule();}});
     }
     resize() {
       const ratio=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,this.stage.clientWidth),h=Math.max(1,this.stage.clientHeight);
@@ -536,7 +537,7 @@
     }
     async restoreEvidence(view) {
       const cam=view?.camera;
-      if(view?.schema_version!==1||view.source_view!=='3d'||view.source!=='seg_m1300'||!cam||!finite3(cam.center_nm)||!['yaw','pitch','zoom','frame_height_nm','radius_nm'].every(k=>Number.isFinite(cam[k]))||Math.abs(cam.pitch)>1.48||cam.zoom<.08||cam.zoom>12||cam.frame_height_nm<=0||cam.radius_nm<=0||!Number.isFinite(view.opacity)||view.opacity<0||view.opacity>1||!['plane_visible','box_visible','context_visible','annotations_visible','seed_points_visible'].every(k=>typeof view[k]==='boolean')||!Array.isArray(view.objects)||view.objects.length>10000||view.objects.some(o=>!o||typeof o.object_id!=='string'||typeof o.visible!=='boolean'||!(o.segment_id===null||typeof o.segment_id==='string')))throw new Error('Сохранённые настройки 3D-вида повреждены.');
+      if(view?.schema_version!==1||view.source_view!=='3d'||view.source!=='seg_m1300'||!cam||!finite3(cam.center_nm)||!['yaw','pitch','zoom','frame_height_nm','radius_nm'].every(k=>Number.isFinite(cam[k]))||Math.abs(cam.pitch)>1.48||cam.zoom<.08||cam.zoom>MAX_ZOOM||cam.frame_height_nm<=0||cam.radius_nm<=0||!Number.isFinite(view.opacity)||view.opacity<0||view.opacity>1||!['plane_visible','box_visible','context_visible','annotations_visible','seed_points_visible'].every(k=>typeof view[k]==='boolean')||!Array.isArray(view.objects)||view.objects.length>10000||view.objects.some(o=>!o||typeof o.object_id!=='string'||typeof o.visible!=='boolean'||!(o.segment_id===null||typeof o.segment_id==='string')))throw new Error('Сохранённые настройки 3D-вида повреждены.');
       if(!this.volume||view.case_id!==this.caseId||view.volume_id!==this.volume.volume_id)throw new Error('Сначала откройте объём, указанный в сохранённом 3D-виде.');
       if(!this.gl)throw new Error('В этом браузере 3D-восстановление недоступно. Сохранённый PNG можно открыть отдельно.');
       if(view.context_mode!==undefined&&!['slice','full'].includes(view.context_mode)||['context_opacity','segmentation_opacity'].some(k=>view[k]!==undefined&&(!Number.isFinite(view[k])||view[k]<0||view[k]>1))||view.segmentation_visible!==undefined&&typeof view.segmentation_visible!=='boolean')throw new Error('Сохранённые настройки слоёв 3D-вида повреждены.');
