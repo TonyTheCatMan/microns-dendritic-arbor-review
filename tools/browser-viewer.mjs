@@ -21,7 +21,7 @@ try {
     await page.waitForFunction(id=>ReviewApp.viewer.getSegments().some(s=>s.id===id&&s.identityStatus==='candidate'),report.nativePick.value,{timeout:15000});
     report.nativePick.persistedCandidate=await page.evaluate(async()=>{await ReviewApp.saveAll();return (await ReviewApp.store.load(ReviewApp.current.id)).segments;});
   }
-  const popupEvent=context.waitForEvent('page');await page.locator('#detach').click();const detached=await popupEvent;
+  await page.evaluate(()=>location.hash='neuroglancer');const popupEvent=context.waitForEvent('page');await page.locator('#detach').click();const detached=await popupEvent;
   await detached.waitForFunction(()=>window.DendriticBridge,{timeout:60000});
   report.warmedNextSlice=await page.evaluate(async()=>{const before=ReviewApp.viewer.source.networkBytes,v=ReviewApp.viewer.getView();v.centerNm[2]+=40;await ReviewApp.viewer.setView(v);return {elapsedMs:ReviewApp.viewer.plane.elapsedMs,networkBytes:ReviewApp.viewer.source.networkBytes-before};});
   await detached.waitForFunction(()=>viewer.state.toJSON().position[2]===21467,{timeout:20000});report.hostToDetached=true;

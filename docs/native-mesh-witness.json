@@ -1,0 +1,485 @@
+{
+  "checkedAt": "2026-10-09T12:07:58.198Z",
+  "screenshotsTaken": 0,
+  "before": {
+    "segments": [],
+    "position": [
+      94120,
+      80824,
+      21466
+    ]
+  },
+  "picked": {
+    "id": "864691136389585015",
+    "source": "seg_m1300",
+    "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+    "identityStatus": "candidate",
+    "visible": true,
+    "color": "#66d9b4",
+    "sourceBinding": {
+      "coordinateConvention": "integer-sample",
+      "selectionMethod": "native-spatial-pick",
+      "positionNm": [
+        752960,
+        646592,
+        858640
+      ],
+      "positionVoxel": [
+        94120,
+        80824,
+        21466
+      ],
+      "coordinateResolutionNm": [
+        8,
+        8,
+        40
+      ],
+      "loadedVoxelSizeNm": [
+        7.999999773744548,
+        7.999999773744548,
+        39.99999975690116
+      ],
+      "identityConfirmed": false
+    }
+  },
+  "geometry": {
+    "vertexCount": 44106,
+    "triangleCount": 77559,
+    "boundsNm": [
+      [
+        583488.9023575189,
+        355455.4228427558,
+        720000.9851224537
+      ],
+      [
+        860415.1279163805,
+        845440.8994277867,
+        992400.1416037232
+      ]
+    ],
+    "provenance": {
+      "source": "seg_m1300",
+      "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+      "segmentId": "864691136389585015",
+      "identityStatus": "candidate",
+      "representation": "native-selected-multiresolution-mesh-subchunks",
+      "partial": true,
+      "readyForView": true,
+      "fragments": [
+        {
+          "key": "864691136389585015/3:1145",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 327,
+          "triangleCount": 109
+        },
+        {
+          "key": "864691136389585015/3:1146",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 2730,
+          "triangleCount": 910
+        },
+        {
+          "key": "864691136389585015/3:1147",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 303,
+          "triangleCount": 101
+        },
+        {
+          "key": "864691136389585015/3:1148",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 12720,
+          "triangleCount": 4240
+        },
+        {
+          "key": "864691136389585015/3:1149",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 3240,
+          "triangleCount": 1080
+        },
+        {
+          "key": "864691136389585015/3:1150",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 6093,
+          "triangleCount": 2031
+        },
+        {
+          "key": "864691136389585015/3:1151",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 3651,
+          "triangleCount": 1217
+        },
+        {
+          "key": "864691136389585015/3:1152",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 47403,
+          "triangleCount": 15801
+        },
+        {
+          "key": "864691136389585015/3:1153",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 1140,
+          "triangleCount": 380
+        },
+        {
+          "key": "864691136389585015/3:1154",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 4206,
+          "triangleCount": 1402
+        },
+        {
+          "key": "864691136389585015/3:1155",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 4548,
+          "triangleCount": 1516
+        },
+        {
+          "key": "864691136389585015/3:1156",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 8019,
+          "triangleCount": 2673
+        },
+        {
+          "key": "864691136389585015/3:1157",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 129,
+          "triangleCount": 43
+        },
+        {
+          "key": "864691136389585015/3:1158",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 13416,
+          "triangleCount": 4472
+        },
+        {
+          "key": "864691136389585015/3:1159",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 1497,
+          "triangleCount": 499
+        },
+        {
+          "key": "864691136389585015/3:1160",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 3084,
+          "triangleCount": 1028
+        },
+        {
+          "key": "864691136389585015/3:1161",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 86652,
+          "triangleCount": 28884
+        },
+        {
+          "key": "864691136389585015/3:1162",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 954,
+          "triangleCount": 318
+        },
+        {
+          "key": "864691136389585015/3:1163",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 17496,
+          "triangleCount": 5832
+        },
+        {
+          "key": "864691136389585015/3:1164",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 756,
+          "triangleCount": 252
+        },
+        {
+          "key": "864691136389585015/3:1165",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 7983,
+          "triangleCount": 2661
+        },
+        {
+          "key": "864691136389585015/3:1166",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 3594,
+          "triangleCount": 1198
+        },
+        {
+          "key": "864691136389585015/3:1167",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 336,
+          "triangleCount": 112
+        },
+        {
+          "key": "864691136389585015/3:1168",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 1431,
+          "triangleCount": 477
+        },
+        {
+          "key": "864691136389585015/3:1169",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 924,
+          "triangleCount": 308
+        },
+        {
+          "key": "864691136389585015/3:1170",
+          "lod": 3,
+          "indexStart": 0,
+          "indexEnd": 45,
+          "triangleCount": 15
+        }
+      ],
+      "drawCount": 35,
+      "transformNm": [
+        16,
+        0,
+        0,
+        0,
+        0,
+        16,
+        0,
+        0,
+        0,
+        0,
+        40,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "manifestBoundsNm": [
+      [
+        573440,
+        344064,
+        716800
+      ],
+      [
+        868352,
+        851968,
+        1003520
+      ]
+    ],
+    "position": [
+      94120,
+      80824,
+      21466
+    ],
+    "projectionScale": 104623.25597609741,
+    "finiteVertices": true,
+    "validTriangleIndices": true
+  },
+  "meshRequests": [
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/info",
+      "status": 200
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    },
+    {
+      "url": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300/mesh/11c0.shard",
+      "status": 206
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

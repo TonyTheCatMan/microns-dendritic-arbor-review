@@ -1,3 +1,17 @@
+# Current correction verification — 2026-10-09
+
+The original interface/surface-renderer restoration passes **53 Node tests**, **16 browser review/exchange checks**, **6 real IndexedDB checks**, **4 extended import/coverage checks**, and **6 restored-interface/real-mesh checks**. Separate native tests verify source spatial sampling, actual sharded mesh draws, both-way detached navigation, all three physical EM planes, and lossless native PNG bytes (zero pixel differences). Test data exist only in ignored .local files and temporary browser profiles.
+
+Actual main-view mesh: public candidate 864691136389585015, 44,106 vertices and 77,559 triangles in 26 source fragments; the EM center stayed unchanged during mesh framing. Sample resolution is recorded separately from the 8/8/40 nm coordinate grid. Candidate identity is not confirmed anatomy. Source geometry uses exact mesh transforms, and the copied renderer's TIFF-specific half-voxel plane/picking assumption is replaced by the actual integer-sampled plane rectangle.
+
+Four adjacent full-resolution browser plane changes required zero new source bytes, taking roughly 8–17 ms including browser callbacks in the integrated check. RawSource-only real cached reslices took 1.67–2.04 ms. New uncached regions still require network retrieval. Stale displayed planes are labeled and cannot be exported or annotated as the requested new position. Native meshes remain multiresolution navigation geometry, with available fragments explicitly identified.
+
+Three fresh single-image workers independently inspected the original page, restored page, and completed 3D scene. The coordinator saw no images. Text findings confirmed the original page/control structure and a fully framed branching 3D object; surface opacity was then raised to improve contrast. Screenshots are excluded from source/build.
+
+**Hosting is not complete:** source is private; GitHub Pages setup rejects this account plan (HTTP 422). Anonymous source and requested website both return 404 after propagation. Application build succeeds. No alternative host or visibility workaround has been used. See public-hosting.md and CHECKPOINT.md.
+
+## Earlier implementation verification (historical)
+
 # Technical verification — 2026-10-09
 
 This is software and source-binding verification. No human anatomical review was performed and no default task is marked reviewed.

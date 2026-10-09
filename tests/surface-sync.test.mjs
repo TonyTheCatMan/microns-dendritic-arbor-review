@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {cameraQuaternion,nativeCamera} from '../viewer/surface-sync.js';
+test('copied camera conversion retains the original front-facing frame',()=>{const q=cameraQuaternion({right:[1,0,0],up:[0,-1,0],eye_direction:[0,0,-1]});q.forEach((v,i)=>assert.ok(Math.abs(v-(i===3?1:0))<1e-12));assert.equal(cameraQuaternion({right:[0,0,0],up:[0,1,0],eye_direction:[0,0,1]}),null);});
+test('native camera uses physical anisotropy and integer origin without a half voxel',()=>{const panel={visible:true,projectionParameters:{value:{invViewMatrix:[1,0,0,0,0,-1,0,0,0,0,-.2,0,0,0,0,1],projectionMat:[1,0,0,0,0,.002,0,0,0,0,1,0,0,0,0,1]}}};const host={viewer:{display:{panels:[panel]},position:{value:[94120,80824,21466]}}};const c=nativeCamera(host,[752000,646000,858000]);assert.deepEqual(c.center_nm,[960,592,640]);assert.equal(c.physical_height_nm,8000);assert.deepEqual(c.right,[1,0,0]);assert.deepEqual(c.up,[0,-1,0]);assert.deepEqual(c.eye_direction,[0,0,-1]);});

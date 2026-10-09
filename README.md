@@ -5,18 +5,18 @@ A browser-based anatomy review workspace for the Interneuron Dendritic Input Org
 ## Open
 
 - Private repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
-- Private online preview: https://microns-dendritic-arbor-review.anthtony.chatgpt.site (owner access).
+- Requested public hosting: GitHub Pages backed by this private repository. GitHub currently rejects setup with HTTP 422: “Your current plan does not support GitHub Pages for this repository.” The public URL is not live. See `docs/public-hosting.md`. The older GPT-hosted preview is not the current version or the requested final host.
 - Local preview: run `npm start`, then open http://127.0.0.1:8874. Node.js is needed only for this development server; a deployed static copy runs entirely in the browser.
 - Build a static hosting directory: `npm run build`. Serve `dist/` through HTTPS or localhost. Keep the bundled `vendor/neuroglancer/` directory intact. No server-side application or database is required.
 - Direct task links use `?task=MC264649.boundary_origin3944`.
 
-The exact deployed code commit, successful deployment receipt and final verification details are recorded in `CHECKPOINT.md` and `docs/VERIFICATION.md`. Private hosting requires the owner's authorized access; exports can be imported into another copy of this same application.
+Current implementation, tests and the hosting limitation are recorded in `CHECKPOINT.md` and `docs/VERIFICATION.md`. Source remains private; review exports can be imported into another copy of this application.
 
 ## Review
 
 Choose a task. Native EM and Neuroglancer open at the source coordinate anchor. The source-anchor dropdown includes available soma, origin, cut and child anchors. Use XY/XZ/YZ, section buttons, Shift with the mouse wheel for sections, plain wheel or plus/minus for zoom, and drag for panning.
 
-Double-click a segmentation structure in Neuroglancer to select the existing v1300 object. Selections retain the public source/version, exact string ID, visibility, color and individual note. A spatial selection remains an **unconfirmed identity candidate**, never an automatic release661 mapping or arbor partition. The 3D pane has no selected mesh until a structure is selected.
+Use **Show structure in 3D** above the right-hand pane to sample the center of the current section and load its real public mesh. The selected whole structure is framed automatically. Drag rotates; Shift-drag pans; the wheel zooms. The original surface renderer, layout, style sheets, control arrangement and separate Neuroglancer tab are retained. You can also double-click a segmentation structure in Neuroglancer to select the existing v1300 object. Selections retain the public source/version, exact string ID, visibility, color and individual note. A spatial selection remains an **unconfirmed identity candidate**, never an automatic release661 mapping or arbor partition. The empty state explains how to select a mesh. Meshes use the actual visible multiresolution fragments; they are navigation surfaces, not native EM evidence. The spatial pick retains the segmentation sampling resolution separately from its coordinate grid.
 
 Create points, open traces, rectangular regions and distances. Each item has its own name, note, visibility and stable ID. Edit vertices numerically; delete, undo and redo are available. Traces never close automatically or interpolate between sections. An unfinished mark autosaves explicitly as a draft.
 
@@ -50,4 +50,4 @@ Technical validation and export never certify membrane identity, anatomy or the 
 
 See `docs/SOURCE_ADAPTER.md`, `docs/EXCHANGE.md` and `docs/VIEWER.md`. The original malformed decision schema is preserved; the versioned adapter leaves reviewer identity and qualifications null.
 
-This application is new work in `researcher_review_website_v2`. The working co-innervation website supplied the retained Neuroglancer build and workflow reference. Abandoned applications and original scientific sources were not modified. Third-party notices are retained in `vendor/neuroglancer/NOTICE.txt`; the exact copied bundle files are documented in its vendor manifest.
+This application is in `researcher_review_website_v2`. The working co-innervation website supplied the directly copied interface styles, original WebGL surface renderer, intensity-window code, camera synchronization formulas and retained Neuroglancer build. `viewer/LegacySurface.js` adapts real public meshes and integer-sampled planes to that renderer; old cases and storage were not transplanted. Abandoned applications and original scientific sources were not modified. Third-party notices are retained in `vendor/neuroglancer/NOTICE.txt`; the exact copied bundle files are documented in its vendor manifest.

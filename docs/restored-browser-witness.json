@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-10-09T12:07:09.010Z",
+  "checks": [
+    "Original surface renderer displays actual source mesh after the visible Show 3D action",
+    "Four neighboring sections reuse source chunks without downloads",
+    "Original brightness window changes only display, with no plane load or raw intensity change",
+    "Main 3D rotation/zoom retains EM chunks and saves the camera",
+    "Reload restores selection and physical 3D camera",
+    "Original navigation tabs and bilingual new controls work"
+  ],
+  "mesh": {
+    "id": "864691136389585015",
+    "triangles": 77559,
+    "surfaceBounds": [
+      276944,
+      490016,
+      272520
+    ],
+    "originNm": [
+      583480,
+      355440,
+      719960
+    ],
+    "pointGrid": {
+      "coordinateConvention": "integer-sample",
+      "selectionMethod": "native-spatial-pick",
+      "positionNm": [
+        752960,
+        646592,
+        858640
+      ],
+      "positionVoxel": [
+        94120,
+        80824,
+        21466
+      ],
+      "coordinateResolutionNm": [
+        8,
+        8,
+        40
+      ],
+      "loadedVoxelSizeNm": [
+        7.999999773744548,
+        7.999999773744548,
+        39.99999975690116
+      ],
+      "identityConfirmed": false
+    },
+    "defaultDecision": "unreviewed"
+  },
+  "cache": {
+    "additionalBytes": 0,
+    "times": [
+      14.799999997019768,
+      10.299999997019768,
+      9.600000008940697,
+      7.699999988079071
+    ]
+  },
+  "errors": [],
+  "passed": true
+}

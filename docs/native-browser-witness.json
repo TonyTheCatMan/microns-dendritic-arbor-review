@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-09T11:10:09.250Z",
+  "checkedAt": "2026-10-09T11:56:58.532Z",
   "browser": "Microsoft Edge, headless, clean ephemeral profile",
   "screenshotsTaken": 0,
   "initial": {
@@ -7,9 +7,9 @@
     "complete": true,
     "width": 512,
     "height": 512,
-    "firstUsefulMs": 5087.70000000298,
-    "elapsedMs": 12902.10000000894,
-    "networkBytes": 3859475
+    "firstUsefulMs": 7060.899999991059,
+    "elapsedMs": 14629.5,
+    "networkBytes": 3854909
   },
   "position": [
     94120,
@@ -32,7 +32,7 @@
     ]
   },
   "warmedNextSlice": {
-    "elapsedMs": 135.09999999403954,
+    "elapsedMs": 11.599999994039536,
     "networkBytes": 0
   },
   "hostToDetached": true,
@@ -56,7 +56,7 @@
       },
       {
         "name": "figure-metadata.json",
-        "bytes": 5991
+        "bytes": 7004
       }
     ],
     "plane": {
@@ -116,16 +116,16 @@
     "files": [
       {
         "name": "navigation-neuroglancer.png",
-        "bytes": 202382
+        "bytes": 763719
       },
       {
         "name": "navigation-metadata.json",
-        "bytes": 3833
+        "bytes": 4670
       }
     ],
     "dimensions": [
-      502,
-      440
+      1542,
+      758
     ],
     "rendering": "Neuroglancer native canvas navigation figure; adaptive multiscale images and meshes, not a native-resolution EM evidence panel",
     "sceneReady": false,

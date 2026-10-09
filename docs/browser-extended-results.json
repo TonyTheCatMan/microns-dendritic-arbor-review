@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-10-09T11:13:58.838Z",
+  "testedAt": "2026-10-09T11:59:02.160Z",
   "checks": [
     "all 50 direct task bindings, blank decisions and navigation remain usable with imagery unavailable",
     "selected mark and self-contained annotated panel import and reload without imagery network",

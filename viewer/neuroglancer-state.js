@@ -36,7 +36,7 @@ export function makeNgState(task,view,segments=[],marks=[],language='ru') {
     layers:[{name:EM_LAYER,type:'image',source:'precomputed://'+EM_URL,shaderControls:{normalized:{range:[0,255]}}},
       {name:SEG_LAYER,type:'segmentation',source:'precomputed://'+SEG_URL,segments:selected.map(s=>s.id),segmentColors:Object.fromEntries(selected.map(s=>[s.id,s.color])),selectedAlpha:0.28,notSelectedAlpha:0,objectAlpha:0.8},
       {name:MARK_LAYER,type:'annotation',source:{url:'local://annotations',transform:{outputDimensions:dimensions}},annotationColor:'#ffd166',annotations}],
-    showSlices:true,showAxisLines:false,showScaleBar:true,selectedLayer:{visible:false},layout:{type:'xy-3d',orthographicProjection:true}};
+    showSlices:view.showSlices!==false,showAxisLines:false,showScaleBar:true,selectedLayer:{visible:false},layout:{type:'xy-3d',orthographicProjection:true}};
 }
 export function mergeNativeSegments(current,state) {
   const layer=state.layers?.find(l=>l.name===SEG_LAYER);if(!layer)return current;

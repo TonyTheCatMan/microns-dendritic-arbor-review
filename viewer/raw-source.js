@@ -8,6 +8,17 @@ async function inflate(bytes, encoding) {
   if(encoding!=='gzip') return bytes;
   return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
 }
+// Cancelling a view releases that caller immediately. Already-started source reads
+// may finish and become useful to the next view, instead of restarting each pan.
+function observe(promise,signal,onFinish=()=>{}) {
+  return new Promise((resolve,reject)=>{
+    let finished=false;
+    const finish=(callback,value)=>{if(finished)return;finished=true;signal?.removeEventListener('abort',abort);onFinish();callback(value);};
+    const abort=()=>finish(reject,signal.reason||new DOMException('Aborted','AbortError'));
+    promise.then(value=>finish(resolve,value),error=>finish(reject,error));
+    if(signal?.aborted)abort();else signal?.addEventListener('abort',abort,{once:true});
+  });
+}
 export function shardLocation(id, sharding) {
   if(sharding.hash!=='identity') throw new Error('Unsupported source shard hash');
   const hashed=id>>BigInt(sharding.preshift_bits), mini=Number(hashed&((1n<<BigInt(sharding.minishard_bits))-1n));
@@ -55,13 +66,20 @@ export class ChunkCache {
 }
 
 export class RawSource {
-  constructor({fetcher=globalThis.fetch.bind(globalThis),cache=new ChunkCache(),concurrency=4}={}) {this.fetcher=fetcher;this.cache=cache;this.concurrency=concurrency;this.indexes=new Map();this.info=null;this.infoHash=null;this.scale=null;this.networkBytes=0;}
+  constructor({fetcher=globalThis.fetch.bind(globalThis),cache=new ChunkCache(),concurrency=4}={}) {
+    this.fetcher=fetcher;this.cache=cache;this.concurrency=Math.max(1,Math.floor(concurrency));this.indexes=new Map();this.info=null;this.infoHash=null;this.scale=null;this.networkBytes=0;
+    this.initRequest=null;this.indexRequests=new Map();this.chunkRequests=new Map();this.chunkQueue=[];this.activeChunkLoads=0;this.decodedHashes=new WeakMap();
+  }
   async init(signal) {
+    signal?.throwIfAborted();
     if(this.info)return this.info;
-    const r=await this.fetcher(EM_URL+'/info',{signal});if(!r.ok)throw new Error('EM metadata HTTP '+r.status);
-    const text=await r.text(),info=JSON.parse(text);const sorted=[...info.scales].sort((a,b)=>a.resolution.reduce((p,n)=>p*n,1)-b.resolution.reduce((p,n)=>p*n,1));const scale=sorted[0];
-    if(info.data_type!=='uint8'||info.num_channels!==1||scale.encoding!=='raw'||!scale.resolution.every((r,i)=>r===RESOLUTION_NM[i]))throw new Error('EM source changed: expected finest raw uint8 8 × 8 × 40 nm. Review source binding before use.');
-    this.infoHash=await sha256(text);this.info=info;this.scale=scale;return info;
+    if(!this.initRequest)this.initRequest=(async()=>{
+      const r=await this.fetcher(EM_URL+'/info');if(!r.ok)throw new Error('EM metadata HTTP '+r.status);
+      const text=await r.text(),info=JSON.parse(text);const sorted=[...info.scales].sort((a,b)=>a.resolution.reduce((p,n)=>p*n,1)-b.resolution.reduce((p,n)=>p*n,1));const scale=sorted[0];
+      if(info.data_type!=='uint8'||info.num_channels!==1||scale.encoding!=='raw'||!scale.resolution.every((r,i)=>r===RESOLUTION_NM[i]))throw new Error('EM source changed: expected finest raw uint8 8 × 8 × 40 nm. Review source binding before use.');
+      this.infoHash=await sha256(text);this.info=info;this.scale=scale;return info;
+    })().finally(()=>{this.initRequest=null;});
+    return observe(this.initRequest,signal);
   }
   async range(url,start,end,signal) {
     signal?.throwIfAborted();
@@ -70,27 +88,66 @@ export class RawSource {
     const bytes=new Uint8Array(await response.arrayBuffer());if(bytes.byteLength!==end-start)throw new Error('Truncated EM range');
     this.networkBytes+=bytes.byteLength;return bytes;
   }
-  async chunk(grid,signal) {
-    const s=this.scale,size=s.chunk_sizes[0],shape=s.size.map((n,i)=>Math.ceil(n/size[i])),id=mortonCode(grid,shape);
-    const cacheId=this.infoHash+':'+s.key+':'+id;const cached=await this.cache.get(cacheId);signal?.throwIfAborted();
-    const begin=grid.map((n,i)=>n*size[i]+(s.voxel_offset?.[i]||0));const dimensions=grid.map((n,i)=>Math.min(size[i],s.size[i]-n*size[i]));
-    let data=cached,receipt;
-    if(!data) {
-      const loc=shardLocation(id,s.sharding),url=EM_URL+'/'+s.key+'/'+loc.filename,key=url+':'+loc.mini;
-      let entries=this.indexes.get(key);
-      if(!entries) {
-        const header=await this.range(url,loc.mini*16,loc.mini*16+16,signal),d=new DataView(header.buffer,header.byteOffset,16);
-        const start=Number(d.getBigUint64(0,true))+loc.indexBytes,end=Number(d.getBigUint64(8,true))+loc.indexBytes;
-        if(start===end)throw new Error('No EM chunk at this location');
-        const bytes=await inflate(await this.range(url,start,end,signal),s.sharding.minishard_index_encoding);
-        entries=decodeMinishard(bytes,loc.indexBytes);this.indexes.set(key,entries);if(this.indexes.size>64)this.indexes.delete(this.indexes.keys().next().value);
-      }
-      const position=entries.get(id.toString());if(!position)throw new Error('No EM chunk at this location');
-      data=await inflate(await this.range(url,position.start,position.end,signal),s.sharding.data_encoding);
-      if(data.byteLength!==dimensions.reduce((p,n)=>p*n,1))throw new Error('EM chunk length differs from native uint8 shape');
-      signal?.throwIfAborted();await this.cache.put(cacheId,data);receipt={url,rangeBytes:[position.start,position.end]};
+  pumpChunks() {
+    while(this.activeChunkLoads<this.concurrency&&this.chunkQueue.length){
+      const job=this.chunkQueue.shift();
+      if(!job.entry.waiters){job.reject(new DOMException('Superseded view','AbortError'));continue;}
+      this.activeChunkLoads++;job.entry.started=true;
+      job.resolve(()=>{this.activeChunkLoads--;this.pumpChunks();});
     }
-    return {data,begin,dimensions,receipt:{source:EM_URL,scale:s.key,chunkId:id.toString(),grid,begin,dimensions,decodedSha256:await sha256(data),fromCache:!!cached,...receipt}};
+  }
+  index(url,loc) {
+    const key=url+':'+loc.mini;
+    if(this.indexes.has(key))return Promise.resolve(this.indexes.get(key));
+    if(!this.indexRequests.has(key))this.indexRequests.set(key,(async()=>{
+      const header=await this.range(url,loc.mini*16,loc.mini*16+16),d=new DataView(header.buffer,header.byteOffset,16);
+      const start=Number(d.getBigUint64(0,true))+loc.indexBytes,end=Number(d.getBigUint64(8,true))+loc.indexBytes;
+      if(start===end)throw new Error('No EM chunk at this location');
+      const bytes=await inflate(await this.range(url,start,end),this.scale.sharding.minishard_index_encoding);
+      const entries=decodeMinishard(bytes,loc.indexBytes);this.indexes.set(key,entries);if(this.indexes.size>64)this.indexes.delete(this.indexes.keys().next().value);
+      return entries;
+    })().finally(()=>this.indexRequests.delete(key)));
+    return this.indexRequests.get(key);
+  }
+  decodedHash(data) {
+    // The weak key follows the cache's decoded byte allocation, so eviction also
+    // releases its hash. Persistent bytes are verified once when read into memory.
+    if(!this.decodedHashes.has(data))this.decodedHashes.set(data,sha256(data));
+    return this.decodedHashes.get(data);
+  }
+  chunk(grid,signal) {
+    signal?.throwIfAborted();
+    const s=this.scale,size=s.chunk_sizes[0],shape=s.size.map((n,i)=>Math.ceil(n/size[i])),id=mortonCode(grid,shape);
+    const cacheId=this.infoHash+':'+s.key+':'+id;
+    const begin=grid.map((n,i)=>n*size[i]+(s.voxel_offset?.[i]||0));const dimensions=grid.map((n,i)=>Math.min(size[i],s.size[i]-n*size[i]));
+    let entry=this.chunkRequests.get(cacheId);const shared=!!entry;
+    if(!entry){
+      entry={waiters:0,started:false};
+      entry.promise=(async()=>{
+        const cached=await this.cache.get(cacheId);let data=cached,receipt;
+        if(!data){
+          const release=await new Promise((resolve,reject)=>{this.chunkQueue.push({entry,resolve,reject});this.pumpChunks();});
+          try{
+            const loc=shardLocation(id,s.sharding),url=EM_URL+'/'+s.key+'/'+loc.filename,entries=await this.index(url,loc);
+            const position=entries.get(id.toString());if(!position)throw new Error('No EM chunk at this location');
+            data=await inflate(await this.range(url,position.start,position.end),s.sharding.data_encoding);
+            if(data.byteLength!==dimensions.reduce((p,n)=>p*n,1))throw new Error('EM chunk length differs from native uint8 shape');
+            // remember() happens synchronously. Durable browser cache bookkeeping
+            // can finish after the pixels are available to this and the next view.
+            this.cache.put(cacheId,data).catch(error=>this.cache.onWarning?.('Image cache: '+error.message));
+            receipt={url,rangeBytes:[position.start,position.end]};
+          }finally{release();}
+        }
+        return {data,begin,dimensions,receipt:{source:EM_URL,scale:s.key,chunkId:id.toString(),grid,begin,dimensions,decodedSha256:await this.decodedHash(data),fromCache:!!cached,...receipt}};
+      })().finally(()=>{if(this.chunkRequests.get(cacheId)===entry)this.chunkRequests.delete(cacheId);});
+      this.chunkRequests.set(cacheId,entry);
+    }
+    entry.waiters++;
+    return observe(entry.promise,signal,()=>{
+      entry.waiters--;
+      if(!entry.waiters&&!entry.started&&this.chunkRequests.get(cacheId)===entry)this.chunkRequests.delete(cacheId);
+      this.pumpChunks();
+    }).then(chunk=>({...chunk,receipt:{...chunk.receipt,sharedRequest:shared}}));
   }
   async plane(view,{signal,onProgress=()=>{}}={}) {
     const started=performance.now();await this.init(signal);signal?.throwIfAborted();const s=this.scale,p=planePlan(view,s),size=s.chunk_sizes[0],offset=s.voxel_offset||[0,0,0];
@@ -99,11 +156,19 @@ export class RawSource {
     for(let z=first[2];z<=last[2];z++)for(let y=first[1];y<=last[1];y++)for(let x=first[0];x<=last[0];x++)grids.push([x,y,z]);
     // Central chunks produce a useful partial image first; unfilled pixels remain explicitly masked.
     grids.sort((a,b)=>a.reduce((sum,n,i)=>sum+(n-(first[i]+last[i])/2)**2,0)-b.reduce((sum,n,i)=>sum+(n-(first[i]+last[i])/2)**2,0));
-    const result={...p,pixels:new Uint8Array(p.width*p.height),coverage:new Uint8Array(p.width*p.height),receipts:[],complete:false,loaded:0,total:grids.length,elapsedMs:0};let cursor=0,failures=[];
+    const result={...p,pixels:new Uint8Array(p.width*p.height),coverage:new Uint8Array(p.width*p.height),receipts:[],complete:false,loaded:0,total:grids.length,cacheHits:0,sharedChunks:0,elapsedMs:0};let cursor=0,failures=[];
     const [u,v,d]=p.axes;
     const worker=async()=>{while(cursor<grids.length){signal?.throwIfAborted();const grid=grids[cursor++];try{
       const chunk=await this.chunk(grid,signal);signal?.throwIfAborted();const startU=Math.max(p.begin[u],chunk.begin[u]),endU=Math.min(p.end[u],chunk.begin[u]+chunk.dimensions[u]),startV=Math.max(p.begin[v],chunk.begin[v]),endV=Math.min(p.end[v],chunk.begin[v]+chunk.dimensions[v]);
-      for(let y=startV;y<endV;y++)for(let x=startU;x<endU;x++){const xyz=[...p.begin];xyz[u]=x;xyz[v]=y;const local=xyz.map((n,i)=>n-chunk.begin[i]);const native=local[0]+chunk.dimensions[0]*(local[1]+chunk.dimensions[1]*local[2]),i=(y-p.begin[v])*p.width+x-p.begin[u];result.pixels[i]=chunk.data[native];result.coverage[i]=1;}
+      const strides=[1,chunk.dimensions[0],chunk.dimensions[0]*chunk.dimensions[1]],rowWidth=endU-startU;
+      let native=(p.begin[d]-chunk.begin[d])*strides[d]+(startV-chunk.begin[v])*strides[v]+(startU-chunk.begin[u])*strides[u];
+      for(let y=startV;y<endV;y++,native+=strides[v]){
+        const output=(y-p.begin[v])*p.width+startU-p.begin[u];
+        if(strides[u]===1)result.pixels.set(chunk.data.subarray(native,native+rowWidth),output);
+        else for(let x=0,input=native;x<rowWidth;x++,input+=strides[u])result.pixels[output+x]=chunk.data[input];
+        result.coverage.fill(1,output,output+rowWidth);
+      }
+      if(chunk.receipt.fromCache)result.cacheHits++;if(chunk.receipt.sharedRequest)result.sharedChunks++;
       result.receipts.push(chunk.receipt);if(result.firstUsefulMs===undefined)result.firstUsefulMs=performance.now()-started;
     }catch(e){if(signal?.aborted)throw e;failures.push({grid,error:e.message});}result.loaded++;result.elapsedMs=performance.now()-started;onProgress(result);}};
     await Promise.all(Array.from({length:Math.min(this.concurrency,grids.length)},worker));signal?.throwIfAborted();result.complete=failures.length===0;result.failures=failures;result.elapsedMs=performance.now()-started;

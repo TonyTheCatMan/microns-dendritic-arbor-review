@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {ReviewViewer,planeKey} from '../viewer/ReviewViewer.js';
+import {normalizeView} from '../viewer/coordinates.js';
+function host(){return Object.assign(Object.create(ReviewViewer.prototype),{task:{id:'t'},view:normalizeView(),sequence:0,language:'en',draw(){},makeRaster(){},say(){},source:{plane:async()=>({complete:true,width:512,height:512,elapsedMs:1})}});}
+test('subvoxel movement and 3D camera changes do not reload the same native plane',async()=>{const v=host();let reads=0;v.source.plane=async()=>{reads++;return{complete:true,width:512,height:512,elapsedMs:1};};await v.load();v.view.centerNm[0]+=.1;v.view.ngState={projectionOrientation:[.2,.3,0,.9327379]};await v.load();assert.equal(reads,1);assert.equal(v.sequence,1);});
+test('pending moves retain the previous display but reject exporting it as the new position',async()=>{const v=host();await v.load();const old=v.plane;v.view.centerNm[2]+=40;let complete;v.source.plane=()=>new Promise(r=>complete=r);const pending=v.load();assert.equal(v.plane,old);assert.notEqual(v.loadedKey,planeKey(v.view));await assert.rejects(v.exportPlane(),/still loading/);complete({complete:true,width:512,height:512,elapsedMs:1});await pending;assert.equal(v.loadedKey,planeKey(v.view));});
+test('requests for an identical pending plane share its result',async()=>{const v=host();let reads=0,complete;v.source.plane=()=>{reads++;return new Promise(r=>complete=r);};const a=v.load(),b=v.load();complete({complete:true,width:512,height:512,elapsedMs:1});await Promise.all([a,b]);assert.equal(reads,1);});
