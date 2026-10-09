@@ -1,0 +1,65 @@
+{
+  "testedAt": "2026-10-09T15:56:54.687Z",
+  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "checks": [
+    {
+      "name": "Real XY slice stepping, pointer pan and zoom followed by Fit retain the exact XYZ center and loaded section",
+      "passed": true,
+      "centerNm": [
+        752796.1598360656,
+        646469.1200819672,
+        858680
+      ],
+      "depthNm": 858680,
+      "spanNm": 4096
+    },
+    {
+      "name": "Fit leaves saved marks and the active trace draft unchanged, allowing the same draft to continue without a popup",
+      "passed": true
+    },
+    {
+      "name": "Next and previous section remain relative to the fitted section; autosaved center, plane, zoom and marks survive reload",
+      "passed": true
+    },
+    {
+      "name": "XY real Fit and section button handlers preserve the current center and correct depth axis",
+      "passed": true,
+      "imagery": "not loaded in supplemental state check",
+      "centerNm": [
+        752880,
+        646568,
+        858800
+      ],
+      "stepNm": 40
+    },
+    {
+      "name": "XZ real Fit and section button handlers preserve the current center and correct depth axis",
+      "passed": true,
+      "imagery": "not loaded in supplemental state check",
+      "centerNm": [
+        752880,
+        646568,
+        858800
+      ],
+      "stepNm": 8
+    },
+    {
+      "name": "YZ real Fit and section button handlers preserve the current center and correct depth axis",
+      "passed": true,
+      "imagery": "not loaded in supplemental state check",
+      "centerNm": [
+        752880,
+        646568,
+        858800
+      ],
+      "stepNm": 8
+    },
+    {
+      "name": "No uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "screenshotsTaken": 0,
+  "anatomicalReview": false
+}
