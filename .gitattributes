@@ -1,0 +1,2 @@
+# Preserve source and vendored asset bytes across Windows and static hosts.
+* -text

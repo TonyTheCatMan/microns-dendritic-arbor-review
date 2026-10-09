@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "microns-dendritic-arbor-decisions.v2",
+  "title": "Anonymous unreviewed anatomy decision adapter",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "projectId",
+    "catalogHash",
+    "sourceHash",
+    "records",
+    "anatomicalCertification",
+    "originalSourcesModified"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "projectId": {
+      "const": "microns-dendritic-arbor-review"
+    },
+    "catalogHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sourceHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "anatomicalCertification": {
+      "const": false
+    },
+    "originalSourcesModified": {
+      "const": false
+    },
+    "records": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "taskId",
+          "status",
+          "answers",
+          "notes",
+          "annotations"
+        ],
+        "properties": {
+          "taskId": {
+            "enum": [
+              "MC298937.soma_identity",
+              "MC298937.origin3447_to_soma",
+              "MC298937.origin4053_to_soma",
+              "MC298937.origin4480_to_soma",
+              "MC298937.origin4667_to_soma",
+              "MC298937.cut4475",
+              "MC298937.damage_cut4475_z872320",
+              "MC264649.soma_identity",
+              "MC264649.origin3362_to_soma",
+              "MC264649.origin3639_to_soma",
+              "MC264649.origin3944_to_soma",
+              "MC264649.origin3945_to_soma",
+              "MC264649.origin4058_to_soma",
+              "MC264649.origin4507_to_soma",
+              "MC264649.relation_3362_4058",
+              "MC264649.relation_3944_3945",
+              "MC264649.boundary_origin3944",
+              "MC264649.boundary_excluded3639",
+              "MC264920.soma_identity",
+              "MC264920.origin5149_to_soma",
+              "MC264920.origin5498_to_soma",
+              "MC264920.origin5794_to_soma",
+              "MC264920.origin6123_to_soma",
+              "MC264920.origin6124_to_soma",
+              "MC264920.origin6127_to_soma",
+              "MC264920.origin6422_to_soma",
+              "MC264920.relation_5149_5498",
+              "MC264920.relation_5149_5498_6127",
+              "MC264920.relation_5498_6127",
+              "MC264920.boundary_origin5149",
+              "MC264920.boundary_origin5794",
+              "MC264824.soma_identity",
+              "MC264824.origin2428_to_soma",
+              "MC264824.origin2517_to_soma",
+              "MC264824.origin2601_to_soma",
+              "MC264824.origin2710_to_soma",
+              "MC264824.origin2711_to_soma",
+              "MC264824.origin2721_to_soma",
+              "MC264824.origin2826_to_soma",
+              "MC264824.origin2969_to_soma",
+              "MC264824.origin3476_to_soma",
+              "MC264824.cut869",
+              "MC264824.cut2638",
+              "MC264824.cut5297",
+              "MC264824.relation_2601_2710",
+              "MC264824.relation_2601_2710_2711",
+              "MC264824.relation_2601_2711",
+              "MC264824.relation_2710_2711",
+              "MC264824.damage_origin2711_z818640",
+              "MC264824.excluded2826_vs2428"
+            ]
+          },
+          "status": {
+            "enum": [
+              "unreviewed",
+              "draft",
+              "reviewed"
+            ]
+          },
+          "answers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "annotations": {
+            "type": "array"
+          },
+          "reviewer_name": {
+            "type": "null"
+          },
+          "qualifications": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  }
+}

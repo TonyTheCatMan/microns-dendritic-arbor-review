@@ -1,0 +1,10 @@
+{
+  "testedAt": "2026-10-09T11:13:58.838Z",
+  "checks": [
+    "all 50 direct task bindings, blank decisions and navigation remain usable with imagery unavailable",
+    "selected mark and self-contained annotated panel import and reload without imagery network",
+    "imported regional evidence can be exported again",
+    "re-export preserves all four mark-linked native evidence files"
+  ],
+  "anatomicalReview": false
+}

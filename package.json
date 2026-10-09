@@ -1,0 +1,16 @@
+{
+  "name": "microns-dendritic-arbor-review",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Source-bound browser anatomy review for 50 dendritic arbor tasks",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node tools/run-tests.mjs",
+    "test:browser": "node tools/browser-test.mjs",
+    "build": "node tools/build-static.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}

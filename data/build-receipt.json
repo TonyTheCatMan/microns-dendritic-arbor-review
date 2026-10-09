@@ -1,0 +1,531 @@
+{
+  "adapterVersion": 2,
+  "catalogHash": "a418cf860346c65eb04fe0032de39e2d636c3778413259769a2a462ffa49d132",
+  "sourceHash": "f2f20d85a817da34f26fbf79064393cdd0711e4c04833429f3d554e259a5f5cc",
+  "sourceSchemaIssue": {
+    "error": "Expecting ',' delimiter",
+    "line": 60,
+    "column": 1,
+    "repair": "Derived v2 schema replaces malformed original; original remains immutable."
+  },
+  "verifiedInputCount": 115,
+  "verifiedInputs": [
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937/contacts.jsonl",
+      "sha256": "1f68ba5836850698e6a585b3b9ad66fe81ee9d44372c503dba3bc21379630855"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937/source_footprints.jsonl",
+      "sha256": "caccea57020172cfa7cff8a47863b78c90ca67d07447c09f9e579c1a4da63525"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937/native_review_anchors.json",
+      "sha256": "679d0b0d9c312816a5015087e376630925dbe32477fc497635b5ec09c2385186"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649/contacts.jsonl",
+      "sha256": "dd4b440a936f8d18f018fb9e6a5c0b5c61176c513267592b1b807ea750befed8"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649/source_footprints.jsonl",
+      "sha256": "24fcf9215e38580750ac6bd4f87765d5991ff6d287d4cedebd22674a88abed93"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649/native_review_anchors.json",
+      "sha256": "0bde54e0a54eeeedbd9123cbcd5f50d2a23e5b420ed32d4e68011d9fb1ccccbe"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920/contacts.jsonl",
+      "sha256": "ebc11e34085712b496146abf1b418045c35f4ee82e720a21ebca6da18df338c8"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920/source_footprints.jsonl",
+      "sha256": "616f00f8b0548df789e8688318470dcc74c073f0ec20dbb37331961ed154b4b9"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920/native_review_anchors.json",
+      "sha256": "67e29ce37d8374cd8bdd60f78c1d0da030bbf11fa5b037be2d4eb631eb641466"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824/contacts.jsonl",
+      "sha256": "7db37d4618de76fbb52dc14cb4dc311ad44fd79fc927c4d288c7ba561a3234ae"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824/source_footprints.jsonl",
+      "sha256": "9c344912fe7b685bf161c93df946e591b9f1e68254e3b3d8cd4104361e3cf0ec"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824/native_review_anchors.json",
+      "sha256": "9448bb46db85fb6a2626a7939b7e0c3388dbd34844e777b2e79bc4e4cb352347"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937/geometry_summary.json",
+      "sha256": "e3bb345474f68a3310e700570246980342a3f5b026fcc641fc839aa79cc25d56"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937/graph_domains.jsonl",
+      "sha256": "02a24278b54fbc5f91650f2bd703f96055ab2daec9987a0dd4803a75cbab7e5e"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937/skeleton_geometry.npz",
+      "sha256": "241dde92009809e5bb20edc2b9ed3c398fc0a3c62f6c82a14da44f559efd63d2"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/coordinator_synthesis.json",
+      "sha256": "73da3170899b9b67df142ff99e11cce768d8f6c836ac4e24a2cb6cf18898aad7"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_298937.h5",
+      "sha256": "129ed42bb80f47c1bebc2312125d144fd23984eb64886d3a55c2a8808408668d"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC298937_cut4475_16/em_xyz.npy",
+      "sha256": "1ed57519704c9054d401e3ccb365f996db284d4a574f7d185aa10400094d754c"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC298937_cut4475_16/em_receipt.json",
+      "sha256": "a9df8b0e18dfbe2e65c8e52f6079986da8dc127c54e3d71fc0cfe5e092e717f3"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/parallel_NC298937_cut4475_16/NC298937_cut4475_16_manifest.json",
+      "sha256": "0755b49d40b66c9972504086764b540bd480a6e3d27b3f76ec45dc866a328b67"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC298937_origin_soma32/em_xyz.npy",
+      "sha256": "0ab937dd40b3b18794c4170dbd9d637001d9302f1c977939682b24ce573c041d"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC298937_origin_soma32/em_receipt.json",
+      "sha256": "0175edfdd640ee3aec4a0cd71782ab593064641d431f279de38f4af7ab359d9f"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/parallel_NC298937_origin_soma32/NC298937_origin_soma32_manifest.json",
+      "sha256": "58b201cf1a0227ea30abb5e79435cc5e3d3405fb429bb75fd5ed55988ae9ffae"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/cut4475_serial16_manifest.json",
+      "sha256": "7d198f0148c25b5b9e315b8025aae0661f3be881345dcb5d3c30ce49d496011d"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/origins_1_3_manifest.json",
+      "sha256": "174a4f6e420d467e0a683c0e8039f0743402c84d2acf5332fa652c4390c30690"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/origins_4_4_manifest.json",
+      "sha256": "1049c30d8b9a250e10a07fb02f84ae3b2883f0c2aceba6445cbc700e96bb994d"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/soma_xyz_context_manifest.json",
+      "sha256": "481d9a8481534129e6ad83dec1f2eb74fd1a0f97dab116b53a874228077768a8"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/isolated_views/cut4475/observations.json",
+      "sha256": "51b12f49b9677637006086a3e3522f071ad73e22fc08354006389c93f0dbd882"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/review.json",
+      "sha256": "6eac549a33e2f434dff8d27428e7d44de57d3a8b674fd22b8b8e00446eb422ca"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_298937/view_ledger.json",
+      "sha256": "eda4d7bc252e0b4bc0130c27731a2d21751255a667700c3ce2b4f2e152cdfec5"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649/geometry_summary.json",
+      "sha256": "fad4707dc79722cf09e75b0b200e0a17f389cb189d5a28f29331b8283b50b187"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649/graph_domains.jsonl",
+      "sha256": "9a1df19932935c99c9731cd4c7643efdf08cefef4b44fd3090bf6f95417abc17"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649/skeleton_geometry.npz",
+      "sha256": "701b04158a5e6751ac4d1a648b468780b2fee34cd0076f4299992e4a1d91fe62"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/coordinator_synthesis.json",
+      "sha256": "ea63cbc6125b4d604d1ed645087d17a0b97528ca9ec05fb5dac3d5c331efc97f"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264649.h5",
+      "sha256": "a005d0907cf28251ff9be5f425ba035cde839bfc732d0ac4d6b88ee13f8892e5"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/expert_review_packet.json",
+      "sha256": "b7fac4b6860cf7a54e2700a9852c82f602b1a44c08314a63388a30823eb10359"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264649_excluded3639_enclosure_16/em_xyz.npy",
+      "sha256": "f6f66a992581f63a7693b3f9e87690e839a1aa694aa0f8d4db0ec1ffa9d93532"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264649_excluded3639_enclosure_16/em_receipt.json",
+      "sha256": "b40ec37bd1d61be9dc53e8e676f490f2342bbabacc5d3ddfc4f2f60154c4595c"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/parallel_NC264649_excluded3639_enclosure_16/NC264649_excluded3639_enclosure_16_manifest.json",
+      "sha256": "813d11264f6e19147848978e0981a4bb7a4d681c08431e9acb82f3cc5c6f0de4"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264649_origin3944_enclosure_16/em_xyz.npy",
+      "sha256": "5fdda93d7117f8ba690869123ba4f9bf560d27ab0e467c17ab4d6fba0f32b11a"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264649_origin3944_enclosure_16/em_receipt.json",
+      "sha256": "202756282a31a797a80210c178e2f724de7de57d71e36973cb0aa56ed1a50bad"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/parallel_NC264649_origin3944_enclosure_16/NC264649_origin3944_enclosure_16_manifest.json",
+      "sha256": "0beb318659df3381cd52457b84cb782fbb5ea01b4afb55046b0f5ffac0e2b2bf"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264649_origin_soma32/em_xyz.npy",
+      "sha256": "49670b436d485db1edffaeb76ba308fd561a44f4b865566f27b4d5bff84c6f02"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264649_origin_soma32/em_receipt.json",
+      "sha256": "472a3d17e33464bbf3a67171d6574538178078129be149eb009d29653e4a7a0c"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/parallel_NC264649_origin_soma32/NC264649_origin_soma32_manifest.json",
+      "sha256": "7bf2802dbcadde233f2c968374bab79534eea1ee3dce7835398b13b633dc9909"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/fine_questions_batch1_manifest.json",
+      "sha256": "a4ad5b1691a7298310f38cf8bb4c5c4f17932afe8e653a687161584d4cf063b0"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/fine_questions_batch1_native_scale_manifest.json",
+      "sha256": "64e5702b6f0c3f02a9ea6c88562f2a0538eb27d38a6a21c82ce5b3e2d334afe3"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/origins_1_3_manifest.json",
+      "sha256": "dcd0db10b1010ccf7b4e7c46ffe772ebf494e96efc363c126f77ec44aa042127"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/origins_4_6_manifest.json",
+      "sha256": "2ad5038031096259e9ab947d33efd03c028ff6cac98fa2958b1d1c375ff698da"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/soma_xyz_context_manifest.json",
+      "sha256": "a1cd5ec4918e50a796fbad0724fb4aab5f09e1c4686e7bc981d0811e19fd300a"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/isolated_views/context1_3/observations.json",
+      "sha256": "3d12f813466bdc224d27917d7b8fd49cc680dccd0318c459d134d3a051ae2e96"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/isolated_views/context4_6/observations.json",
+      "sha256": "cee245988c8e35a0551402d2129743c1c650ebc75db709c1876a10d9c88cd981"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/isolated_views/fine_native_scale/observations.json",
+      "sha256": "094708a7c02e8e3091662d5c2ce98105e53329e894f3e1bfa85698f9e4dfa473"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264649/isolated_views/soma_context/observations.json",
+      "sha256": "4a57f4cdb34b4996367d07be76e184365b7fd9c1b2b3922b5b7561262be934fb"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920/geometry_summary.json",
+      "sha256": "9d447b13bbab0986df6aee770d2f287a5584758ef4ad18b66e64c5f82db08902"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920/graph_domains.jsonl",
+      "sha256": "8818aff044e0f1456f398452115fb617aae829d01354a8bd6a46513d2a9f7d6d"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920/skeleton_geometry.npz",
+      "sha256": "54019a9419edca3c6743fe2932869e96e8a4a01d9740577c5ce03aa68cd5d448"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264920/coordinator_synthesis.json",
+      "sha256": "92dde99636cb3af5a1a256f06a27f9f2ecba4a7f0cfbf0ab82e31eb33694eeca"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264920.h5",
+      "sha256": "6e5fabafade3f7bb940aa82e7dfd021474fecb85692107e759643d50d48b5892"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264920_origin5149_ring_16/em_xyz.npy",
+      "sha256": "f1b20e732ded837b5187f74f3a558985b0a1a6bc6e18568b411901ee576095b5"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264920_origin5149_ring_16/em_receipt.json",
+      "sha256": "6e916b8aa4e26646c19e2bc61012604f26251281985b338cd6ea164135964819"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/parallel_NC264920_origin5149_ring_16/NC264920_origin5149_ring_16_manifest.json",
+      "sha256": "83df456fadb8902ef46c64109b003fa345412081241015159e76517822e986c5"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264920_origin5794_longitudinal_16/em_xyz.npy",
+      "sha256": "b4880f018b97e2e098b4b072c5d9527548e655a7cb746e272bd6412cf1b6a09d"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264920_origin5794_longitudinal_16/em_receipt.json",
+      "sha256": "af1096f649f674d5b6f210c714a10ddb9f9d97bfa3ea2306d367eaaa618e62b4"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/parallel_NC264920_origin5794_longitudinal_16/NC264920_origin5794_longitudinal_16_manifest.json",
+      "sha256": "88812011b4779488bdebc9b0bdaf646d109db6dfdcf7f2bc25d4a95bc19b229f"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264920_origin_soma32/em_xyz.npy",
+      "sha256": "3bca30f970b45ba5996a1d9c1ed12665fe1763f6c9a5527a053291b596989c13"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/NC264920_origin_soma32/em_receipt.json",
+      "sha256": "9f4c20216182897ba0620780330eaba2745bdc3f917d93ba5ae2e9e11edbc9ac"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/acquisition/parallel_NC264920_origin_soma32/NC264920_origin_soma32_manifest.json",
+      "sha256": "45cabe0c9eca4521c41d01ff1c4e029ec961a5562ee2595547051cbf32718428"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264920/fine_questions_batch1_manifest.json",
+      "sha256": "583a1a75ca2bd398fab6046cfce7314b388729f69b8142f4f97ddde4cfd1d4ee"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264920/whole_context_manifest.json",
+      "sha256": "915d76ed7c83098ed40c86fc6e253db048ee6a91f62c200a48437cc2efd8790a"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264920/isolated_views/fine_questions/observations.json",
+      "sha256": "f00e929b34ff1b4bc6595d34df5194e576e2c2a0f35c6becbd2591637750ff4a"
+    },
+    {
+      "path": "prospective_validation_v3/anatomy/new_cohort_review/recipient_264920/isolated_views/whole_context/observations.json",
+      "sha256": "528e32f5463f07f33db9550321180fbaa52f31954530f106ed6c9bfeaf208ce8"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824/geometry_summary.json",
+      "sha256": "a00da5f1cc62d3d65640f5378bff9bc22d12aa7d09c070ab5162a07ace32b84f"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824/graph_domains.jsonl",
+      "sha256": "39e768f0e17a07bc62d7a769411fb9509ed0c19fe7514354d33146a21ce14a91"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824/skeleton_geometry.npz",
+      "sha256": "d1d957c571d95c5efd4208f68531078dc2b054792b98f56ac92876a042e23aeb"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/coordinator_synthesis.json",
+      "sha256": "2b2393d4ee3453350ece7fbfa69f2e13ba2dddd3ee53c44cc0c93a6077b01ecb"
+    },
+    {
+      "path": "prospective_validation_v2/geometry/recipient_264824.h5",
+      "sha256": "e41f19ff854b9ec55ebc16410d22d817330395d927c1a83518f55b3bbe236fb5"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC264824_excluded2826_242816/em_xyz.npy",
+      "sha256": "1ee9b57122be73127ba1695a3d43d693eb033b1d356e10fc9e634ed788eae72f"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC264824_excluded2826_242816/em_receipt.json",
+      "sha256": "3176044ed0e7b121798912ab2088e63415e7c3e13c36ec14dad5839d74d6111c"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/parallel_NC264824_excluded2826_242816/NC264824_excluded2826_242816_manifest.json",
+      "sha256": "f7526ca26fe7df6fdd098cba9b6f14306e44fe9d2aa90b5c6fe727d129686943"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC264824_north2601_2711_271016/em_xyz.npy",
+      "sha256": "4f7dfbd280d82cfaf35c1c85ffef9a5e4e2e7c8c23c9aa4a312b116dfa5c43f4"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC264824_north2601_2711_271016/em_receipt.json",
+      "sha256": "c4c9398a157813fb4a5e212f913876483926683506b81b2b0af1cedce092aa2d"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/parallel_NC264824_north2601_2711_271016/NC264824_north2601_2711_271016_manifest.json",
+      "sha256": "af933f196960e02af509de40cba5ae680a06a95a04a53732968d132249c53043"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC264824_origin_soma32/em_xyz.npy",
+      "sha256": "52ac44c1f09f66f49c933fffd42845f9845dbfea37a1b8c0732f23f2ad063504"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/NC264824_origin_soma32/em_receipt.json",
+      "sha256": "e97e6db3656a696811552cba69f6dcbea17197eb3c0e43d4398de351b47e25f2"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/acquisition/parallel_NC264824_origin_soma32/NC264824_origin_soma32_manifest.json",
+      "sha256": "c46b066300fe00647b5ff90742750fb2f3e113fc064227ab8564ec4ff9274062"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_excluded2826_242816_origin2428_serial_manifest.json",
+      "sha256": "5d1696e99c41bba7571781dc42e57b4dea19aa2d26eab6dfc4fc33ba15a4c83f"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_excluded2826_242816_origin2826_serial_manifest.json",
+      "sha256": "7c00e42d8ad1423466958254d25c8eb22e6f4d01e530285383a9f9d586d6da07"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_excluded2826_242816_orthogonal_manifest.json",
+      "sha256": "f6907b1e7b78ae480652e533782a027d13db6ce7d7a3c3600aee3d9fb1068e5c"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_excluded2826_242816_volume_1_manifest.json",
+      "sha256": "3e5cd5eb6287e4bb56fa1355f2a86d599401ddddc055d559e93cf48610841b5d"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_excluded2826_242816_volume_2_manifest.json",
+      "sha256": "c2c2c9c793222e12a1a0590732659f8e123289881a7b38b16b93aff975b23ff9"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_excluded2826_242816_volume_3_manifest.json",
+      "sha256": "6991ac6aa33cf2b11e532e94e187158f97d812d3bc7e10b22a02ec5577228216"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_origin2601_serial_manifest.json",
+      "sha256": "436b28a42eb300caa1544b5a59f152be8b61630029fb85e83529468d26695eae"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_origin2710_serial_manifest.json",
+      "sha256": "da7bd38b24c70d4b59f389a9973785d4c5e08584a10572d5a70437d78482a877"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_origin2711_serial_manifest.json",
+      "sha256": "3314260103f5ad8c4cc1cd471d2c5cd69e0cdef66b2096df62c4fdc1c3dbf152"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_orthogonal_manifest.json",
+      "sha256": "8f3368b4ef317f23b4e0ecaa2d4857372e29c9c4356d37917c00d972cd8df67e"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_volume_1_manifest.json",
+      "sha256": "80c8f7c5641b279c4a09cce1ad699c26dfda8bafd0f0d47f15076d566b2c289f"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_volume_2_manifest.json",
+      "sha256": "82ce866ec7307728f21b53f9f31d84bdac5292ca9f8d0f24b523f3c3bf5a3728"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_volume_3_manifest.json",
+      "sha256": "94b461f902c346cad3619149b97f33048494dc6d9f8f32e6bc13f2cd7b757575"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/NC264824_north2601_2711_271016_volume_4_manifest.json",
+      "sha256": "8ff3d596a52d90ea5d3327ead2e08f85947515a7563d3f3493ca8c3f90df0cd7"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/origins_1_3_manifest.json",
+      "sha256": "e3db718095b476525417d04d0d5ca94bf306f6a07552031dd85390a7fa78a6bc"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/origins_4_6_manifest.json",
+      "sha256": "1fdc1166dbd0695981b619e3e02573e833c14e8d745e8ad5404cada10cd68ea7"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/origins_7_9_manifest.json",
+      "sha256": "1dfd9ec6a3877091266931f471fefd7b7d4fcbc72746bc612c2ff27c520bcd9c"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/soma_xyz_context_manifest.json",
+      "sha256": "2bb375d6cfae80707a87b0007e83b4388cc56af325ea225c3f74789a0a461006"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/context_origins_1_3/observations.json",
+      "sha256": "5b1817dd004be67e4098ff320a2cce88b0dc2476bce4f22234a8796d4a0e9f10"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/context_origins_4_6/observations.json",
+      "sha256": "85639d323cc922cd0d890e37df3febf767fac37a21ce541fb4da59d9cb695133"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/context_origins_7_9/observations.json",
+      "sha256": "4a289d5d0097bd8897bd4a940b02e9d2bba06601dd23f8cb32800fc24bc61abe"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/context_soma/observations.json",
+      "sha256": "41edaed79ab3d961a7a00740a1a04ea7945adaec31ce9688dd64f1c6108460fb"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/excluded2428_serial/observations.json",
+      "sha256": "ae2804f2815d14375da527238633969e7681c622e6a8dff1e596fa8d8e7e56bc"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/excluded2826_serial/observations.json",
+      "sha256": "a363508214a92d682943b038f7879d697d57fcc9da9a6e3ed298de46b9b68483"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/excluded_orthogonal/observations.json",
+      "sha256": "efd31dce70522bde33f41adbc6d9dfc8127dbd303f58e28c7685249a3104f602"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/north2601_serial/observations.json",
+      "sha256": "f96f90539bb085de50ee26cc7debac948b53f5ecba62de10629f9861a3701663"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/north2710_serial/observations.json",
+      "sha256": "e4dd6c98d7b7e1fe1be62f763702b6095e456ad46db14f445e846f6d2cfe5ed4"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/north2711_serial/observations.json",
+      "sha256": "997e62db8155beaaa99d16c9768d1112098c535017a266336f9aa5c1c4818e1b"
+    },
+    {
+      "path": "prospective_validation_v2/anatomy/new_cohort_review/recipient_264824/isolated_views/north_orthogonal/observations.json",
+      "sha256": "c3e79c973e28a34fcfe36631573a1d8ac91e00440652fe15ac259ec94e7a0439"
+    }
+  ],
+  "registryEntryCount": 115,
+  "allRegistryHashesRecomputed": true,
+  "taskCounts": {
+    "MC298937": 7,
+    "MC264649": 11,
+    "MC264920": 13,
+    "MC264824": 19
+  },
+  "contacts": 27099,
+  "footprints": 22844,
+  "fullFootprintMembershipVerified": true,
+  "separateCoordinatesVerified": true,
+  "releaseMapping": "unresolved: no validated bridge in supplied source anchors",
+  "sourceFilesModified": false,
+  "imagesInspected": 0,
+  "outputs": [
+    {
+      "path": "catalog.json",
+      "bytes": 376016,
+      "sha256": "0fb2b84f87577cdd64a0195a9d08925857a4e27e2bb350e3f6f026c204b26c16"
+    },
+    {
+      "path": "contacts/MC264649.json",
+      "bytes": 3672925,
+      "sha256": "b3f2b432ea5ba4f300dabff71119f9e0431a150622db57f23c32ba0be32665fc"
+    },
+    {
+      "path": "contacts/MC264824.json",
+      "bytes": 4221144,
+      "sha256": "f0aebec2ac75da7cc400dd31ece26c0287ed8e037bb627d28c4c9f025466b2c4"
+    },
+    {
+      "path": "contacts/MC264920.json",
+      "bytes": 3632168,
+      "sha256": "8c96864cf98e31477c74ded332092de3b1a70e662301188eeb472d02e3990943"
+    },
+    {
+      "path": "contacts/MC298937.json",
+      "bytes": 3593607,
+      "sha256": "3fc08f96c574544411c453e0c1221a2c6ffef2cd48cceb30c33404754d86dc4f"
+    },
+    {
+      "path": "decision-schema-v2.json",
+      "bytes": 4126,
+      "sha256": "a8d4ed3cad69f9f70f95950b803ac4b68625a30d1fbe5a37f773c5adcd62e3b2"
+    },
+    {
+      "path": "decisions-blank-v2.json",
+      "bytes": 12920,
+      "sha256": "e83d5c8d9eb765e417bb74976dc0e8845946c89dc18d76fff910f5809a4de584"
+    },
+    {
+      "path": "source-pointers.json",
+      "bytes": 117028,
+      "sha256": "6234efaba111567765c99adb9c9f3bf0ef928aa6f29dccb3b115e529bb70343f"
+    }
+  ]
+}

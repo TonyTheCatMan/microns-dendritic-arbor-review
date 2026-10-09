@@ -1,0 +1,460 @@
+{
+  "schemaVersion": 2,
+  "projectId": "microns-dendritic-arbor-review",
+  "catalogHash": "a418cf860346c65eb04fe0032de39e2d636c3778413259769a2a462ffa49d132",
+  "sourceHash": "f2f20d85a817da34f26fbf79064393cdd0711e4c04833429f3d554e259a5f5cc",
+  "anatomicalCertification": false,
+  "originalSourcesModified": false,
+  "records": {
+    "MC298937.soma_identity": {
+      "taskId": "MC298937.soma_identity",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC298937.origin3447_to_soma": {
+      "taskId": "MC298937.origin3447_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC298937.origin4053_to_soma": {
+      "taskId": "MC298937.origin4053_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC298937.origin4480_to_soma": {
+      "taskId": "MC298937.origin4480_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC298937.origin4667_to_soma": {
+      "taskId": "MC298937.origin4667_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC298937.cut4475": {
+      "taskId": "MC298937.cut4475",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC298937.damage_cut4475_z872320": {
+      "taskId": "MC298937.damage_cut4475_z872320",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.soma_identity": {
+      "taskId": "MC264649.soma_identity",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.origin3362_to_soma": {
+      "taskId": "MC264649.origin3362_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.origin3639_to_soma": {
+      "taskId": "MC264649.origin3639_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.origin3944_to_soma": {
+      "taskId": "MC264649.origin3944_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.origin3945_to_soma": {
+      "taskId": "MC264649.origin3945_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.origin4058_to_soma": {
+      "taskId": "MC264649.origin4058_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.origin4507_to_soma": {
+      "taskId": "MC264649.origin4507_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.relation_3362_4058": {
+      "taskId": "MC264649.relation_3362_4058",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.relation_3944_3945": {
+      "taskId": "MC264649.relation_3944_3945",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.boundary_origin3944": {
+      "taskId": "MC264649.boundary_origin3944",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264649.boundary_excluded3639": {
+      "taskId": "MC264649.boundary_excluded3639",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.soma_identity": {
+      "taskId": "MC264920.soma_identity",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin5149_to_soma": {
+      "taskId": "MC264920.origin5149_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin5498_to_soma": {
+      "taskId": "MC264920.origin5498_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin5794_to_soma": {
+      "taskId": "MC264920.origin5794_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin6123_to_soma": {
+      "taskId": "MC264920.origin6123_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin6124_to_soma": {
+      "taskId": "MC264920.origin6124_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin6127_to_soma": {
+      "taskId": "MC264920.origin6127_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.origin6422_to_soma": {
+      "taskId": "MC264920.origin6422_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.relation_5149_5498": {
+      "taskId": "MC264920.relation_5149_5498",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.relation_5149_5498_6127": {
+      "taskId": "MC264920.relation_5149_5498_6127",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.relation_5498_6127": {
+      "taskId": "MC264920.relation_5498_6127",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.boundary_origin5149": {
+      "taskId": "MC264920.boundary_origin5149",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264920.boundary_origin5794": {
+      "taskId": "MC264920.boundary_origin5794",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.soma_identity": {
+      "taskId": "MC264824.soma_identity",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2428_to_soma": {
+      "taskId": "MC264824.origin2428_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2517_to_soma": {
+      "taskId": "MC264824.origin2517_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2601_to_soma": {
+      "taskId": "MC264824.origin2601_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2710_to_soma": {
+      "taskId": "MC264824.origin2710_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2711_to_soma": {
+      "taskId": "MC264824.origin2711_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2721_to_soma": {
+      "taskId": "MC264824.origin2721_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2826_to_soma": {
+      "taskId": "MC264824.origin2826_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin2969_to_soma": {
+      "taskId": "MC264824.origin2969_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.origin3476_to_soma": {
+      "taskId": "MC264824.origin3476_to_soma",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.cut869": {
+      "taskId": "MC264824.cut869",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.cut2638": {
+      "taskId": "MC264824.cut2638",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.cut5297": {
+      "taskId": "MC264824.cut5297",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.relation_2601_2710": {
+      "taskId": "MC264824.relation_2601_2710",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.relation_2601_2710_2711": {
+      "taskId": "MC264824.relation_2601_2710_2711",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.relation_2601_2711": {
+      "taskId": "MC264824.relation_2601_2711",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.relation_2710_2711": {
+      "taskId": "MC264824.relation_2710_2711",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.damage_origin2711_z818640": {
+      "taskId": "MC264824.damage_origin2711_z818640",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    },
+    "MC264824.excluded2826_vs2428": {
+      "taskId": "MC264824.excluded2826_vs2428",
+      "status": "unreviewed",
+      "answers": {},
+      "notes": "",
+      "annotations": [],
+      "reviewer_name": null,
+      "qualifications": null
+    }
+  }
+}

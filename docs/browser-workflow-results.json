@@ -1,0 +1,86 @@
+{
+  "testedAt": "2026-10-09T11:17:26.221Z",
+  "origin": "http://127.0.0.1:8874",
+  "browser": "Edge Chromium headless",
+  "checks": [
+    {
+      "label": "native full-resolution first useful task",
+      "passed": true,
+      "wallMs": 13151,
+      "elapsed": 12967.09999999404,
+      "totalChunks": 25,
+      "bytes": 3859475,
+      "shape": [
+        512,
+        512
+      ],
+      "resolution": [
+        8,
+        8,
+        40
+      ]
+    },
+    {
+      "label": "50 task controls and blank human decision defaults",
+      "passed": true
+    },
+    {
+      "label": "point, per-mark note, autosave and Ctrl+S",
+      "passed": true
+    },
+    {
+      "label": "reload restores marks, decisions and saved views",
+      "passed": true
+    },
+    {
+      "label": "version-bound candidate segment ID remains exact string",
+      "passed": true
+    },
+    {
+      "label": "section change preserves draft and does not connect sections",
+      "passed": true
+    },
+    {
+      "label": "undo and redo retain valid review state",
+      "passed": true
+    },
+    {
+      "label": "exact synapse search reconstructs full seven-contact source footprint",
+      "passed": true
+    },
+    {
+      "label": "task switching preserves edits",
+      "passed": true
+    },
+    {
+      "label": "English interface, unchanged original notes, no arrow characters",
+      "passed": true
+    },
+    {
+      "label": "selected evidence ZIP includes native and annotated image files",
+      "passed": true
+    },
+    {
+      "label": "complete-project portable export",
+      "passed": true
+    },
+    {
+      "label": "clean-profile import and reload exactly reconstructs work",
+      "passed": true
+    },
+    {
+      "label": "conflicting import defaults to keeping local work",
+      "passed": true
+    },
+    {
+      "label": "image cache eviction and failed imagery preserve review state",
+      "passed": true
+    },
+    {
+      "label": "no uncaught browser page errors",
+      "passed": true
+    }
+  ],
+  "anatomicalReview": false,
+  "defaultProjectUnchanged": true
+}
