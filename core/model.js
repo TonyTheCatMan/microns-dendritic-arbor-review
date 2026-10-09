@@ -56,7 +56,9 @@ export function validateMarkGeometry(mark) {
   invariant(mark.kind !== 'point' || mark.pointsNm.length === 1, 'POINTS', 'Point annotations contain one point');
   invariant(mark.kind === 'point' || mark.pointsNm.length >= 2 || mark.draft === true, 'POINTS', 'Finished shapes require at least two points; incomplete drafts must be explicit');
   invariant(!['arrow', 'ellipse'].includes(mark.kind) || mark.pointsNm.length <= 2, 'POINTS', 'Arrows and ellipses contain two endpoints');
-  invariant(!['trace', 'freehand'].includes(mark.kind) || mark.closed !== true, 'CLOSED_TRACE', 'An open route must not be silently closed');
+  invariant(mark.closed === undefined || typeof mark.closed === 'boolean', 'MARK_CLOSED', 'Invalid annotation closure state');
+  invariant(mark.kind !== 'freehand' || mark.closed !== true, 'CLOSED_TRACE', 'Freehand paths remain open');
+  if (mark.kind === 'trace' && mark.closed === true) invariant(new Set(mark.pointsNm.map(point => point.join(','))).size >= 3, 'CLOSED_TRACE', 'A closed trace requires at least three distinct vertices');
   invariant(['xy', 'xz', 'yz', 'XY', 'XZ', 'YZ'].includes(mark.plane) || plain(mark.plane), 'PLANE', 'Annotation requires a plane');
   const planeValue = typeof mark.plane === 'string' ? mark.plane : mark.plane.plane ?? ({x:'yz',y:'xz',z:'xy'}[mark.plane.axis]);
   const plane = typeof planeValue === 'string' ? planeValue.toLowerCase() : undefined;

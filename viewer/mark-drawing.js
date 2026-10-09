@@ -32,7 +32,10 @@ export function markGeometry(mark, projectedPoints, {x=0, y=0, sx=1, sy=1, offse
   // Break paths at off-plane points rather than joining across unreviewed sections.
   const geometry=[];let run=[];
   const finish=()=>{if(run.length>1)geometry.push(polyline(run));run=[];};
-  for(const point of points){if(finiteOnPlane(point))run.push(position(point));else finish();}finish();
+  for(const point of points){if(finiteOnPlane(point))run.push(position(point));else finish();}
+  // Closure is explicit and does not connect vertices across different sections.
+  if(kind==='trace'&&mark.closed===true&&points.length>=3&&points.every(finiteOnPlane))run.push(position(points[0]));
+  finish();
   return geometry;
 }
 export function markSvg(mark, projectedPoints, options={}) {

@@ -89,6 +89,9 @@ try{
       samples=[await pointerClick(page,...geometry.a),await pointerClick(page,...geometry.middle),await pointerClick(page,...geometry.b)];
       await page.locator('#finishMark').click();
     }else samples=await pointerDrag(page,geometry.a,geometry.b);
+    assert.equal(await page.locator('#editorDialog').isVisible(),false,`${geometry.kind} saves without opening an editor`);
+    assert.equal((await task(page)).marks.at(-1).draft,false,`${geometry.kind} is completed immediately`);
+    await page.locator('#activeMarkEdit').click();
     await page.locator('#editorDialog').waitFor({state:'visible'});
     if(geometry.kind==='arrow'){
       await page.locator('#itemColor').fill('#ed4e88');await page.locator('#itemLineWidth').fill('4');

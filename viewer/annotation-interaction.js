@@ -17,7 +17,7 @@ function hitsBody(mark,pts,p,tolerance){
   const kind=kindOf(mark),a=pts[0],b=pts.at(-1);
   if(kind==='roi')return p[0]>=Math.min(a[0],b[0])-tolerance&&p[0]<=Math.max(a[0],b[0])+tolerance&&p[1]>=Math.min(a[1],b[1])-tolerance&&p[1]<=Math.max(a[1],b[1])+tolerance;
   if(kind==='ellipse'){const rx=Math.abs(a[0]-b[0])/2,ry=Math.abs(a[1]-b[1])/2,cx=(a[0]+b[0])/2,cy=(a[1]+b[1])/2;return ((p[0]-cx)/(rx+tolerance))**2+((p[1]-cy)/(ry+tolerance))**2<=1;}
-  return pts.slice(1).some((q,i)=>lineDistance(p,pts[i],q)<=tolerance);
+  return pts.slice(1).some((q,i)=>lineDistance(p,pts[i],q)<=tolerance)||(kind==='trace'&&mark.closed===true&&pts.length>=3&&lineDistance(p,b,a)<=tolerance);
 }
 /** CSS-pixel hit testing is independent of native XY/XZ/YZ anisotropy. */
 export function hitAnnotation(marks,plan,rect,point,{activeId=null,tolerance=9}={}){

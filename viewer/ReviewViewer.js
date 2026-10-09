@@ -95,7 +95,7 @@ export class ReviewViewer {
     for(const mark of visibleMarks(marks,p)){
       const pts=mark.projected;drawMark(ctx,mark,pts,{x,y,sx,sy});
       const first=pts.find(t=>t.onPlane);if(first&&(mark.label||mark.kind==='distance')){const a=[x+(first.x+.5)*sx,y+(first.y+.5)*sy];let label=mark.label||'';if(mark.kind==='distance'&&mark.pointsNm?.length===2){const [a,b]=mark.pointsNm;label+=`${label?' · ':''}${(Math.hypot(...a.map((n,i)=>n-b[i]))/1000).toFixed(3)} µm`;}ctx.strokeStyle='#101b25';ctx.lineWidth=3;ctx.strokeText(label,a[0]+8,a[1]-8);ctx.fillStyle=mark.color||'#ffd166';ctx.fillText(label,a[0]+8,a[1]-8);}
-      if(mark.id===this.activeMarkId&&editableOnPlane(mark,p)&&this.loadedKey===planeKey(this.view)&&p.complete){const pts=markScreenPoints(mark,p,this.drawRect);ctx.fillStyle='#fff';ctx.strokeStyle='#111';ctx.lineWidth=1.5;for(const index of handleIndices(mark)){const a=pts[index];ctx.fillRect(a[0]-4,a[1]-4,8,8);ctx.strokeRect(a[0]-4,a[1]-4,8,8);}}
+      if(mark.id===this.activeMarkId&&editableOnPlane(mark,p)&&this.loadedKey===planeKey(this.view)&&p.complete){const pts=markScreenPoints(mark,p,this.drawRect);ctx.fillStyle='#fff';ctx.strokeStyle='#111';ctx.lineWidth=1.5;for(const index of handleIndices(mark)){const a=pts[index];ctx.fillRect(a[0]-4,a[1]-4,8,8);ctx.strokeRect(a[0]-4,a[1]-4,8,8);}if(this.interactionMode==='trace'&&mark.kind==='trace'&&mark.draft&&new Set(mark.pointsNm.map(point=>point.join(','))).size>=3){const a=pts[0];ctx.beginPath();ctx.arc(a[0],a[1],12,0,Math.PI*2);ctx.strokeStyle=mark.color||'#ffd166';ctx.lineWidth=2;ctx.stroke();}}
     }
     ctx.restore();
     const bar=scaleBar(p),length=bar.nm*scale;ctx.fillStyle='#000b';ctx.fillRect(x+8,y+dh-49,length+30,40);ctx.strokeStyle=ctx.fillStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+20,y+dh-18);ctx.lineTo(x+20+length,y+dh-18);ctx.stroke();ctx.fillText(bar.label,x+20,y+dh-28);
@@ -103,6 +103,10 @@ export class ReviewViewer {
     if(this.loadedKey!==planeKey(this.view)){ctx.fillStyle='#523b12ed';ctx.fillRect(x,y+26,dw,30);ctx.fillStyle='#fff';ctx.fillText(this.text('Предыдущий вид · новый загружается','Previous view · new position loading'),x+10,y+46);}
   }
   canvasPoint(event,clamp=false){const rect=this.canvas.getBoundingClientRect(),r=this.drawRect;if(!r||!this.plane)return null;const x=(event.clientX-rect.left-r.x)/r.w*this.plane.width,y=(event.clientY-rect.top-r.y)/r.h*this.plane.height;if(clamp)return {x:Math.max(0,Math.min(this.plane.width-1,x)),y:Math.max(0,Math.min(this.plane.height-1,y))};if(x<0||y<0||x>=this.plane.width||y>=this.plane.height)return null;return {x,y};}
+  traceStartHit(mark,screenPoint){
+    if(!screenPoint||!this.canEditPlane()||!editableOnPlane(mark,this.plane)||!this.drawRect)return false;
+    const first=markScreenPoints(mark,this.plane,this.drawRect)[0];return Math.hypot(first[0]-screenPoint[0],first[1]-screenPoint[1])<=12;
+  }
   canEditPlane(){return !!this.task&&!!this.plane?.complete&&this.loadedKey===planeKey(this.view);}
   cancelInteraction(){this.drag=null;this.annotationPreview=null;this.dragPreview=null;}
   markEvent(pointsNm,kind){return {kind,pointsNm,plane:this.plane.plane,sourceBinding:this.getSourceBinding(),taskId:this.task.id||this.task.taskId};}
@@ -112,7 +116,7 @@ export class ReviewViewer {
       if(this.drag||![0,1].includes(e.button)||!this.task)return;
       const point=this.canvasPoint(e),pan=this.interactionMode==='navigate'||e.button===1||e.shiftKey;if(!point&&!pan)return;
       if(!pan&&!this.canEditPlane()){this.say(this.text('Дождитесь полной загрузки текущего среза, чтобы рисовать или менять метки.','Wait for the current section to finish loading before drawing or editing marks.'),'error');return;}
-      e.preventDefault();const rect=this.canvas.getBoundingClientRect(),mode=pan?'navigate':this.interactionMode,startNm=point?samplePoint(this.plane,point):null;
+      e.preventDefault();this.canvas.closest('[tabindex]')?.focus({preventScroll:true});const rect=this.canvas.getBoundingClientRect(),mode=pan?'navigate':this.interactionMode,startNm=point?samplePoint(this.plane,point):null;
       let hit=null;if(mode==='select'){hit=hitAnnotation(this.overlays,this.plane,this.drawRect,[e.clientX-rect.left,e.clientY-rect.top],{activeId:this.activeMarkId});this.activeMarkId=hit?.mark.id||null;this.onMarkSelect(this.activeMarkId);}
       this.drag={x:e.clientX,y:e.clientY,center:[...this.view.centerNm],moved:false,pointerId:e.pointerId,epoch:this.epoch,key:this.loadedKey,mode,startNm,hit,points:startNm?[startNm]:[]};
       if(DRAG_TOOLS.has(mode))this.annotationPreview={kind:mode,plane:this.plane.plane,pointsNm:[startNm,startNm],visible:true,color:this.markColor||'#ffd166',strokeWidth:this.markStrokeWidth||2};
@@ -141,7 +145,7 @@ export class ReviewViewer {
         const nm=samplePoint(this.plane,point);
         if(drag.mode==='select'&&drag.hit&&drag.moved){const pointsNm=moveAnnotation(drag.hit.mark,this.plane,drag.startNm,nm,drag.hit.index);this.onMarkEdit({id:drag.hit.mark.id,pointsNm,taskId:this.task.id||this.task.taskId});}
         else if(DRAG_TOOLS.has(drag.mode)&&drag.moved){const points=drag.mode==='freehand'?(preview?.pointsNm||drag.points):[drag.startNm,nm];if(drag.mode==='freehand'&&nm.some((n,i)=>n!==points.at(-1)[i]))points.push(nm);if(validDraw(drag.mode,points,this.plane))this.onMark(this.markEvent(points,drag.mode));}
-        else if(['point','trace'].includes(drag.mode)&&!drag.moved)this.onPoint({pointNm:nm,...this.markEvent([nm],drag.mode)});
+        else if(['point','trace'].includes(drag.mode)&&!drag.moved)this.onPoint({pointNm:nm,screenPoint:[e.clientX-this.canvas.getBoundingClientRect().left,e.clientY-this.canvas.getBoundingClientRect().top],...this.markEvent([nm],drag.mode)});
       }
       this.draw();
     });

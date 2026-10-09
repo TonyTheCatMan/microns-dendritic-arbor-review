@@ -76,3 +76,45 @@ test('native navigation emits arrows and ellipses in their actual plane and pres
   const freehand=annotations.filter(item=>item.id.startsWith('freehand-'));assert.equal(freehand.length,2);assert.deepEqual(ngToNm(freehand.at(-1).pointB),marks[2].pointsNm.at(-1));assert.equal(annotations.length,new Set(annotations.map(item=>item.id)).size);assert.equal(annotations[0].description,`${marks[0].label}\n${marks[0].note}`);assert.deepEqual(marks,before);
   const ring=ellipsePointsNm(marks[1]);assert.equal(ring.length,65);assert.deepEqual(ring[0],ring.at(-1));assert.ok(ring.every(point=>point[1]===800));
 });
+
+
+test('trace closure is explicit, requires three distinct coplanar vertices, and preserves the source points',()=>{
+  const pointsNm=[[0,0,0],[8,0,0],[8,8,0]],closed=mark('trace',{closed:true,pointsNm}),before=structuredClone(closed);
+  assert.doesNotThrow(()=>validateMarkGeometry(closed));assert.deepEqual(closed,before);
+  assert.doesNotThrow(()=>validateMarkGeometry(mark('trace',{closed:false})));
+  assert.doesNotThrow(()=>validateMarkGeometry(mark('trace',{draft:true,pointsNm:[[0,0,0]]})));
+  for(const points of [[[0,0,0],[8,8,0]],[[0,0,0],[8,8,0],[0,0,0]]])assert.throws(()=>validateMarkGeometry(mark('trace',{closed:true,pointsNm:points})),{code:'CLOSED_TRACE'});
+  assert.throws(()=>validateMarkGeometry(mark('trace',{closed:'true',pointsNm})),{code:'MARK_CLOSED'});
+  assert.throws(()=>validateMarkGeometry(mark('trace',{closed:true,pointsNm:[[0,0,0],[8,0,0],[8,8,40]]})),{code:'NONCOPLANAR_MARK'});
+});
+
+test('open and closed traces round-trip through ZIP and selected JSON with exact vertices, notes and binding',async()=>{
+  const task=taskWithMarks(),closed=mark('trace',{id:'closed-route',closed:true,pointsNm:[[752960,646592,858640],[753120,646592,858640],[753120,646752,858640]]});
+  task.marks.push(closed,mark('trace',{id:'open-route'}));
+  const zip=await parseImport((await createExport(catalog,[task],{scope:'current'})).blob,catalog);
+  assert.deepEqual(zip.tasks,[task]);
+  const json=await parseImport(createAnnotationExport(catalog,[task],{scope:'selected',selectedIds:['closed-route']}).blob,catalog);
+  assert.deepEqual(json.tasks[0].marks,[closed]);assert.equal(json.tasks[0].marks[0].pointsNm.length,3);assert.deepEqual(json.tasks[0].decision,task.decision);
+});
+
+test('Canvas and SVG explicitly join the trace tail, while default traces and off-plane runs stay open',()=>{
+  const projected=[{x:0,y:0,onPlane:true},{x:20,y:0,onPlane:true},{x:20,y:20,onPlane:true}],closed=mark('trace',{closed:true}),before=structuredClone(projected);
+  const geometry=markGeometry(closed,projected,{offset:0});assert.deepEqual(geometry[0].points,[[0,0],[20,0],[20,20],[0,0]]);
+  assert.deepEqual(markGeometry(mark('trace'),projected,{offset:0})[0].points,[[0,0],[20,0],[20,20]]);
+  assert.deepEqual(markGeometry({...closed,closed:false},projected,{offset:0})[0].points,[[0,0],[20,0],[20,20]]);
+  const split=markGeometry(closed,[...projected.slice(0,2),{x:20,y:20,onPlane:false},{x:30,y:20,onPlane:true}],{offset:0});assert.deepEqual(split[0].points,[[0,0],[20,0]]);assert.equal(split.length,1);
+  const calls=[],ctx=new Proxy({}, {get:(target,key)=>target[key]??((...args)=>calls.push([key,...args])),set:(target,key,value)=>(target[key]=value,true)});
+  assert.deepEqual(drawMark(ctx,closed,projected,{offset:0}),geometry);assert.deepEqual(calls.filter(call=>call[0]==='lineTo'),[['lineTo',20,0],['lineTo',20,20],['lineTo',0,0]]);assert.deepEqual(projected,before);
+  const plan=planePlan({plane:'xy',centerNm:[800,800,800],spanNm:800},{resolution:RESOLUTION_NM}),pointsNm=[[640,640,800],[960,640,800],[960,960,800]];
+  const {svg}=overlaySvg(plan,[mark('trace',{closed:true,pointsNm})]);assert.match(svg,/<polyline points="30\.5,30\.5 70\.5,30\.5 70\.5,70\.5 30\.5,30\.5"/);
+});
+
+test('native closed traces add exactly the tail-to-start segment in each plane without duplicating source vertices',()=>{
+  for(const plane of ['xy','xz','yz']){
+    const depthAxis={xy:2,xz:1,yz:0}[plane],axes=[0,1,2].filter(axis=>axis!==depthAxis),a=[800,800,800],b=[...a],c=[...a];b[axes[0]]+=160;c[axes[0]]+=160;c[axes[1]]+=160;
+    const closed=mark('trace',{closed:true,plane,pointsNm:[a,b,c]}),before=structuredClone(closed),view={centerNm:[800,800,800],plane,spanNm:800};
+    const annotations=makeNgState({id:'review-task'},view,[],[closed]).layers.find(layer=>layer.name===MARK_LAYER).annotations;
+    assert.equal(annotations.length,3);assert.equal(annotations.at(-1).id,'trace-close');assert.deepEqual(ngToNm(annotations.at(-1).pointA),c);assert.deepEqual(ngToNm(annotations.at(-1).pointB),a);assert.equal(annotations.at(-1).description,`${closed.label}\n${closed.note}`);assert.deepEqual(closed,before);
+    const open=makeNgState({id:'review-task'},view,[],[{...closed,closed:false}]).layers.find(layer=>layer.name===MARK_LAYER).annotations;assert.equal(open.length,2);
+  }
+});

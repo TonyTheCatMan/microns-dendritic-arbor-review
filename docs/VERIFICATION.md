@@ -2,9 +2,13 @@
 
 This records software and source-binding checks. All 50 anatomy decisions remain unreviewed. The automatic-branch and prepared-imagery correction has passed local source, workflow and full native integration checks, and is now deployed with verified public assets and a passing clean public-browser run.
 
+## Connected traces and uninterrupted drawing
+
+Explicit trace closure is covered by 90 passing Node tests and 12 browser workflows in `trace-browser-witness.json`. Real-pointer checks cover repeated points/arrows without a popup or scroll jump, open Finish/Enter, first-point closure without duplicate vertices, close/reopen controls, Continue preserving identity/notes, optional explicit editing, a delayed-Continue tool-change race, autosave/reload and exact fresh-profile ZIP/JSON uploads. All 15 annotation workflows, four integrity regressions and 16 established workflows also pass. Shared Canvas/SVG/3D and native annotations include the closing edge. Browser profiles are isolated; no reviewer work is changed.
+
 ## Image markup follow-up
 
-The current markup update passes 85 Node tests, 15 actual-pointer annotation workflows, four focused editing/import regressions, all 16 established review/exchange workflows and six durable-cache workflows. Checks cover all seven mark geometries, exact native samples, per-mark notes and styles, body/handle dragging, undo/save consistency, legacy plane formats, edited-section evidence, 50-task and selected exports, fresh-profile ZIP/JSON import, and visible annotation pixels in decoded PNGs. A fresh single-image worker found the toolbar, arrow handles, mark list and note inspector clear, with no overlap; the ambiguous cancel/undo labels were subsequently clarified. Code `8f760201be3795b3afa9308dfe721dffa69a7738` deployed through [run 37947487194](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37947487194); all 37 public assets match. All 15 [live annotation checks](live-annotation-browser-witness.json) pass. Native integration also passes with zero exported native-pixel mismatches. See [ANNOTATIONS.md](ANNOTATIONS.md).
+The earlier markup release passed 85 Node tests, 15 actual-pointer annotation workflows, four focused editing/import regressions, all 16 established review/exchange workflows and six durable-cache workflows. Checks cover all seven mark geometries, exact native samples, per-mark notes and styles, body/handle dragging, undo/save consistency, legacy plane formats, edited-section evidence, 50-task and selected exports, fresh-profile ZIP/JSON import, and visible annotation pixels in decoded PNGs. A fresh single-image worker found the toolbar, arrow handles, mark list and note inspector clear, with no overlap; the ambiguous cancel/undo labels were subsequently clarified. Code `8f760201be3795b3afa9308dfe721dffa69a7738` deployed through [run 37947487194](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37947487194); all 37 public assets match. All 15 [live annotation checks](live-annotation-browser-witness.json) pass. Native integration also passes with zero exported native-pixel mismatches. See [ANNOTATIONS.md](ANNOTATIONS.md).
 
 ## Cutout camera and durable cache follow-up
 
@@ -16,7 +20,7 @@ The previous four-step warm test stayed within an already downloaded 16-section 
 
 ## Current source and browser evidence
 
-**85 Node tests pass.** Coverage includes catalog/exchange invariants, exact large string IDs, source identity, integer coordinates, XY/XZ/YZ anisotropy, source sharding, shared cancellation and bounded caching, native mesh transforms, stale-plane protection, and prepared-data integrity. New prepared-source tests show the first plane before held background packs, verify every pixel through 80 sections across four chunk boundaries with no additional requests after warming, reject corrupted assets and changed public metadata, and preserve source binding after cache clearing.
+**90 Node tests pass.** Coverage includes catalog/exchange invariants, exact large string IDs, source identity, integer coordinates, XY/XZ/YZ anisotropy, source sharding, shared cancellation and bounded caching, native mesh transforms, stale-plane protection, and prepared-data integrity. New prepared-source tests show the first plane before held background packs, verify every pixel through 80 sections across four chunk boundaries with no additional requests after warming, reject corrupted assets and changed public metadata, and preserve source binding after cache clearing.
 
 `node tools/verify-prepared-em.mjs` independently verified:
 

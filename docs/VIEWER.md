@@ -10,7 +10,7 @@ Views are `{centerNm:[x,y,z],plane:'xy'|'xz'|'yz',spanNm:4096,resolutionNm:[8,8,
 
 Native zoom and camera orientation are retained in `ngState`. Exact orthogonal native camera orientations also select the matching raw plane. Arbitrary oblique native views remain saved as navigation views with `nativeOblique:true`; the raw evidence plane remains orthogonal and is labeled as such. A native overview can be wider than the bounded raw acquisition field. Native edits that replace a pinned source URL or coordinate scale are rejected for saved picks/navigation evidence until the task is reopened; they cannot silently rebind IDs to another source.
 
-Marks accept `id`, `type` or `kind`, `pointsNm` (or `points`, or `pointNm`), `plane`, `color`, `visible`, `label`, `note`. Point, open trace, distance and rectangular ROI overlays are supported. Off-plane vertices are not projected onto the current plane, and lines are never drawn between off-plane vertices in a 2D evidence panel. User notes are preserved verbatim. UI editing, undo and saved evidence belong to the host.
+Marks accept `id`, `type` or `kind`, `pointsNm` (or `points`, or `pointNm`), `plane`, `color`, `visible`, `label`, `note`. Point, arrow, trace, freehand, ellipse, distance and rectangular ROI overlays are supported. Traces are open by default; an explicit `closed: true` adds the last-to-first edge without duplicating the first stored vertex. Closed traces require at least three distinct coplanar vertices. Off-plane vertices are not projected onto the current plane, and lines are never drawn between off-plane vertices in a 2D evidence panel. User notes are preserved verbatim. UI editing, undo and saved evidence belong to the host.
 
 ## Coordinates and source versions
 

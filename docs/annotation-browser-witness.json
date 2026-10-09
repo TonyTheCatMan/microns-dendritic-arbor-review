@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-10-09T14:40:16.198Z",
+  "testedAt": "2026-10-09T15:25:10.696Z",
   "origin": "http://127.0.0.1:8874",
   "browser": "Edge Chromium headless",
   "checks": [
@@ -52,7 +52,7 @@
     {
       "name": "one-click annotated image downloads a real PNG",
       "passed": true,
-      "bytes": 300078
+      "bytes": 298593
     },
     {
       "name": "complete 50-task ZIP and compact task JSON preserve exact geometry, styles, notes and provenance",

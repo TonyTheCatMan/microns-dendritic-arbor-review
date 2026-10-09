@@ -62,7 +62,7 @@ try{
   report.checks.push('Every section across +32 and -32 offsets remains correctly positioned and matches independently reconstructed exact native chunk pixels where prepared');
   await page.evaluate(anchor=>ReviewApp.viewer.setView({centerNm:anchor}),anchor);
   await page.locator('#decisionNote').fill('QA persistence across prepared-image and task changes');
-  await page.locator('[data-tool="point"]').click();await page.locator('#emCanvas').click();await page.locator('#itemLabel').fill('QA source-bound point');await page.locator('#itemNote').fill('QA exact coordinates retained');await page.locator('#commitEditor').click();await page.evaluate(()=>ReviewApp.saveAll());
+  await page.locator('[data-tool="point"]').click();await page.locator('#emCanvas').click();assert.equal(await page.locator('#editorDialog').isVisible(),false);await page.locator('#activeMarkEdit').click();await page.locator('#itemLabel').fill('QA source-bound point');await page.locator('#itemNote').fill('QA exact coordinates retained');await page.locator('#commitEditor').click();await page.evaluate(()=>ReviewApp.saveAll());
   const preserved=await page.evaluate(()=>({note:ReviewApp.task.decision.note,marks:structuredClone(ReviewApp.task.marks),segments:structuredClone(ReviewApp.task.segments)}));
   const taskIds=await page.evaluate(()=>ReviewApp.catalog.tasks.slice(1,4).map(t=>t.id));
   const switchStart=Date.now();await page.evaluate(id=>ReviewApp.switchTask(id),taskIds[0]);await page.waitForFunction(()=>ReviewApp.viewer.surface.modelReady,{timeout:30000});

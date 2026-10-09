@@ -37,15 +37,17 @@ test('freehand handle count is bounded and degenerate shapes are not committed',
 
 function harness(mode='arrow'){
   const handlers={},events=[],p=plan(),view={plane:'xy',centerNm:[800,800,800],spanNm:800},capture=new Set();
-  const host={canvas:{style:{},getBoundingClientRect:()=>({left:0,top:0}),addEventListener:(name,fn)=>handlers[name]=fn,setPointerCapture:id=>capture.add(id),hasPointerCapture:id=>capture.has(id),releasePointerCapture:id=>capture.delete(id)},task:{id:'task-a'},epoch:'a',view,plane:p,loadedKey:planeKey(view),drawRect:{x:0,y:0,w:100,h:100},interactionMode:mode,overlays:[],draw(){},say(){},text:(_,en)=>en,getSourceBinding:()=>({source:'native-em'}),onPoint:e=>events.push(['point',e]),onMark:e=>events.push(['mark',e]),onMarkSelect:id=>events.push(['select',id]),onMarkEdit:e=>events.push(['edit',e]),setView:e=>events.push(['view',e])};
+  const focusCalls=[],dom={activeElement:{tagName:'TEXTAREA'},addEventListener(){}},viewport={tagName:'DIV',tabIndex:0,focus(options){dom.activeElement=this;focusCalls.push(options);}};
+  const host={canvas:{style:{},closest:selector=>selector==='[tabindex]'?viewport:null,getBoundingClientRect:()=>({left:0,top:0}),addEventListener:(name,fn)=>handlers[name]=fn,setPointerCapture:id=>capture.add(id),hasPointerCapture:id=>capture.has(id),releasePointerCapture:id=>capture.delete(id)},task:{id:'task-a'},epoch:'a',view,plane:p,loadedKey:planeKey(view),drawRect:{x:0,y:0,w:100,h:100},interactionMode:mode,overlays:[],draw(){},say(){},text:(_,en)=>en,getSourceBinding:()=>({source:'native-em'}),onPoint:e=>events.push(['point',e]),onMark:e=>events.push(['mark',e]),onMarkSelect:id=>events.push(['select',id]),onMarkEdit:e=>events.push(['edit',e]),setView:e=>events.push(['view',e])};
   for(const name of ['canvasPoint','cancelInteraction','canEditPlane','markEvent'])host[name]=ReviewViewer.prototype[name];
-  const original=globalThis.document;globalThis.document={addEventListener(){}};
+  const original=globalThis.document;globalThis.document=dom;
   try{ReviewViewer.prototype.installControls.call(host);}finally{globalThis.document=original;}
   const send=(name,x,y,extra={})=>handlers[name]({clientX:x,clientY:y,button:0,pointerId:1,preventDefault(){},...extra});
-  return {host,events,send};
+  return {host,events,send,dom,viewport,focusCalls};
 }
 test('drag callback commits exact source-bound points once; pan and click gestures remain distinct',()=>{
-  const {host,events,send}=harness();send('pointerdown',10.9,20.3);send('pointermove',50.7,61.8);send('pointerup',50.7,61.8);
+  const {host,events,send,dom,viewport,focusCalls}=harness();send('pointerdown',10.9,20.3);send('pointermove',50.7,61.8);send('pointerup',50.7,61.8);
+  assert.equal(dom.activeElement,viewport);assert.deepEqual(focusCalls,[{preventScroll:true}]);
   assert.equal(events.length,1);assert.equal(events[0][0],'mark');assert.deepEqual(events[0][1].pointsNm,[pixelToNm(host.plane,10,20),pixelToNm(host.plane,50,61)]);assert.equal(events[0][1].taskId,'task-a');assert.equal(events[0][1].kind,'arrow');
   send('pointerdown',10,10,{shiftKey:true});send('pointermove',30,10);send('pointerup',30,10);assert.equal(events.at(-1)[0],'view');
   host.interactionMode='point';send('pointerdown',25.8,31.6);send('pointerup',25.8,31.6);assert.deepEqual(events.at(-1)[1].pointNm,pixelToNm(host.plane,25,31));
@@ -59,4 +61,15 @@ test('selected handles resize the existing mark without replacing its ID',()=>{
   const {host,events,send}=harness('select');host.overlays=[mark('arrow',[pixelToNm(host.plane,20,20),pixelToNm(host.plane,50,50)])];host.activeMarkId='m';
   send('pointerdown',50.5,50.5);send('pointermove',60.7,70.8);send('pointerup',60.7,70.8);
   assert.deepEqual(events[0],['select','m']);assert.equal(events[1][0],'edit');assert.equal(events[1][1].id,'m');assert.deepEqual(events[1][1].pointsNm,[pixelToNm(host.plane,20,20),pixelToNm(host.plane,60,70)]);
+});
+
+
+test('explicit closing edges are selectable and remain connected after a vertex edit',()=>{
+  const p=plan(),rect={x:0,y:0,w:400,h:400},points=[pixelToNm(p,20,20),pixelToNm(p,40,20),pixelToNm(p,40,40)],closed={...mark('trace',points,'loop'),closed:true},before=structuredClone(closed);
+  assert.equal(hitAnnotation([{...closed,closed:false}],p,rect,[122,122],{tolerance:2}),null);
+  assert.deepEqual(hitAnnotation([closed],p,rect,[122,122],{tolerance:2}),{mark:closed,index:null});
+  const moved={...closed,pointsNm:moveAnnotation(closed,p,points[2],pixelToNm(p,30,50),2)};
+  assert.equal(moved.closed,true);assert.equal(moved.pointsNm.length,3);assert.deepEqual(moved.pointsNm[0],points[0]);
+  const screen=markScreenPoints(moved,p,rect),mid=screen[0].map((value,axis)=>(value+screen.at(-1)[axis])/2);
+  assert.equal(hitAnnotation([moved],p,rect,mid,{tolerance:2}).mark.id,'loop');assert.deepEqual(closed,before);
 });

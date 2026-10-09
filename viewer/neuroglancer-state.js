@@ -38,7 +38,10 @@ export function makeNgState(task,view,segments=[],marks=[],language='ru') {
         }
       }
     }
-    else for(let i=1;i<points.length;i++)line(mark.id+'-'+i,points[i-1],points[i]);
+    else {
+      for(let i=1;i<points.length;i++)line(mark.id+'-'+i,points[i-1],points[i]);
+      if(kind==='trace'&&mark.closed===true&&points.length>=3)line(mark.id+'-close',points.at(-1),points[0]);
+    }
   }
   const orientation=ORIENTATIONS[view.plane];
   return {title:task.id||task.taskId||'Dendritic review',dimensions,position:nmToNg(view.centerNm),
