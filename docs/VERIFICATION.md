@@ -2,13 +2,17 @@
 
 This records software and source-binding checks. All 50 anatomy decisions remain unreviewed. The automatic-branch and prepared-imagery correction has passed local source, workflow and full native integration checks, and is now deployed with verified public assets and a passing clean public-browser run.
 
+## Cutout camera and durable cache follow-up
+
+The latest local checks pass: six durable-cache workflows with all source endpoints blocked and HTTP caching disabled, 11 camera/rendering checks, and the 16 existing review/exchange workflows. The cache checks include a full browser restart and independently verify actual native pixels and complete mesh bytes. GPU reads confirm 50% blending without multiple transparent faces accumulating opacity. The close-up remains limited by source-mesh detail; use native EM for fine anatomy. See [cutout-and-cache.md](cutout-and-cache.md). Public deployment verification for this follow-up is pending.
+
 ## What the earlier checks missed
 
 The previous four-step warm test stayed within an already downloaded 16-section chunk. A clean public-site comparison measured 17.04 seconds for the new site's initial plane versus 4.29 seconds for the original site's prepared volume. Step six crossed a native chunk boundary and stalled for 13.65 seconds. A separate hidden-Neuroglancer control measured 252 versus 55 source requests and first-plane completion at 16.606 versus 7.463 seconds with that hidden instance enabled versus disabled. These individual runs explain the defect; they are not latency guarantees.
 
 ## Current source and browser evidence
 
-**61 Node tests pass.** Coverage includes catalog/exchange invariants, exact large string IDs, source identity, integer coordinates, XY/XZ/YZ anisotropy, source sharding, shared cancellation and bounded caching, native mesh transforms, stale-plane protection, and prepared-data integrity. New prepared-source tests show the first plane before held background packs, verify every pixel through 80 sections across four chunk boundaries with no additional requests after warming, reject corrupted assets and changed public metadata, and preserve source binding after cache clearing.
+**73 Node tests pass.** Coverage includes catalog/exchange invariants, exact large string IDs, source identity, integer coordinates, XY/XZ/YZ anisotropy, source sharding, shared cancellation and bounded caching, native mesh transforms, stale-plane protection, and prepared-data integrity. New prepared-source tests show the first plane before held background packs, verify every pixel through 80 sections across four chunk boundaries with no additional requests after warming, reject corrupted assets and changed public metadata, and preserve source binding after cache clearing.
 
 `node tools/verify-prepared-em.mjs` independently verified:
 

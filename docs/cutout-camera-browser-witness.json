@@ -1,0 +1,58 @@
+{
+  "checkedAt": "2026-10-09T13:48:19.320Z",
+  "url": "http://127.0.0.1:8874/",
+  "screenshotsTaken": 0,
+  "checks": [
+    {
+      "label": "fresh 3D view centers on the cutout at 50% opacity",
+      "passed": true,
+      "heightNm": 7106.959447525442
+    },
+    {
+      "label": "50% opacity blends nearest neuron surfaces halfway against their background",
+      "passed": true,
+      "interiorPixels": 336396,
+      "midpointWithinTwoFraction": 0.9968400337697237,
+      "meanChannelError": 0.4480314867001986,
+      "maxChannelError": 40.5,
+      "glError": 0
+    },
+    {
+      "label": "Reset centers on the current sampled cutout after navigation",
+      "passed": true
+    },
+    {
+      "label": "Match 2D remains close to the current cutout",
+      "passed": true
+    },
+    {
+      "label": "Match 2D uses the sampled XZ cutout and orientation",
+      "passed": true
+    },
+    {
+      "label": "Match 2D uses the sampled YZ cutout and orientation",
+      "passed": true
+    },
+    {
+      "label": "explicit Whole neuron overview survives reload",
+      "passed": true
+    },
+    {
+      "label": "reviewer opacity choice survives reload",
+      "passed": true
+    },
+    {
+      "label": "exact legacy automatic overview upgrades to the cutout view",
+      "passed": true
+    },
+    {
+      "label": "legacy basis rotation is preserved even when yaw and pitch retain old defaults",
+      "passed": true
+    },
+    {
+      "label": "no uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

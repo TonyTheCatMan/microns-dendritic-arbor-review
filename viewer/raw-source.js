@@ -40,9 +40,13 @@ export function decodeMinishard(bytes,indexBytes) {
 export class ChunkCache {
   constructor({maxBytes=64*1024*1024,persistentLimit=256,onWarning=()=>{}}={}) {
     this.maxBytes=maxBytes;this.persistentLimit=persistentLimit;this.onWarning=onWarning;this.memory=new Map();this.bytes=0;this.cache=null;this.persistenceDisabled=false;
+    this.openRequest=null;this.writeTail=Promise.resolve();this.generation=0;
   }
   async open() {
-    if(!this.cache&&!this.persistenceDisabled&&globalThis.caches)try{this.cache=await caches.open('dendritic-arbor-em-v2');}catch(e){this.persistenceDisabled=true;this.onWarning(e.message);}
+    if(!this.cache&&!this.persistenceDisabled&&globalThis.caches){
+      if(!this.openRequest)this.openRequest=caches.open('dendritic-arbor-em-v2').then(cache=>{this.cache=cache;}).catch(e=>{this.persistenceDisabled=true;this.onWarning(e.message);}).finally(()=>{this.openRequest=null;});
+      await this.openRequest;
+    }
   }
   key(id) {return EM_URL+'/__dendritic_native_cache__/'+encodeURIComponent(id);}
   remember(id,value) {
@@ -56,13 +60,18 @@ export class ChunkCache {
     return null;
   }
   async put(id,value) {
-    this.remember(id,value);await this.open();if(!this.cache)return;
-    try {
-      await this.cache.put(this.key(id),new Response(value));const keys=await this.cache.keys();
-      for(let i=0;i<keys.length-this.persistentLimit;i++)await this.cache.delete(keys[i]);
-    }catch(e){this.persistenceDisabled=true;this.cache=null;this.onWarning('Image cache: '+e.message);}
+    this.remember(id,value);const generation=this.generation;
+    const write=this.writeTail.then(async()=>{
+      if(generation!==this.generation)return;await this.open();if(!this.cache)return;
+      try {
+        await this.cache.put(this.key(id),new Response(value));const keys=await this.cache.keys();
+        for(let i=0;i<keys.length-this.persistentLimit;i++)await this.cache.delete(keys[i]);
+      }catch(e){this.persistenceDisabled=true;this.cache=null;this.onWarning('Image cache: '+e.message);}
+    });
+    this.writeTail=write.catch(()=>{});await write;
   }
-  async clear() {this.memory.clear();this.bytes=0;this.cache=null;if(globalThis.caches)await caches.delete('dendritic-arbor-em-v2');}
+  async delete(id){this.memory.delete(id);this.bytes=[...this.memory.values()].reduce((sum,bytes)=>sum+bytes.byteLength,0);await this.open();await this.cache?.delete(this.key(id));}
+  async clear() {this.generation++;await this.writeTail;await this.openRequest;this.memory.clear();this.bytes=0;this.cache=null;this.persistenceDisabled=false;if(globalThis.caches)await caches.delete('dendritic-arbor-em-v2');}
 }
 
 export class RawSource {
@@ -71,6 +80,12 @@ export class RawSource {
     this.initRequest=null;this.indexRequests=new Map();this.chunkRequests=new Map();this.chunkQueue=[];this.activeChunkLoads=0;this.decodedHashes=new WeakMap();
     this.prepared=prepared;this.preparedReceipts=new Map();this.failedStarters=new Set();this.liveMetadataVerified=false;this.liveInfoRequest=null;
     if(prepared)prepared.onChunk=(id,chunk)=>{const key=this.infoHash+':'+this.scale.key+':'+id;this.preparedReceipts.set(id,chunk.receipt);this.decodedHashes.set(chunk.data,Promise.resolve(chunk.receipt.decodedSha256));this.cache.put(key,chunk.data).catch(error=>this.cache.onWarning?.(error.message));};
+    if(prepared)prepared.cachedChunk=async chunk=>{
+      if(!this.scale)return null;
+      const key=this.infoHash+':'+this.scale.key+':'+chunk.chunkId,data=await this.cache.get(key);
+      if(!data||data.byteLength!==chunk.bytes||await this.decodedHash(data)!==chunk.receipt.decodedSha256)return null;
+      this.preparedReceipts.set(chunk.chunkId,chunk.receipt);return {data,receipt:{...chunk.receipt,fromCache:true}};
+    };
   }
   async init(signal) {
     signal?.throwIfAborted();
@@ -131,9 +146,11 @@ export class RawSource {
     const begin=grid.map((n,i)=>n*size[i]+(s.voxel_offset?.[i]||0));const dimensions=grid.map((n,i)=>Math.min(size[i],s.size[i]-n*size[i]));
     let entry=this.chunkRequests.get(cacheId);const shared=!!entry;
     if(!entry){
-      entry={waiters:0,started:false};
+      entry={waiters:0,started:false};const cacheGeneration=this.cache.generation;
       entry.promise=(async()=>{
-        const cached=await this.cache.get(cacheId);let data=cached,receipt;
+        let cached=await this.cache.get(cacheId);const expected=this.prepared?.chunkIndex.get(id.toString())?.chunk;
+        if(cached&&expected&&(cached.byteLength!==expected.bytes||await this.decodedHash(cached)!==expected.receipt.decodedSha256)){await this.cache.delete(cacheId);cached=null;}
+        let data=cached,receipt=expected?.receipt;
         if(!data){
           const release=await new Promise((resolve,reject)=>{this.chunkQueue.push({entry,resolve,reject});this.pumpChunks();});
           try{
@@ -150,7 +167,7 @@ export class RawSource {
             if(data.byteLength!==dimensions.reduce((p,n)=>p*n,1))throw new Error('EM chunk length differs from native uint8 shape');
             // remember() happens synchronously. Durable browser cache bookkeeping
             // can finish after the pixels are available to this and the next view.
-            this.cache.put(cacheId,data).catch(error=>this.cache.onWarning?.('Image cache: '+error.message));
+            if(cacheGeneration===this.cache.generation)this.cache.put(cacheId,data).catch(error=>this.cache.onWarning?.('Image cache: '+error.message));
           }finally{release();}
         }
         return {data,begin,dimensions,receipt:{source:EM_URL,scale:s.key,chunkId:id.toString(),grid,begin,dimensions,decodedSha256:await this.decodedHash(data),fromCache:!!cached,...this.preparedReceipts.get(id.toString()),...receipt}};
@@ -177,7 +194,7 @@ export class RawSource {
     const warm=grids.every(grid=>this.cache.memory?.has(this.infoHash+':'+s.key+':'+mortonCode(grid,s.size.map((n,i)=>Math.ceil(n/size[i])))));
     if(this.prepared&&!warm&&!this.failedStarters.has(starterKey))try{
       const starter=await observe(this.prepared.starter(p),signal);
-      if(starter){signal?.throwIfAborted();Object.assign(result,{pixels:starter.pixels,receipts:starter.receipts,complete:true,loaded:grids.length,failures:[],preparedVolumeId:starter.volumeId,sourceBinding:binding,elapsedMs:performance.now()-started,firstUsefulMs:performance.now()-started});result.coverage.fill(1);onProgress(result);return result;}
+      if(starter){signal?.throwIfAborted();Object.assign(result,{pixels:starter.pixels,receipts:starter.receipts,cacheHits:starter.fromCache?grids.length:0,complete:true,loaded:grids.length,failures:[],preparedVolumeId:starter.volumeId,sourceBinding:binding,elapsedMs:performance.now()-started,firstUsefulMs:performance.now()-started});result.coverage.fill(1);onProgress(result);return result;}
     }catch(error){if(signal?.aborted)throw error;this.failedStarters.add(starterKey);this.cache.onWarning?.(error.message+'; using native chunks.');}
     const [u,v,d]=p.axes;
     const worker=async()=>{while(cursor<grids.length){signal?.throwIfAborted();const grid=grids[cursor++];try{

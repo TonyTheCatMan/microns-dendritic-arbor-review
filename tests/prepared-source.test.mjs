@@ -24,7 +24,7 @@ async function fixture({holdPacks=false}={}){
   const plan=planePlan(view,info.scales[0]),pixels=new Uint8Array(plan.width*plan.height);for(let y=0;y<plan.height;y++)for(let x=0;x<plan.width;x++)pixels[x+plan.width*y]=intensity(x,y,40);
   const encoded=gzipSync(pixels),file='plane.bin.gz';assets.set(file,encoded);manifest.volumes[2].planes.push({...plan,file,fileSha256:await sha256(encoded),decodedSha256:await sha256(pixels),warmVolumeIds:['crop-2','crop-3','crop-1','crop-4','crop-0']});
   const fetcher=async input=>{const url=String(input),file=url.split('/').pop();calls.push(url);if(file==='manifest.json')return Response.json(manifest);if(url===EM_URL+'/info')return new Response(infoText);if(!assets.has(file))throw new Error('Unexpected network access '+url);if(file.startsWith('crop-')&&holdPacks)await new Promise(resolve=>held.push(resolve));return new Response(assets.get(file));};
-  const prepared=new PreparedSource({url:'https://prepared.test/manifest.json',fetcher}),source=new RawSource({fetcher,prepared});
+  const prepared=new PreparedSource({url:'https://prepared.test/manifest.json',fetcher,manifestSha256:await sha256(JSON.stringify(manifest))}),source=new RawSource({fetcher,prepared});
   return {manifest,assets,calls,view,prepared,source,release(){holdPacks=false;held.splice(0).forEach(resolve=>resolve());}};
 }
 function exact(plane){assert.equal(plane.complete,true);const [u,v]=plane.axes;for(let y=0;y<plane.height;y++)for(let x=0;x<plane.width;x++){const p=[...plane.begin];p[u]+=x;p[v]+=y;assert.equal(plane.pixels[y*plane.width+x],intensity(...p));}}
@@ -43,6 +43,26 @@ test('80 exact neighboring sections cross four native chunk boundaries with zero
   for(let z=0;z<80;z++){const plane=await f.source.plane({...f.view,centerNm:[256,256,z*40]});exact(plane);assert.equal(plane.cacheHits,4);}
   for(const plane of ['xz','yz'])exact(await f.source.plane({...f.view,plane}));
   assert.equal(f.calls.length,requests);assert.equal(f.prepared.networkBytes,bytes);assert.equal(f.source.networkBytes,0);assert.ok(f.prepared.activePacks<=2);
+});
+
+test('warming an already decoded crop reuses verified chunks without reading its compressed pack again',async()=>{
+  const f=await fixture();await f.source.plane(f.view);await warmed(f.prepared);const requests=f.calls.length,bytes=f.prepared.networkBytes;
+  const chunks=await f.prepared.pack(f.manifest.volumes[2]);assert.equal(chunks.size,4);assert.equal(f.prepared.reusedPacks,1);
+  assert.equal(f.calls.length,requests);assert.equal(f.prepared.networkBytes,bytes);assert.ok([...chunks.values()].every(chunk=>chunk.receipt.fromCache));
+});
+
+test('damaged decoded cache bytes are replaced before they can be shown as verified imagery',async()=>{
+  const f=await fixture();await f.source.plane(f.view);await warmed(f.prepared);
+  const chunk=f.manifest.volumes[2].chunks[0],key=f.source.infoHash+':'+f.source.scale.key+':'+chunk.chunkId;
+  const corrupted=(await f.source.cache.get(key)).slice();corrupted[0]^=1;await f.source.cache.put(key,corrupted);
+  const plane=await f.source.plane(f.view);exact(plane);assert.equal(await sha256(await f.source.cache.get(key)),chunk.receipt.decodedSha256);
+});
+
+test('clearing while crop downloads are active prevents old warm work from repopulating decoded images',async()=>{
+  const f=await fixture({holdPacks:true});await f.source.plane(f.view);
+  while(!f.prepared.activePacks)await delay();f.prepared.stopWarming();await f.source.cache.clear();
+  f.release();await Promise.allSettled([...f.prepared.packRequests.values()]);await delay();
+  assert.equal(f.source.cache.memory.size,0);assert.equal(f.prepared.pendingWarm.length,0);assert.equal(f.prepared.activePacks,0);
 });
 
 test('corrupt starter and corrupt crop cannot expose unverified pixels',async()=>{

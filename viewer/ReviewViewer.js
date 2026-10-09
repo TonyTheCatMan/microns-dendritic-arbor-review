@@ -1,6 +1,7 @@
 import {RESOLUTION_NM,PLANES,EM_URL,normalizeView,normalizeSegments,ngToNm,pixelToNm,planePlan} from './coordinates.js';
 import {RawSource,ChunkCache,sha256} from './raw-source.js';
 import {PreparedSource} from './prepared-source.js';
+import {clearPreparedAssetCache} from './asset-cache.js';
 import {makeNgState,mergeNativeSegments,orthogonalPlane,assertNativeSources} from './neuroglancer-state.js';
 import {visibleMarks,scaleBar,exportFigure,canvasBlob} from './figure.js';
 import {displayedGray} from '../reference-viewer/image-display.js';
@@ -49,7 +50,7 @@ export class ReviewViewer {
   updateSegments(segments) {if(!this.view.defaultStructuresInitialized){this.view.defaultStructuresInitialized=true;this.onViewChange(this.getView());}this.segments=normalizeSegments(segments);this.surface?.updateSegments(this.segments);this.publish();const epoch=this.epoch;Promise.resolve(this.loadSelectedStructures?.()).catch(error=>{if(epoch===this.epoch)this.surface?.setStatus(error.message,'error');});return this.getSegments();}
   setOverlays(marks=[]) {this.overlays=clone(marks);this.surface?.setMarks(marks);this.draw();this.publish();}
   async retry(){return this.load();}
-  async clearCache(){await this.source.cache.clear();this.source.indexes.clear();this.say(this.text('Кэш изображений очищен. Сохранённые заметки не изменены.','Image cache cleared. Saved notes are unchanged.'),'ready');}
+  async clearCache(){this.source.prepared?.stopWarming();await this.source.cache.clear();await clearPreparedAssetCache();this.source.indexes.clear();this.say(this.text('Кэш изображений очищен. Сохранённые заметки не изменены.','Image cache cleared. Saved notes are unchanged.'),'ready');}
   async load() {
     if(!this.task)return;const key=planeKey(this.view);
     if(this.loadedKey===key&&this.plane?.complete)return this.plane;

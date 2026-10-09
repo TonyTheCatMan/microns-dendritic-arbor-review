@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-09T12:52:20.597Z",
+  "checkedAt": "2026-10-09T13:42:10.436Z",
   "screenshotsTaken": 0,
   "checks": [
     "Fresh profile automatically displays real soma-picked branches without user action or a native iframe.",
@@ -9,7 +9,7 @@
     "An explicitly removed default remains removed on reload."
   ],
   "initial": {
-    "firstBranchesMs": 532.5,
+    "firstBranchesMs": 524.0999999940395,
     "triangles": 77559,
     "segments": [
       {
@@ -357,16 +357,11 @@
   "errors": [],
   "externalAttempts": [],
   "meshRequests": [
-    "http://127.0.0.1:8876/data/starter-meshes/manifest.json",
-    "http://127.0.0.1:8876/data/starter-meshes/MC298937.bin",
-    "http://127.0.0.1:8876/data/starter-meshes/MC264649.bin",
-    "http://127.0.0.1:8876/data/starter-meshes/MC264920.bin",
-    "http://127.0.0.1:8876/data/starter-meshes/MC264824.bin",
-    "http://127.0.0.1:8876/data/starter-meshes/manifest.json",
-    "http://127.0.0.1:8876/data/starter-meshes/MC264920.bin",
-    "http://127.0.0.1:8876/data/starter-meshes/manifest.json",
-    "http://127.0.0.1:8876/data/starter-meshes/MC264920.bin",
-    "http://127.0.0.1:8876/data/starter-meshes/manifest.json"
+    "http://127.0.0.1:8874/data/starter-meshes/manifest.json",
+    "http://127.0.0.1:8874/data/starter-meshes/MC298937.bin",
+    "http://127.0.0.1:8874/data/starter-meshes/MC264649.bin",
+    "http://127.0.0.1:8874/data/starter-meshes/MC264920.bin",
+    "http://127.0.0.1:8874/data/starter-meshes/MC264824.bin"
   ],
   "passed": true
 }

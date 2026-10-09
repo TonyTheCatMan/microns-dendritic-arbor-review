@@ -2,13 +2,35 @@
 // No old cases, meshes, review storage, or voxel-center offset are imported.
 import '../reference-viewer/marker-styles.js';
 import '../reference-viewer/surface3d.js';
-import {RESOLUTION_NM} from './coordinates.js';
+import {RESOLUTION_NM,PLANES} from './coordinates.js';
+import {cutoutFrame,isLegacyOverview} from './cutout-camera.js';
 const $=id=>document.getElementById(id);
 export class LegacySurface extends window.LocalSurfaceView {
   constructor(host){super();this.host=host;this.rawMeshes=new Map();this.language='ru';}
   text(ru,en){return this.language==='en'?en:ru;}
   setStatus(text,kind=''){super.setStatus(text,kind);const status=$('meshStatus');if(status)status.textContent=text;}
-  setTask(task,view){this.initializing=true;const savedCamera=view.surfaceCamera;this.clear();this.canvas.dataset.triangleCount="0";this.rawMeshes?.clear();this.task=task;this.caseId=task.id;this.originNm=task.anchorNm.map((n,i)=>Math.floor((n-8192)/RESOLUTION_NM[i])*RESOLUTION_NM[i]);this.bounds=[16384,16384,16400];this.volume={volume_id:task.id,begin_vox_xyz:this.originNm.map((n,i)=>n/RESOLUTION_NM[i]),shape_xyz:this.bounds.map((n,i)=>n/RESOLUTION_NM[i]),resolution_nm:[...RESOLUTION_NM]};this.makeFrame();this.enable(true);$('surfacePlane').checked=view.showSlices!==false;this.alpha=view.surfaceOpacity??1;$('surfaceOpacity').value=Math.round(this.alpha*100);$('surfaceOpacityReadout').textContent=Math.round(this.alpha*100)+'%';this.reset();this.savedCamera=savedCamera||null;this.lastPlane=null;this.setStatus(this.text('Загрузка ветвей нейрона…','Loading neuron branches…'));this.initializing=false;}
+  setTask(task,view){this.initializing=true;const savedCamera=view.surfaceCamera;this.clear();this.canvas.dataset.triangleCount="0";this.rawMeshes?.clear();this.task=task;this.caseId=task.id;this.originNm=task.anchorNm.map((n,i)=>Math.floor((n-8192)/RESOLUTION_NM[i])*RESOLUTION_NM[i]);this.bounds=[16384,16384,16400];this.volume={volume_id:task.id,begin_vox_xyz:this.originNm.map((n,i)=>n/RESOLUTION_NM[i]),shape_xyz:this.bounds.map((n,i)=>n/RESOLUTION_NM[i]),resolution_nm:[...RESOLUTION_NM]};this.makeFrame();this.enable(true);$('surfacePlane').checked=view.showSlices!==false;this.alpha=view.surfaceOpacity??.5;$('surfaceOpacity').value=Math.round(this.alpha*100);$('surfaceOpacityReadout').textContent=Math.round(this.alpha*100)+'%';this.reset();this.savedCamera=savedCamera||null;this.lastPlane=null;this.setStatus(this.text('Загрузка ветвей нейрона…','Loading neuron branches…'));this.initializing=false;}
+  reset(front=false){
+    if(!this.bounds||!this.host?.view)return;
+    this.yaw=front?0:-.65;this.pitch=front?0:.4;this.zoom=1;this.cameraBasis=null;
+    if(front){const [u,v]=PLANES[this.host.view.plane],right=[0,0,0],up=[0,0,0];right[u]=1;up[v]=-1;this.cameraBasis={right,up,eye_direction:[right[1]*up[2]-right[2]*up[1],right[2]*up[0]-right[0]*up[2],right[0]*up[1]-right[1]*up[0]]};}
+    this.center=this.bounds.map(n=>n/2);this.frameHeight=1;this.radius=Math.hypot(...this.bounds)*3;
+    const camera=this.camera(),frame=cutoutFrame(this.host.view,this.originNm,camera.right,camera.up,this.stage.clientWidth/Math.max(1,this.stage.clientHeight));
+    this.center=frame.center;this.frameHeight=frame.height;this.navigationChanged('reset');this.schedule();
+  }
+  showOverview(){super.reset();}
+  alignTo2D(){this.reset(true);}
+  draw(){this.transparencyPrepared=false;super.draw();}
+  drawGeometry(geometry,color,mode=0,primitive=null){
+    if(mode===0&&color[3]>0&&color[3]<1&&!this.transparencyPrepared){
+      // Blend the nearest surface once. Unordered front/back triangles otherwise
+      // accumulate until a nominal 50% mesh becomes opaque over the EM cutout.
+      this.transparencyPrepared=true;const gl=this.gl;gl.colorMask(false,false,false,false);gl.depthMask(true);
+      for(const mesh of this.meshes)if(this.visibleMesh(mesh)&&(mesh.context?this.contextAlpha:this.alpha)>0)super.drawGeometry(mesh.geometry,[1,1,1,1]);
+      gl.colorMask(true,true,true,true);gl.depthMask(false);
+    }
+    super.drawGeometry(geometry,color,mode,primitive);
+  }
   setPlane(plane,canvas){if(!this.volume||!this.gl)return;this.lastPlane={plane,canvas};this.slice={z:plane.center[2]-this.volume.begin_vox_xyz[2],black:0,white:255};const [u,v,d]=plane.axes,corners=[[0,0],[plane.width,0],[plane.width,plane.height],[0,plane.height]].flatMap(([x,y])=>{const p=plane.begin.map((n,i)=>n*RESOLUTION_NM[i]-this.originNm[i]);p[u]+=x*RESOLUTION_NM[u];p[v]+=y*RESOLUTION_NM[v];return p;});const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,this.planeGeometry.positions);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(corners),gl.DYNAMIC_DRAW);gl.bindTexture(gl.TEXTURE_2D,this.texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,canvas);this.canvas.dataset.planeGlobalNm=String(plane.depthNm);$('surfaceReadout').textContent=`${plane.plane.toUpperCase()} · ${'XYZ'[d]}=${plane.depthNm} nm · ${plane.pixelSizeNm.join(' × ')} nm`;this.schedule();}
   setMesh(segment,data){
     if(!data.vertices?.length||!data.triangles?.length)return false;
@@ -19,12 +41,13 @@ export class LegacySurface extends window.LocalSurfaceView {
     this.updating=true;
     if(!this.rawMeshes.size){for(const m of this.meshes)this.deleteGeometry(m.geometry);this.meshes=[];this.objectsUI.replaceChildren();this.modelReady=false;this.canvas.dataset.triangleCount='0';this.updating=false;this.setStatus(this.text('Структуры не выбраны. Добавьте структуру из текущего среза.','No structures selected. Add a structure from the current section.'));this.schedule();return;}
     const lo=[...this.task.anchorNm],hi=[...lo];for(const m of this.rawMeshes.values())for(let i=0;i<m.vertices.length;i++){lo[i%3]=Math.min(lo[i%3],m.vertices[i]);hi[i%3]=Math.max(hi[i%3],m.vertices[i]);}
-    const oldOrigin=this.originNm,oldCamera=this.modelReady?this.getNavigationState():null,restoringCamera=!!this.savedCamera;
+    const oldOrigin=this.originNm,oldCamera=this.modelReady?this.getNavigationState():null;let restoringCamera=!!this.savedCamera;
     this.originNm=lo.map((n,i)=>Math.floor((n-RESOLUTION_NM[i])/RESOLUTION_NM[i])*RESOLUTION_NM[i]);this.bounds=hi.map((n,i)=>Math.max(RESOLUTION_NM[i],Math.ceil((n-this.originNm[i]+RESOLUTION_NM[i])/RESOLUTION_NM[i])*RESOLUTION_NM[i]));
     this.volume.begin_vox_xyz=this.originNm.map((n,i)=>n/RESOLUTION_NM[i]);this.volume.shape_xyz=this.bounds.map((n,i)=>n/RESOLUTION_NM[i]);
     for(const m of this.meshes)this.deleteGeometry(m.geometry);this.meshes=[];this.objectsUI.replaceChildren();this.deleteGeometry(this.boxGeometry);this.deleteGeometry(this.axisGeometry);this.makeFrame();
     for(const [id,m]of this.rawMeshes){const vertices=new Float32Array(m.vertices.length);for(let i=0;i<vertices.length;i++)vertices[i]=m.vertices[i]-this.originNm[i%3];const color=m.segment.color||'#66d9b4',bounds=[[Infinity,Infinity,Infinity],[-Infinity,-Infinity,-Infinity]];for(let i=0;i<vertices.length;i++){bounds[0][i%3]=Math.min(bounds[0][i%3],vertices[i]);bounds[1][i%3]=Math.max(bounds[1][i%3],vertices[i]);}const mesh={id,segment_id:id,label:this.text('Кандидат v1300','v1300 candidate'),color:[1,3,5].map(i=>parseInt(color.slice(i,i+2),16)/255),cssColor:color,visible:m.segment.visible!==false,clipped:[],vertices,triangles:m.triangles,bounds,geometry:this.geometry(vertices,m.triangles),faces:m.triangles.length/3};this.meshes.push(mesh);this.objectControl(mesh);}
     this.modelReady=true;this.canvas.dataset.triangleCount=String(this.meshes.reduce((n,m)=>n+m.faces,0));
+    if(isLegacyOverview(this.savedCamera,this.bounds,this.originNm)){this.savedCamera=null;restoringCamera=false;}
     if(this.savedCamera){const c=this.savedCamera;this.applyNavigationState({...c,center_nm:c.center_nm.map((n,i)=>n+(c.originNm?.[i]||0)-this.originNm[i])});this.savedCamera=null;}
     else if(oldCamera)this.applyNavigationState({...oldCamera,center_nm:oldCamera.center_nm.map((n,i)=>n+oldOrigin[i]-this.originNm[i])});else this.reset();
     if(this.lastPlane)this.setPlane(this.lastPlane.plane,this.lastPlane.canvas);
