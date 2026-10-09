@@ -1,0 +1,1097 @@
+{
+  "schemaVersion": 1,
+  "source": "seg_m1300",
+  "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+  "sourceHash": "f2f20d85a817da34f26fbf79064393cdd0711e4c04833429f3d554e259a5f5cc",
+  "generatedAt": "2026-10-09T12:39:54.347Z",
+  "coordinateConvention": "global_nm",
+  "description": "Real native multiresolution mesh subchunks, spatially sampled at the documented recipient soma anchor. Navigation geometry only; cross-version identity remains unconfirmed.",
+  "recipients": {
+    "MC298937": {
+      "recipientId": "MC298937",
+      "somaNm": [
+        752960,
+        646592,
+        858640
+      ],
+      "segment": {
+        "id": "864691136389585015",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "native-spatial-pick",
+          "positionNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "positionVoxel": [
+            94120,
+            80824,
+            21466
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false
+        }
+      },
+      "file": "MC298937.bin",
+      "bytes": 1459988,
+      "sha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+      "vertexCount": 44106,
+      "triangleCount": 77559,
+      "boundsNm": [
+        [
+          583488.9023575189,
+          355455.4228427558,
+          720000.9851224537
+        ],
+        [
+          860415.1279163805,
+          845440.8994277867,
+          992400.1416037232
+        ]
+      ],
+      "manifestBoundsNm": [
+        [
+          573440,
+          344064,
+          716800
+        ],
+        [
+          868352,
+          851968,
+          1003520
+        ]
+      ],
+      "provenance": {
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "segmentId": "864691136389585015",
+        "identityStatus": "candidate",
+        "representation": "native-selected-multiresolution-mesh-subchunks",
+        "partial": true,
+        "readyForView": true,
+        "fragments": [
+          {
+            "key": "864691136389585015/3:1145",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 327,
+            "triangleCount": 109
+          },
+          {
+            "key": "864691136389585015/3:1146",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 2730,
+            "triangleCount": 910
+          },
+          {
+            "key": "864691136389585015/3:1147",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 303,
+            "triangleCount": 101
+          },
+          {
+            "key": "864691136389585015/3:1148",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 12720,
+            "triangleCount": 4240
+          },
+          {
+            "key": "864691136389585015/3:1149",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3240,
+            "triangleCount": 1080
+          },
+          {
+            "key": "864691136389585015/3:1150",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6093,
+            "triangleCount": 2031
+          },
+          {
+            "key": "864691136389585015/3:1151",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3651,
+            "triangleCount": 1217
+          },
+          {
+            "key": "864691136389585015/3:1152",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 47403,
+            "triangleCount": 15801
+          },
+          {
+            "key": "864691136389585015/3:1153",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1140,
+            "triangleCount": 380
+          },
+          {
+            "key": "864691136389585015/3:1154",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 4206,
+            "triangleCount": 1402
+          },
+          {
+            "key": "864691136389585015/3:1155",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 4548,
+            "triangleCount": 1516
+          },
+          {
+            "key": "864691136389585015/3:1156",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 8019,
+            "triangleCount": 2673
+          },
+          {
+            "key": "864691136389585015/3:1157",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 129,
+            "triangleCount": 43
+          },
+          {
+            "key": "864691136389585015/3:1158",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 13416,
+            "triangleCount": 4472
+          },
+          {
+            "key": "864691136389585015/3:1159",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1497,
+            "triangleCount": 499
+          },
+          {
+            "key": "864691136389585015/3:1160",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3084,
+            "triangleCount": 1028
+          },
+          {
+            "key": "864691136389585015/3:1161",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 86652,
+            "triangleCount": 28884
+          },
+          {
+            "key": "864691136389585015/3:1162",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 954,
+            "triangleCount": 318
+          },
+          {
+            "key": "864691136389585015/3:1163",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 17496,
+            "triangleCount": 5832
+          },
+          {
+            "key": "864691136389585015/3:1164",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 756,
+            "triangleCount": 252
+          },
+          {
+            "key": "864691136389585015/3:1165",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 7983,
+            "triangleCount": 2661
+          },
+          {
+            "key": "864691136389585015/3:1166",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3594,
+            "triangleCount": 1198
+          },
+          {
+            "key": "864691136389585015/3:1167",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 336,
+            "triangleCount": 112
+          },
+          {
+            "key": "864691136389585015/3:1168",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1431,
+            "triangleCount": 477
+          },
+          {
+            "key": "864691136389585015/3:1169",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 924,
+            "triangleCount": 308
+          },
+          {
+            "key": "864691136389585015/3:1170",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 45,
+            "triangleCount": 15
+          }
+        ],
+        "drawCount": 130,
+        "transformNm": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "MC264649": {
+      "recipientId": "MC264649",
+      "somaNm": [
+        701056,
+        735424,
+        807680
+      ],
+      "segment": {
+        "id": "864691135014601110",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "native-spatial-pick",
+          "positionNm": [
+            701056,
+            735424,
+            807680
+          ],
+          "positionVoxel": [
+            87632,
+            91928,
+            20192
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false
+        }
+      },
+      "file": "MC264649.bin",
+      "bytes": 1286372,
+      "sha256": "2e0afab417cfcef4b63e191c92a9a230ecd74455996a93ff2e1cabc2157b4470",
+      "vertexCount": 38918,
+      "triangleCount": 68279,
+      "boundsNm": [
+        [
+          535744.1738307774,
+          362495.5302662699,
+          674400.2893110551
+        ],
+        [
+          822336.5468833448,
+          899775.7285114825,
+          929439.1808957047
+        ]
+      ],
+      "manifestBoundsNm": [
+        [
+          524288,
+          360448,
+          655360
+        ],
+        [
+          835584,
+          901120,
+          942080
+        ]
+      ],
+      "provenance": {
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "segmentId": "864691135014601110",
+        "identityStatus": "candidate",
+        "representation": "native-selected-multiresolution-mesh-subchunks",
+        "partial": true,
+        "readyForView": true,
+        "fragments": [
+          {
+            "key": "864691135014601110/3:1064",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 840,
+            "triangleCount": 280
+          },
+          {
+            "key": "864691135014601110/3:1065",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1227,
+            "triangleCount": 409
+          },
+          {
+            "key": "864691135014601110/3:1066",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6081,
+            "triangleCount": 2027
+          },
+          {
+            "key": "864691135014601110/3:1067",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 447,
+            "triangleCount": 149
+          },
+          {
+            "key": "864691135014601110/3:1068",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 2907,
+            "triangleCount": 969
+          },
+          {
+            "key": "864691135014601110/3:1069",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 243,
+            "triangleCount": 81
+          },
+          {
+            "key": "864691135014601110/3:1070",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6888,
+            "triangleCount": 2296
+          },
+          {
+            "key": "864691135014601110/3:1071",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 8154,
+            "triangleCount": 2718
+          },
+          {
+            "key": "864691135014601110/3:1072",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 30420,
+            "triangleCount": 10140
+          },
+          {
+            "key": "864691135014601110/3:1073",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 7698,
+            "triangleCount": 2566
+          },
+          {
+            "key": "864691135014601110/3:1074",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 52881,
+            "triangleCount": 17627
+          },
+          {
+            "key": "864691135014601110/3:1075",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 2391,
+            "triangleCount": 797
+          },
+          {
+            "key": "864691135014601110/3:1076",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 31905,
+            "triangleCount": 10635
+          },
+          {
+            "key": "864691135014601110/3:1077",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6345,
+            "triangleCount": 2115
+          },
+          {
+            "key": "864691135014601110/3:1078",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 18759,
+            "triangleCount": 6253
+          },
+          {
+            "key": "864691135014601110/3:1079",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 990,
+            "triangleCount": 330
+          },
+          {
+            "key": "864691135014601110/3:1080",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1044,
+            "triangleCount": 348
+          },
+          {
+            "key": "864691135014601110/3:1081",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 5319,
+            "triangleCount": 1773
+          },
+          {
+            "key": "864691135014601110/3:1082",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 14511,
+            "triangleCount": 4837
+          },
+          {
+            "key": "864691135014601110/3:1083",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1152,
+            "triangleCount": 384
+          },
+          {
+            "key": "864691135014601110/3:1084",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3150,
+            "triangleCount": 1050
+          },
+          {
+            "key": "864691135014601110/3:1085",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1182,
+            "triangleCount": 394
+          },
+          {
+            "key": "864691135014601110/3:1086",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 303,
+            "triangleCount": 101
+          }
+        ],
+        "drawCount": 120,
+        "transformNm": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "MC264920": {
+      "recipientId": "MC264920",
+      "somaNm": [
+        705472,
+        755456,
+        870640
+      ],
+      "segment": {
+        "id": "864691135777697453",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "native-spatial-pick",
+          "positionNm": [
+            705472,
+            755456,
+            870640
+          ],
+          "positionVoxel": [
+            88184,
+            94432,
+            21766
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false
+        }
+      },
+      "file": "MC264920.bin",
+      "bytes": 2507096,
+      "sha256": "b5e8d10154a9f6044339a2879afc0565c351a515ee7098cde75fdc9f734f1466",
+      "vertexCount": 75590,
+      "triangleCount": 133334,
+      "boundsNm": [
+        [
+          544832.3125047685,
+          369407.63573662925,
+          672720.2636758983
+        ],
+        [
+          861823.1494010834,
+          864063.1835812924,
+          1078078.9489585718
+        ]
+      ],
+      "manifestBoundsNm": [
+        [
+          540672,
+          360448,
+          655360
+        ],
+        [
+          868352,
+          868352,
+          1085440
+        ]
+      ],
+      "provenance": {
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "segmentId": "864691135777697453",
+        "identityStatus": "candidate",
+        "representation": "native-selected-multiresolution-mesh-subchunks",
+        "partial": true,
+        "readyForView": true,
+        "fragments": [
+          {
+            "key": "864691135777697453/3:1506",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1737,
+            "triangleCount": 579
+          },
+          {
+            "key": "864691135777697453/3:1507",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 5571,
+            "triangleCount": 1857
+          },
+          {
+            "key": "864691135777697453/3:1508",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 810,
+            "triangleCount": 270
+          },
+          {
+            "key": "864691135777697453/3:1509",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6879,
+            "triangleCount": 2293
+          },
+          {
+            "key": "864691135777697453/3:1510",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 5031,
+            "triangleCount": 1677
+          },
+          {
+            "key": "864691135777697453/3:1511",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 5523,
+            "triangleCount": 1841
+          },
+          {
+            "key": "864691135777697453/3:1512",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 24240,
+            "triangleCount": 8080
+          },
+          {
+            "key": "864691135777697453/3:1513",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 17136,
+            "triangleCount": 5712
+          },
+          {
+            "key": "864691135777697453/3:1514",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 26565,
+            "triangleCount": 8855
+          },
+          {
+            "key": "864691135777697453/3:1515",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 14958,
+            "triangleCount": 4986
+          },
+          {
+            "key": "864691135777697453/3:1516",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 76803,
+            "triangleCount": 25601
+          },
+          {
+            "key": "864691135777697453/3:1517",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 22860,
+            "triangleCount": 7620
+          },
+          {
+            "key": "864691135777697453/3:1518",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 152853,
+            "triangleCount": 50951
+          },
+          {
+            "key": "864691135777697453/3:1519",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6603,
+            "triangleCount": 2201
+          },
+          {
+            "key": "864691135777697453/3:1520",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6750,
+            "triangleCount": 2250
+          },
+          {
+            "key": "864691135777697453/3:1521",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 2367,
+            "triangleCount": 789
+          },
+          {
+            "key": "864691135777697453/3:1522",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6708,
+            "triangleCount": 2236
+          },
+          {
+            "key": "864691135777697453/3:1523",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 150,
+            "triangleCount": 50
+          },
+          {
+            "key": "864691135777697453/3:1524",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1020,
+            "triangleCount": 340
+          },
+          {
+            "key": "864691135777697453/3:1525",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6156,
+            "triangleCount": 2052
+          },
+          {
+            "key": "864691135777697453/3:1526",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 4221,
+            "triangleCount": 1407
+          },
+          {
+            "key": "864691135777697453/3:1527",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1665,
+            "triangleCount": 555
+          },
+          {
+            "key": "864691135777697453/3:1528",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3396,
+            "triangleCount": 1132
+          }
+        ],
+        "drawCount": 139,
+        "transformNm": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "MC264824": {
+      "recipientId": "MC264824",
+      "somaNm": [
+        704704,
+        752128,
+        825200
+      ],
+      "segment": {
+        "id": "864691135571546917",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "native-spatial-pick",
+          "positionNm": [
+            704704,
+            752128,
+            825200
+          ],
+          "positionVoxel": [
+            88088,
+            94016,
+            20630
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false
+        }
+      },
+      "file": "MC264824.bin",
+      "bytes": 1455452,
+      "sha256": "0c13af453df10b97f185a99b985d3645d35a0e00ed9045e2641e0a5f53073f23",
+      "vertexCount": 44332,
+      "triangleCount": 76955,
+      "boundsNm": [
+        [
+          498111.5996032654,
+          359679.4872968643,
+          654239.9816891737
+        ],
+        [
+          859967.1210803387,
+          944000.4033264668,
+          1020400.5688563363
+        ]
+      ],
+      "manifestBoundsNm": [
+        [
+          491520,
+          344064,
+          634880
+        ],
+        [
+          868352,
+          950272,
+          1024000
+        ]
+      ],
+      "provenance": {
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "segmentId": "864691135571546917",
+        "identityStatus": "candidate",
+        "representation": "native-selected-multiresolution-mesh-subchunks",
+        "partial": true,
+        "readyForView": true,
+        "fragments": [
+          {
+            "key": "864691135571546917/3:1290",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 15,
+            "triangleCount": 5
+          },
+          {
+            "key": "864691135571546917/3:1291",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 2013,
+            "triangleCount": 671
+          },
+          {
+            "key": "864691135571546917/3:1292",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6936,
+            "triangleCount": 2312
+          },
+          {
+            "key": "864691135571546917/3:1293",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 528,
+            "triangleCount": 176
+          },
+          {
+            "key": "864691135571546917/3:1294",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 3927,
+            "triangleCount": 1309
+          },
+          {
+            "key": "864691135571546917/3:1295",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 852,
+            "triangleCount": 284
+          },
+          {
+            "key": "864691135571546917/3:1296",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 8214,
+            "triangleCount": 2738
+          },
+          {
+            "key": "864691135571546917/3:1297",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 8493,
+            "triangleCount": 2831
+          },
+          {
+            "key": "864691135571546917/3:1298",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 43422,
+            "triangleCount": 14474
+          },
+          {
+            "key": "864691135571546917/3:1299",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 4509,
+            "triangleCount": 1503
+          },
+          {
+            "key": "864691135571546917/3:1300",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 19740,
+            "triangleCount": 6580
+          },
+          {
+            "key": "864691135571546917/3:1301",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 17763,
+            "triangleCount": 5921
+          },
+          {
+            "key": "864691135571546917/3:1302",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 74139,
+            "triangleCount": 24713
+          },
+          {
+            "key": "864691135571546917/3:1303",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 9,
+            "triangleCount": 3
+          },
+          {
+            "key": "864691135571546917/3:1304",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 429,
+            "triangleCount": 143
+          },
+          {
+            "key": "864691135571546917/3:1305",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1656,
+            "triangleCount": 552
+          },
+          {
+            "key": "864691135571546917/3:1306",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 6480,
+            "triangleCount": 2160
+          },
+          {
+            "key": "864691135571546917/3:1307",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 714,
+            "triangleCount": 238
+          },
+          {
+            "key": "864691135571546917/3:1308",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 7614,
+            "triangleCount": 2538
+          },
+          {
+            "key": "864691135571546917/3:1309",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 21,
+            "triangleCount": 7
+          },
+          {
+            "key": "864691135571546917/3:1310",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 5958,
+            "triangleCount": 1986
+          },
+          {
+            "key": "864691135571546917/3:1311",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 12927,
+            "triangleCount": 4309
+          },
+          {
+            "key": "864691135571546917/3:1312",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 1053,
+            "triangleCount": 351
+          },
+          {
+            "key": "864691135571546917/3:1313",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 399,
+            "triangleCount": 133
+          },
+          {
+            "key": "864691135571546917/3:1314",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 2085,
+            "triangleCount": 695
+          },
+          {
+            "key": "864691135571546917/3:1315",
+            "lod": 3,
+            "indexStart": 0,
+            "indexEnd": 969,
+            "triangleCount": 323
+          }
+        ],
+        "drawCount": 111,
+        "transformNm": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    }
+  }
+}

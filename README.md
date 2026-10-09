@@ -5,7 +5,7 @@ A browser-based anatomy review workspace for the Interneuron Dendritic Input Org
 ## Open
 
 - Public repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
-- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The public repository and GitHub Pages match the original website's hosting arrangement, as authorized on 2026-10-09. Deployment succeeded, and anonymous checks verified the current application and all 14 essential assets. See `docs/public-hosting.md`. The older GPT-hosted preview is not the current version or the final host.
+- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The public repository and GitHub Pages match the original website's hosting arrangement, as authorized on 2026-10-09. The previously restored interface (`d342c6b`) is deployed; the current automatic-branch and prepared-imagery correction has passed local integration checks and **awaits deployment and public verification**. See `docs/public-hosting.md`. The older GPT-hosted preview is not the final host.
 - Local preview: run `npm start`, then open http://127.0.0.1:8874. Node.js is needed only for this development server; a deployed static copy runs entirely in the browser.
 - Build a static hosting directory: `npm run build`. Serve `dist/` through HTTPS or localhost. Keep the bundled `vendor/neuroglancer/` directory intact. No server-side application or database is required.
 - Direct task links use `?task=MC264649.boundary_origin3944`.
@@ -14,9 +14,13 @@ Current implementation, tests and deployment status are recorded in `CHECKPOINT.
 
 ## Review
 
-Choose a task. Native EM and Neuroglancer open at the source coordinate anchor. The source-anchor dropdown includes available soma, origin, cut and child anchors. Use XY/XZ/YZ, section buttons, Shift with the mouse wheel for sections, plain wheel or plus/minus for zoom, and drag for panning.
+Choose a task. The native EM plane opens at its source coordinate anchor, and the right pane automatically displays genuine branches from a public segmentation candidate sampled at the recipient soma. The source-anchor dropdown includes available soma, origin, cut and child anchors. Use XY/XZ/YZ, section buttons, Shift with the mouse wheel for sections, plain wheel or plus/minus for zoom, and drag for panning.
 
-Use **Show structure in 3D** above the right-hand pane to sample the center of the current section and load its real public mesh. The selected whole structure is framed automatically. Drag rotates; Shift-drag pans; the wheel zooms. The original surface renderer, layout, style sheets, control arrangement and separate Neuroglancer tab are retained. You can also double-click a segmentation structure in Neuroglancer to select the existing v1300 object. Selections retain the public source/version, exact string ID, visibility, color and individual note. A spatial selection remains an **unconfirmed identity candidate**, never an automatic release661 mapping or arbor partition. The empty state explains how to select a mesh. Meshes use the actual visible multiresolution fragments; they are navigation surfaces, not native EM evidence. The spatial pick retains the segmentation sampling resolution separately from its coordinate grid.
+The section rectangle is a spatial reference within the branch view. Drag rotates; Shift-drag pans; the wheel zooms. Saved selections and cameras take priority, and an explicitly removed default candidate stays removed. **Show structure in 3D** samples the current section center when another structure is needed. Open the separate Neuroglancer tab for the full native viewer; it starts on demand instead of competing with initial imagery downloads. You can double-click a segmentation structure there to select an existing v1300 object. The original surface renderer, layout, style sheets and control arrangement are retained.
+
+Selections retain the public source/version, exact string ID, visibility, color and individual note. A spatial selection remains an **unconfirmed identity candidate**, never an automatic release661 mapping or arbor partition. The four prepared branch assets contain real source mesh fragments, not invented geometry; their coverage and level of detail are limited. See `docs/default-branches.md`.
+
+All 50 tasks have an exact native starter plane and 80 nearby sections served from the website. The 36 distinct anchors reuse 171 bounded chunk packs, covering at least 32 sections in either direction at the initial field. Initial planes are 137–167 KB compressed; neighboring packs load in the background. Larger moves, wider fields and uncovered regions continue to use the public source. Native pixels, integer alignment, source metadata and chunk SHA-256 receipts are preserved. See `docs/loading-fix.md`.
 
 Create points, open traces, rectangular regions and distances. Each item has its own name, note, visibility and stable ID. Edit vertices numerically; delete, undo and redo are available. Traces never close automatically or interpolate between sections. An unfinished mark autosaves explicitly as a draft.
 
@@ -39,14 +43,16 @@ Technical validation and export never certify membrane identity, anatomy or the 
 - The 4/4/40 nm annotation grid is not 4 nm EM. Earlier preparation crops at 16/32 nm XY remain identified at their actual sampling.
 - Coordinates use integer sampling: `nm = (local + voxel_offset) * resolution`; no imported TIFF half-voxel offset.
 - Release661 to v1300 identities remain unresolved unless independently documented; numeric root equality is never assumed.
-- The preparation has 11 cropped volumes. Only 1,112 of 27,099 source post coordinates lie inside those crops. MC264824 cuts 869, 2638 and 5297 have no prepared crop. Direct public EM can add navigable coverage, subject to availability; coverage is not attachment evidence.
+- The original scientific preparation has 11 cropped volumes. Only 1,112 of 27,099 source post coordinates lie inside those original crops; MC264824 cuts 869, 2638 and 5297 have no original prepared crop. This website additionally packages bounded native EM around every task anchor, including those cuts. That navigation coverage does not establish attachment or complete anatomical-route coverage.
 - Full footprints: 27,099 contacts in 22,844 source footprints. All 115 original registry hashes were checked without changing originals.
 - Review state is not collaboratively synchronized between different computers. Transfer it using export/import. Detached Neuroglancer windows synchronize within the same open review session.
 - WebGL2 and modern Chromium/Edge are the tested browser requirements. Source access depends on public network availability. Unavailable chunks are marked explicitly; incomplete planes cannot be exported as complete evidence.
 
 ## Development and verification
 
-`npm install` installs the browser-test dependency. `npm test` runs catalog, exchange, source-coordinate and viewer tests. With the local server running, `node tools/browser-test.mjs`, `node tools/browser-storage.mjs` and the viewer integration test exercise real browser workflows. Test profiles are temporary; demo marks and reviewer files are not part of the delivered default project.
+`npm install` installs the browser-test dependency. `npm test` runs 61 catalog, exchange, source-coordinate and viewer tests. With the local server running, the browser workflow, storage, starter-mesh and viewer integration tools exercise real browser behavior. Test profiles are temporary; demo marks and reviewer files are not part of the delivered default project.
+
+`node tools/prepare-em.mjs` reproducibly acquires the bounded public EM assets. `node tools/verify-prepared-em.mjs` independently verifies every compressed asset and native chunk, all starter pixels and the ±32-section coverage contract. Prepared EM assets total 669,479,702 bytes; the complete static site is about 699.8 MB, with no individual asset larger than 4.30 MB. Only requested crops are downloaded, not the whole site. Local cold-start measurements are recorded separately from public-site measurements; the new public deployment has not yet been timed.
 
 See `docs/SOURCE_ADAPTER.md`, `docs/EXCHANGE.md` and `docs/VIEWER.md`. The original malformed decision schema is preserved; the versioned adapter leaves reviewer identity and qualifications null.
 

@@ -1,0 +1,372 @@
+{
+  "checkedAt": "2026-10-09T12:52:20.597Z",
+  "screenshotsTaken": 0,
+  "checks": [
+    "Fresh profile automatically displays real soma-picked branches without user action or a native iframe.",
+    "All four recipients display their own source-bound candidate mesh and retain unreviewed decisions.",
+    "Rapid task switching cannot attach the previous recipient mesh.",
+    "Saved selection and physical 3D camera survive reload.",
+    "An explicitly removed default remains removed on reload."
+  ],
+  "initial": {
+    "firstBranchesMs": 532.5,
+    "triangles": 77559,
+    "segments": [
+      {
+        "id": "864691136389585015",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "positionVoxel": [
+            94120,
+            80824,
+            21466
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+          "recipientId": "MC298937"
+        }
+      }
+    ],
+    "nativeStarted": false,
+    "decision": "unreviewed",
+    "defaultInitialized": true
+  },
+  "recipients": [
+    {
+      "id": "MC264649",
+      "triangles": 68279,
+      "segment": {
+        "id": "864691135014601110",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            701056,
+            735424,
+            807680
+          ],
+          "positionVoxel": [
+            87632,
+            91928,
+            20192
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "2e0afab417cfcef4b63e191c92a9a230ecd74455996a93ff2e1cabc2157b4470",
+          "recipientId": "MC264649"
+        }
+      },
+      "saved": {
+        "id": "864691135014601110",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            701056,
+            735424,
+            807680
+          ],
+          "positionVoxel": [
+            87632,
+            91928,
+            20192
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "2e0afab417cfcef4b63e191c92a9a230ecd74455996a93ff2e1cabc2157b4470",
+          "recipientId": "MC264649"
+        }
+      },
+      "decision": "unreviewed"
+    },
+    {
+      "id": "MC264920",
+      "triangles": 133334,
+      "segment": {
+        "id": "864691135777697453",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            705472,
+            755456,
+            870640
+          ],
+          "positionVoxel": [
+            88184,
+            94432,
+            21766
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "b5e8d10154a9f6044339a2879afc0565c351a515ee7098cde75fdc9f734f1466",
+          "recipientId": "MC264920"
+        }
+      },
+      "saved": {
+        "id": "864691135777697453",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            705472,
+            755456,
+            870640
+          ],
+          "positionVoxel": [
+            88184,
+            94432,
+            21766
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "b5e8d10154a9f6044339a2879afc0565c351a515ee7098cde75fdc9f734f1466",
+          "recipientId": "MC264920"
+        }
+      },
+      "decision": "unreviewed"
+    },
+    {
+      "id": "MC264824",
+      "triangles": 76955,
+      "segment": {
+        "id": "864691135571546917",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            704704,
+            752128,
+            825200
+          ],
+          "positionVoxel": [
+            88088,
+            94016,
+            20630
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0c13af453df10b97f185a99b985d3645d35a0e00ed9045e2641e0a5f53073f23",
+          "recipientId": "MC264824"
+        }
+      },
+      "saved": {
+        "id": "864691135571546917",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            704704,
+            752128,
+            825200
+          ],
+          "positionVoxel": [
+            88088,
+            94016,
+            20630
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0c13af453df10b97f185a99b985d3645d35a0e00ed9045e2641e0a5f53073f23",
+          "recipientId": "MC264824"
+        }
+      },
+      "decision": "unreviewed"
+    },
+    {
+      "id": "MC298937",
+      "triangles": 77559,
+      "segment": {
+        "id": "864691136389585015",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "positionVoxel": [
+            94120,
+            80824,
+            21466
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+          "recipientId": "MC298937"
+        }
+      },
+      "saved": {
+        "id": "864691136389585015",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "positionVoxel": [
+            94120,
+            80824,
+            21466
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+          "recipientId": "MC298937"
+        }
+      },
+      "decision": "unreviewed"
+    }
+  ],
+  "errors": [],
+  "externalAttempts": [],
+  "meshRequests": [
+    "http://127.0.0.1:8876/data/starter-meshes/manifest.json",
+    "http://127.0.0.1:8876/data/starter-meshes/MC298937.bin",
+    "http://127.0.0.1:8876/data/starter-meshes/MC264649.bin",
+    "http://127.0.0.1:8876/data/starter-meshes/MC264920.bin",
+    "http://127.0.0.1:8876/data/starter-meshes/MC264824.bin",
+    "http://127.0.0.1:8876/data/starter-meshes/manifest.json",
+    "http://127.0.0.1:8876/data/starter-meshes/MC264920.bin",
+    "http://127.0.0.1:8876/data/starter-meshes/manifest.json",
+    "http://127.0.0.1:8876/data/starter-meshes/MC264920.bin",
+    "http://127.0.0.1:8876/data/starter-meshes/manifest.json"
+  ],
+  "passed": true
+}

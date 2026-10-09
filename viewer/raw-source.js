@@ -38,7 +38,7 @@ export function decodeMinishard(bytes,indexBytes) {
 
 /** Reusable image cache is isolated from annotations; clearing it cannot touch review work. */
 export class ChunkCache {
-  constructor({maxBytes=32*1024*1024,persistentLimit=96,onWarning=()=>{}}={}) {
+  constructor({maxBytes=64*1024*1024,persistentLimit=256,onWarning=()=>{}}={}) {
     this.maxBytes=maxBytes;this.persistentLimit=persistentLimit;this.onWarning=onWarning;this.memory=new Map();this.bytes=0;this.cache=null;this.persistenceDisabled=false;
   }
   async open() {
@@ -66,20 +66,29 @@ export class ChunkCache {
 }
 
 export class RawSource {
-  constructor({fetcher=globalThis.fetch.bind(globalThis),cache=new ChunkCache(),concurrency=4}={}) {
+  constructor({fetcher=globalThis.fetch.bind(globalThis),cache=new ChunkCache(),concurrency=4,prepared=null}={}) {
     this.fetcher=fetcher;this.cache=cache;this.concurrency=Math.max(1,Math.floor(concurrency));this.indexes=new Map();this.info=null;this.infoHash=null;this.scale=null;this.networkBytes=0;
     this.initRequest=null;this.indexRequests=new Map();this.chunkRequests=new Map();this.chunkQueue=[];this.activeChunkLoads=0;this.decodedHashes=new WeakMap();
+    this.prepared=prepared;this.preparedReceipts=new Map();this.failedStarters=new Set();this.liveMetadataVerified=false;this.liveInfoRequest=null;
+    if(prepared)prepared.onChunk=(id,chunk)=>{const key=this.infoHash+':'+this.scale.key+':'+id;this.preparedReceipts.set(id,chunk.receipt);this.decodedHashes.set(chunk.data,Promise.resolve(chunk.receipt.decodedSha256));this.cache.put(key,chunk.data).catch(error=>this.cache.onWarning?.(error.message));};
   }
   async init(signal) {
     signal?.throwIfAborted();
     if(this.info)return this.info;
     if(!this.initRequest)this.initRequest=(async()=>{
-      const r=await this.fetcher(EM_URL+'/info');if(!r.ok)throw new Error('EM metadata HTTP '+r.status);
-      const text=await r.text(),info=JSON.parse(text);const sorted=[...info.scales].sort((a,b)=>a.resolution.reduce((p,n)=>p*n,1)-b.resolution.reduce((p,n)=>p*n,1));const scale=sorted[0];
+      let text;
+      if(this.prepared)try{text=(await this.prepared.init()).infoText;}catch(error){this.cache.onWarning?.(error.message+'; using public EM source.');this.prepared=null;}
+      if(!text){const r=await this.fetcher(EM_URL+'/info');if(!r.ok)throw new Error('EM metadata HTTP '+r.status);text=await r.text();this.liveMetadataVerified=true;}
+      const info=JSON.parse(text);const sorted=[...info.scales].sort((a,b)=>a.resolution.reduce((p,n)=>p*n,1)-b.resolution.reduce((p,n)=>p*n,1));const scale=sorted[0];
       if(info.data_type!=='uint8'||info.num_channels!==1||scale.encoding!=='raw'||!scale.resolution.every((r,i)=>r===RESOLUTION_NM[i]))throw new Error('EM source changed: expected finest raw uint8 8 × 8 × 40 nm. Review source binding before use.');
       this.infoHash=await sha256(text);this.info=info;this.scale=scale;return info;
     })().finally(()=>{this.initRequest=null;});
     return observe(this.initRequest,signal);
+  }
+  async verifyLiveMetadata(){
+    if(this.liveMetadataVerified)return;
+    if(!this.liveInfoRequest)this.liveInfoRequest=(async()=>{const r=await this.fetcher(EM_URL+'/info');if(!r.ok)throw new Error('EM metadata HTTP '+r.status);if(await sha256(await r.text())!==this.infoHash)throw new Error('Public EM metadata changed since prepared imagery was acquired. Refusing to mix source versions.');this.liveMetadataVerified=true;})().finally(()=>{this.liveInfoRequest=null;});
+    return this.liveInfoRequest;
   }
   async range(url,start,end,signal) {
     signal?.throwIfAborted();
@@ -128,17 +137,23 @@ export class RawSource {
         if(!data){
           const release=await new Promise((resolve,reject)=>{this.chunkQueue.push({entry,resolve,reject});this.pumpChunks();});
           try{
-            const loc=shardLocation(id,s.sharding),url=EM_URL+'/'+s.key+'/'+loc.filename,entries=await this.index(url,loc);
-            const position=entries.get(id.toString());if(!position)throw new Error('No EM chunk at this location');
-            data=await inflate(await this.range(url,position.start,position.end),s.sharding.data_encoding);
+            let preparedChunk;
+            if(this.prepared)try{preparedChunk=await this.prepared.chunk(id.toString());}catch(error){this.cache.onWarning?.(error.message+'; using public EM source.');}
+            if(preparedChunk){data=preparedChunk.data;receipt=preparedChunk.receipt;}
+            else{
+              await this.verifyLiveMetadata();
+              const loc=shardLocation(id,s.sharding),url=EM_URL+'/'+s.key+'/'+loc.filename,entries=await this.index(url,loc);
+              const position=entries.get(id.toString());if(!position)throw new Error('No EM chunk at this location');
+              data=await inflate(await this.range(url,position.start,position.end),s.sharding.data_encoding);
+              receipt={url,rangeBytes:[position.start,position.end]};
+            }
             if(data.byteLength!==dimensions.reduce((p,n)=>p*n,1))throw new Error('EM chunk length differs from native uint8 shape');
             // remember() happens synchronously. Durable browser cache bookkeeping
             // can finish after the pixels are available to this and the next view.
             this.cache.put(cacheId,data).catch(error=>this.cache.onWarning?.('Image cache: '+error.message));
-            receipt={url,rangeBytes:[position.start,position.end]};
           }finally{release();}
         }
-        return {data,begin,dimensions,receipt:{source:EM_URL,scale:s.key,chunkId:id.toString(),grid,begin,dimensions,decodedSha256:await this.decodedHash(data),fromCache:!!cached,...receipt}};
+        return {data,begin,dimensions,receipt:{source:EM_URL,scale:s.key,chunkId:id.toString(),grid,begin,dimensions,decodedSha256:await this.decodedHash(data),fromCache:!!cached,...this.preparedReceipts.get(id.toString()),...receipt}};
       })().finally(()=>{if(this.chunkRequests.get(cacheId)===entry)this.chunkRequests.delete(cacheId);});
       this.chunkRequests.set(cacheId,entry);
     }
@@ -157,6 +172,13 @@ export class RawSource {
     // Central chunks produce a useful partial image first; unfilled pixels remain explicitly masked.
     grids.sort((a,b)=>a.reduce((sum,n,i)=>sum+(n-(first[i]+last[i])/2)**2,0)-b.reduce((sum,n,i)=>sum+(n-(first[i]+last[i])/2)**2,0));
     const result={...p,pixels:new Uint8Array(p.width*p.height),coverage:new Uint8Array(p.width*p.height),receipts:[],complete:false,loaded:0,total:grids.length,cacheHits:0,sharedChunks:0,elapsedMs:0};let cursor=0,failures=[];
+    const binding={source:EM_URL,scale:s.key,encoding:s.encoding,resolutionNm:s.resolution,infoSha256:this.infoHash,convention:p.convention};
+    const starterKey=JSON.stringify([p.plane,p.begin,p.end]);
+    const warm=grids.every(grid=>this.cache.memory?.has(this.infoHash+':'+s.key+':'+mortonCode(grid,s.size.map((n,i)=>Math.ceil(n/size[i])))));
+    if(this.prepared&&!warm&&!this.failedStarters.has(starterKey))try{
+      const starter=await observe(this.prepared.starter(p),signal);
+      if(starter){signal?.throwIfAborted();Object.assign(result,{pixels:starter.pixels,receipts:starter.receipts,complete:true,loaded:grids.length,failures:[],preparedVolumeId:starter.volumeId,sourceBinding:binding,elapsedMs:performance.now()-started,firstUsefulMs:performance.now()-started});result.coverage.fill(1);onProgress(result);return result;}
+    }catch(error){if(signal?.aborted)throw error;this.failedStarters.add(starterKey);this.cache.onWarning?.(error.message+'; using native chunks.');}
     const [u,v,d]=p.axes;
     const worker=async()=>{while(cursor<grids.length){signal?.throwIfAborted();const grid=grids[cursor++];try{
       const chunk=await this.chunk(grid,signal);signal?.throwIfAborted();const startU=Math.max(p.begin[u],chunk.begin[u]),endU=Math.min(p.end[u],chunk.begin[u]+chunk.dimensions[u]),startV=Math.max(p.begin[v],chunk.begin[v]),endV=Math.min(p.end[v],chunk.begin[v]+chunk.dimensions[v]);
@@ -172,7 +194,7 @@ export class RawSource {
       result.receipts.push(chunk.receipt);if(result.firstUsefulMs===undefined)result.firstUsefulMs=performance.now()-started;
     }catch(e){if(signal?.aborted)throw e;failures.push({grid,error:e.message});}result.loaded++;result.elapsedMs=performance.now()-started;onProgress(result);}};
     await Promise.all(Array.from({length:Math.min(this.concurrency,grids.length)},worker));signal?.throwIfAborted();result.complete=failures.length===0;result.failures=failures;result.elapsedMs=performance.now()-started;
-    result.sourceBinding={source:EM_URL,scale:s.key,encoding:s.encoding,resolutionNm:s.resolution,infoSha256:this.infoHash,convention:p.convention};
+    result.sourceBinding=binding;
     onProgress(result);return result;
   }
 }

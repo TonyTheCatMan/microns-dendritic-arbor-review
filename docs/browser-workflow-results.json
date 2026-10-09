@@ -1,15 +1,15 @@
 {
-  "testedAt": "2026-10-09T12:10:03.293Z",
+  "testedAt": "2026-10-09T13:02:36.281Z",
   "origin": "http://127.0.0.1:8874",
   "browser": "Edge Chromium headless",
   "checks": [
     {
       "label": "native full-resolution first useful task",
       "passed": true,
-      "wallMs": 14375,
-      "elapsed": 13946.10000000894,
+      "wallMs": 478,
+      "elapsed": 94.09999999403954,
       "totalChunks": 25,
-      "bytes": 3854909,
+      "bytes": 0,
       "shape": [
         512,
         512

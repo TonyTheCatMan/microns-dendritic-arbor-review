@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-09T11:56:58.532Z",
+  "checkedAt": "2026-10-09T13:01:50.124Z",
   "browser": "Microsoft Edge, headless, clean ephemeral profile",
   "screenshotsTaken": 0,
   "initial": {
@@ -7,9 +7,9 @@
     "complete": true,
     "width": 512,
     "height": 512,
-    "firstUsefulMs": 7060.899999991059,
-    "elapsedMs": 14629.5,
-    "networkBytes": 3854909
+    "firstUsefulMs": 94.09999999403954,
+    "elapsedMs": 94.09999999403954,
+    "networkBytes": 0
   },
   "position": [
     94120,
@@ -17,27 +17,17 @@
     21466
   ],
   "nativePick": {
-    "value": "864691136389585015",
-    "type": "bigint",
-    "persistedCandidate": [
-      {
-        "id": "864691136389585015",
-        "source": "seg_m1300",
-        "color": "#66d9b4",
-        "visible": true,
-        "label": "864691136389585015",
-        "note": "",
-        "identityStatus": "candidate"
-      }
-    ]
+    "value": "undefined",
+    "type": "undefined"
   },
   "warmedNextSlice": {
-    "elapsedMs": 11.599999994039536,
+    "elapsedMs": 15.099999994039536,
     "networkBytes": 0
   },
   "hostToDetached": true,
   "detachedToHost": true,
   "nativeZoomRetained": true,
+  "pendingNativeZoomSurvivesAcknowledgment": true,
   "detachedCtrlS": true,
   "nativeArrowCharacters": [],
   "export": {
@@ -56,7 +46,7 @@
       },
       {
         "name": "figure-metadata.json",
-        "bytes": 7004
+        "bytes": 8731
       }
     ],
     "plane": {
@@ -116,11 +106,11 @@
     "files": [
       {
         "name": "navigation-neuroglancer.png",
-        "bytes": 763719
+        "bytes": 113190
       },
       {
         "name": "navigation-metadata.json",
-        "bytes": 4670
+        "bytes": 5865
       }
     ],
     "dimensions": [

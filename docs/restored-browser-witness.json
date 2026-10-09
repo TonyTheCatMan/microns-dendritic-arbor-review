@@ -1,9 +1,8 @@
 {
-  "checkedAt": "2026-10-09T12:25:04.386Z",
-  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
-  "deploymentRun": "https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37929719755",
+  "checkedAt": "2026-10-09T12:54:26.475Z",
+  "origin": "http://127.0.0.1:8876/",
   "checks": [
-    "Original surface renderer displays actual source mesh after the visible Show 3D action",
+    "Original surface renderer displays source branches automatically without a hidden native viewer",
     "Four neighboring sections reuse source chunks without downloads",
     "Original brightness window changes only display, with no plane load or raw intensity change",
     "Main 3D rotation/zoom retains EM chunks and saves the camera",
@@ -25,7 +24,7 @@
     ],
     "pointGrid": {
       "coordinateConvention": "integer-sample",
-      "selectionMethod": "native-spatial-pick",
+      "selectionMethod": "prepared-soma-spatial-pick",
       "positionNm": [
         752960,
         646592,
@@ -46,17 +45,19 @@
         7.999999773744548,
         39.99999975690116
       ],
-      "identityConfirmed": false
+      "identityConfirmed": false,
+      "starterAssetSha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+      "recipientId": "MC298937"
     },
     "defaultDecision": "unreviewed"
   },
   "cache": {
     "additionalBytes": 0,
     "times": [
-      12.5,
-      10.400000005960464,
-      12.399999991059303,
-      8.400000005960464
+      16.30000001192093,
+      14.200000002980232,
+      12.799999997019768,
+      9
     ]
   },
   "errors": [],

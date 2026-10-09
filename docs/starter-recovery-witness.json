@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-09T12:47:52.854Z",
+  "screenshotsTaken": 0,
+  "checks": [
+    "A failed first metadata load leaves review selections unchanged, and Retry loads default branches.",
+    "A saved segment falls back to genuine live-source mesh loading when prepared metadata is unavailable."
+  ],
+  "fallback": {
+    "id": "864691136389585015",
+    "triangles": 77559,
+    "nativeStarted": true,
+    "prepared": false
+  },
+  "passed": true
+}

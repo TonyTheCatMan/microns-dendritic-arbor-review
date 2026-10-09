@@ -5,7 +5,7 @@
   const params=new URLSearchParams(location.search),session=params.get('session');if(!session)return;
   const channel=new BroadcastChannel('dendritic-arbor-v2:'+session),peer=crypto.randomUUID();
   const nav=['position','crossSectionOrientation','crossSectionScale','projectionOrientation','projectionScale','projectionDepth','crossSectionDepth'];
-  let taskId=params.get('task')||'',epoch=params.get('epoch')||'',revision=0,applying=false,baseline='',timer,pending=null;
+  let taskId=params.get('task')||'',epoch=params.get('epoch')||'',revision=0,applying=false,baseline='',timer,pending=null,authoritative=null,lastSubmitted=null;
   const clone=x=>structuredClone(x),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
   const SEG_URL='https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300';
   const meshAdapter=()=>import('../../viewer/native-surface-adapter.js');
@@ -31,21 +31,31 @@
   function snapshot() {const state=viewer.state.toJSON();return {position:state.position,dimensions:state.dimensions,...Object.fromEntries(nav.map(k=>[k,state[k]])),layers:state.layers};}
   function flush() {
     timer=null;if(applying||!epoch)return;
-    const state=snapshot(),text=JSON.stringify(state);if(text===baseline)return;baseline=text;send('native',{state,hostRevision:revision});
+    const state=snapshot(),text=JSON.stringify(state);if(text===baseline)return;baseline=text;lastSubmitted=clone(state);send('native',{state,hostRevision:revision});
   }
   function apply(message) {
     if(!window.viewer?.state){pending=message;return;}
     if(message.epoch===epoch&&message.revision<revision)return;
-    applying=true;clearTimeout(timer);
+    const changed=epoch!==message.epoch,before=snapshot(),prior=authoritative;
+    // A host acknowledgment may arrive during the local 110 ms input debounce.
+    // Retain only local navigation edits which that acknowledgment has not changed.
+    const local=changed||!prior?[]:nav.filter(key=>!same(before[key],prior[key]));
+    let replay=false;applying=true;clearTimeout(timer);
     try {
-      const changed=epoch!==message.epoch;epoch=message.epoch;taskId=message.taskId;revision=message.revision;
+      epoch=message.epoch;taskId=message.taskId;revision=message.revision;
       const state=message.state;
       if(changed)viewer.state.restoreState(clone(state));
       else {restore('title',state.title);for(const key of [...nav,'showSlices','showAxisLines','showScaleBar','layout'])if(key in state)restore(key,state[key]);let changedLayers=false;for(const spec of state.layers||[])changedLayers=layer(spec)||changedLayers;if(changedLayers)viewer.layerManager.layersChanged.dispatch();}
       const url=new URL(location.href);url.searchParams.set('task',taskId);url.searchParams.set('epoch',epoch);history.replaceState(history.state,'',url);
-      baseline=JSON.stringify(snapshot());send('applied',{revision});
+      authoritative=snapshot();baseline=JSON.stringify(authoritative);
+      if(changed)lastSubmitted=null;
+      else for(const key of local){
+        const untouched=same(authoritative[key],prior[key]),acknowledgedEarlier=lastSubmitted&&same(authoritative[key],lastSubmitted[key]);
+        if((untouched||acknowledgedEarlier)&&!same(authoritative[key],before[key])){restore(key,before[key]);replay=true;}
+      }
+      send('applied',{revision});
     }catch(error){send('error',{message:error.message});}
-    finally{applying=false;}
+    finally{applying=false;if(replay)timer=setTimeout(flush,0);}
   }
   const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   const current=m=>m.epoch===epoch&&m.taskId===taskId;
@@ -96,7 +106,7 @@
   channel.onmessage=event=>{const m=event.data;if(m?.protocol!=='dendritic-view-v2'||m.peer===peer)return;if(m.type==='host')apply(m);else if(current(m)&&m.type==='pick-center')void pickCenter(m);else if(current(m)&&m.type==='frame-segment')void frameSegment(m);};
   function start() {
     if(!window.viewer?.state){setTimeout(start,50);return;}
-    baseline=JSON.stringify(snapshot());viewer.state.changed.add(()=>{if(!applying){clearTimeout(timer);timer=setTimeout(flush,110);}});
+    authoritative=snapshot();baseline=JSON.stringify(authoritative);viewer.state.changed.add(()=>{if(!applying){clearTimeout(timer);timer=setTimeout(flush,110);}});
     window.DendriticBridge={get state(){return snapshot();},get epoch(){return epoch;},get taskId(){return taskId;},get revision(){return revision;},flush};
     if(pending){apply(pending);pending=null;}send('hello');
   }

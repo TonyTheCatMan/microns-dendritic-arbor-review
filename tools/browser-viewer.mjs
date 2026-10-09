@@ -11,6 +11,8 @@ try {
   await page.waitForFunction(()=>window.ReviewApp?.viewer.plane?.complete,{timeout:120000});
   report.initial=await page.evaluate(()=>({taskId:ReviewApp.current.id,complete:ReviewApp.viewer.plane.complete,width:ReviewApp.viewer.plane.width,height:ReviewApp.viewer.plane.height,firstUsefulMs:ReviewApp.viewer.plane.firstUsefulMs,elapsedMs:ReviewApp.viewer.plane.elapsedMs,networkBytes:ReviewApp.viewer.source.networkBytes}));
   console.log('Native plane complete',report.initial);
+  await page.evaluate(()=>{window.syncTraffic=[];const c=new BroadcastChannel('dendritic-arbor-v2:'+ReviewApp.viewer.session);c.onmessage=({data:m})=>{window.syncTraffic.push({time:performance.now(),peer:m.peer,type:m.type,revision:m.revision,hostRevision:m.hostRevision,position:m.state?.position,scale:m.state?.crossSectionScale});if(window.syncTraffic.length>150)window.syncTraffic.shift();};ReviewApp.viewer.ensureNative();});
+  await page.waitForFunction(()=>document.querySelector('#ngFrame').contentWindow?.DendriticBridge,undefined,{timeout:60000});
   const frame=page.frames().find(f=>f.url().includes('/vendor/neuroglancer/'));
   await frame.waitForFunction(()=>window.DendriticBridge,{timeout:60000});
   report.position=await frame.evaluate(()=>viewer.state.toJSON().position);assert.deepEqual(report.position,[94120,80824,21466]);
@@ -28,8 +30,11 @@ try {
   await detached.evaluate(()=>{const p=[...viewer.position.value];p[0]+=1;viewer.state.children.get('position').restoreState(p);});
   await page.waitForFunction(()=>ReviewApp.viewer.getView().centerNm[0]===752968,{timeout:20000});report.detachedToHost=true;
   await detached.evaluate(()=>viewer.state.children.get('crossSectionScale').restoreState(0.5));
+  // Reproduce a host acknowledgment arriving before the native input debounce.
+  // The pending detached zoom must not be overwritten by this unchanged snapshot.
+  await page.evaluate(()=>ReviewApp.viewer.publish());
   await page.waitForFunction(()=>ReviewApp.viewer.getView().spanNm===2048,{timeout:15000});
-  await frame.waitForFunction(()=>viewer.state.toJSON().crossSectionScale===0.5,{timeout:15000});report.nativeZoomRetained=true;
+  await frame.waitForFunction(()=>viewer.state.toJSON().crossSectionScale===0.5,{timeout:15000});report.nativeZoomRetained=true;report.pendingNativeZoomSurvivesAcknowledgment=true;
   await page.evaluate(()=>{window.nativeSaveCalls=0;const original=ReviewApp.viewer.onSave;ReviewApp.viewer.onSave=()=>{window.nativeSaveCalls++;return original();};});
   await detached.keyboard.press('Control+s');await page.waitForFunction(()=>window.nativeSaveCalls===1,{timeout:10000});report.detachedCtrlS=true;
   report.nativeArrowCharacters=await detached.evaluate(()=>[...new Set(document.body.innerText.match(/[\u2190-\u21ff\u27f0-\u27ff\u2900-\u297f]/g)||[])]);assert.deepEqual(report.nativeArrowCharacters,[]);
@@ -52,4 +57,4 @@ try {
   report.errors=errors;assert.deepEqual(errors,[]);report.passed=true;
   console.log(JSON.stringify(report,null,2));
   await writeFile(new URL('../docs/native-browser-witness.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
-}finally{await browser.close();}
+}catch(error){const diagnostic={message:error.message,host:await page.evaluate(()=>({view:ReviewApp?.viewer.getView(),revision:ReviewApp?.viewer.revision,traffic:window.syncTraffic})),peers:await Promise.all(context.pages().flatMap(p=>p.frames().filter(f=>f.url().includes('/vendor/neuroglancer/'))).map(f=>f.evaluate(()=>({url:location.href,revision:window.DendriticBridge?.revision,state:window.viewer?.state.toJSON()}))))};await writeFile('.local/native-sync-failure.json',JSON.stringify(diagnostic,null,2));console.log('Native sync failure diagnostics saved to .local/native-sync-failure.json');throw error;}finally{await browser.close();}

@@ -1,5 +1,6 @@
 import {RESOLUTION_NM,PLANES,EM_URL,normalizeView,normalizeSegments,ngToNm,pixelToNm,planePlan} from './coordinates.js';
 import {RawSource,ChunkCache,sha256} from './raw-source.js';
+import {PreparedSource} from './prepared-source.js';
 import {makeNgState,mergeNativeSegments,orthogonalPlane,assertNativeSources} from './neuroglancer-state.js';
 import {visibleMarks,scaleBar,exportFigure,canvasBlob} from './figure.js';
 import {displayedGray} from '../reference-viewer/image-display.js';
@@ -11,7 +12,7 @@ export class ReviewViewer {
     this.canvas=canvas;this.frame=frame;this.status=status;this.onViewChange=onViewChange;this.onPoint=onPoint;this.onSegmentsChange=onSegmentsChange;this.onSave=onSave;
     this.language='ru';this.interactionMode='navigate';this.task=null;this.view=normalizeView();this.segments=[];this.overlays=[];this.plane=null;this.sequence=0;
     this.rawCanvas=document.createElement('canvas');this.rawCanvas.width=1;this.rawCanvas.height=1;this.partialCanvas=document.createElement('canvas');
-    this.source=new RawSource({cache:new ChunkCache({onWarning:message=>this.say(message,'warning')})});
+    this.source=new RawSource({cache:new ChunkCache({onWarning:message=>this.say(message,'warning')}),prepared:new PreparedSource({onWarning:message=>this.say(message,'warning')})});
     const sessionKey='dendritic-arbor-view-session:'+new URL('../',import.meta.url).pathname;
     try{this.session=sessionStorage.getItem(sessionKey)||crypto.randomUUID();sessionStorage.setItem(sessionKey,this.session);}catch{this.session=crypto.randomUUID();}
     this.peer=crypto.randomUUID();this.revision=0;this.channel=new BroadcastChannel('dendritic-arbor-v2:'+this.session);
@@ -34,7 +35,10 @@ export class ReviewViewer {
   getSourceBinding(){return {source:EM_URL,scale:this.source.scale?.key||'8_8_40',resolutionNm:[...RESOLUTION_NM],infoSha256:this.source.infoHash,convention:'integer-sampling-no-half-voxel'};}
   async setTask(task,view,segments=[]) {
     this.task=task;this.epoch=crypto.randomUUID();this.view=normalizeView(view||{},task.anchorNm);this.segments=normalizeSegments(segments);this.overlays=[];this.plane=null;this.loadedKey=null;this.loadingKey=null;
-    this.surface?.setTask(task,this.view);this.onViewChange(this.getView());this.publish(true);return this.load();
+    this.surface?.setTask(task,this.view);this.onViewChange(this.getView());this.publish(globalThis.location?.hash==='#neuroglancer');
+    const epoch=this.epoch;
+    this.defaultStructuresPromise=Promise.resolve().then(()=>this.loadDefaultStructures?.()).catch(error=>{if(epoch===this.epoch)this.surface?.setStatus(error.message,'error');});
+    return this.load();
   }
   async setView(view) {
     const ngState={...(view.ngState||this.view.ngState||{})};
@@ -42,7 +46,7 @@ export class ReviewViewer {
     if(view.spanNm!==undefined&&view.spanNm!==this.view.spanNm)delete ngState.crossSectionScale;
     this.view=normalizeView({...this.view,...view,ngState,nativeOblique:view.plane&&view.plane!==this.view.plane?false:!!this.view.nativeOblique},this.task?.anchorNm);this.onViewChange(this.getView());this.publish();return this.load();
   }
-  updateSegments(segments) {this.segments=normalizeSegments(segments);this.surface?.updateSegments(this.segments);this.publish();return this.getSegments();}
+  updateSegments(segments) {if(!this.view.defaultStructuresInitialized){this.view.defaultStructuresInitialized=true;this.onViewChange(this.getView());}this.segments=normalizeSegments(segments);this.surface?.updateSegments(this.segments);this.publish();const epoch=this.epoch;Promise.resolve(this.loadSelectedStructures?.()).catch(error=>{if(epoch===this.epoch)this.surface?.setStatus(error.message,'error');});return this.getSegments();}
   setOverlays(marks=[]) {this.overlays=clone(marks);this.surface?.setMarks(marks);this.draw();this.publish();}
   async retry(){return this.load();}
   async clearCache(){await this.source.cache.clear();this.source.indexes.clear();this.say(this.text('Кэш изображений очищен. Сохранённые заметки не изменены.','Image cache cleared. Saved notes are unchanged.'),'ready');}
@@ -109,6 +113,7 @@ export class ReviewViewer {
   publish(ensure=false){if(!this.task||this.syncEnabled===false&&!ensure)return;const message={protocol:'dendritic-view-v2',peer:this.peer,type:'host',taskId:this.task.id||this.task.taskId,epoch:this.epoch,revision:++this.revision,state:this.state()};this.latest=message;
     if(ensure&&this.frame&&!this.frame.hasAttribute('src'))this.frame.src=this.nativeUrl();this.channel.postMessage(message);}
   nativeUrl(){const url=new URL('../vendor/neuroglancer/',import.meta.url);url.searchParams.set('session',this.session);url.searchParams.set('task',this.task.id||this.task.taskId);url.searchParams.set('epoch',this.epoch);url.hash='!'+encodeURIComponent(JSON.stringify(this.state()));return url.href;}
+  ensureNative(){this.publish(true);}
   requestNative(type,extra={}){const requestId=crypto.randomUUID();this.requests||=new Map();return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{this.requests.delete(requestId);reject(new Error(this.text('Neuroglancer ещё загружает сегментацию. Повторите выбор.','Neuroglancer is still loading segmentation. Retry the selection.')));},type==='frame-segment'?50000:30000);this.requests.set(requestId,{resolve,reject,timer,epoch:this.epoch});this.channel.postMessage({protocol:'dendritic-view-v2',peer:this.peer,type,requestId,epoch:this.epoch,taskId:this.task.id||this.task.taskId,...extra});});}
   async pickCenter(){
     const epoch=this.epoch;this.syncEnabled=true;this.publish(true);const start=performance.now();while(this.frame?.contentWindow?.DendriticBridge?.epoch!==epoch){if(performance.now()-start>20000)throw new Error(this.text('Neuroglancer ещё загружается. Повторите выбор.','Neuroglancer is still loading. Retry selection.'));await new Promise(r=>setTimeout(r,100));}const pick=await this.requestNative('pick-center');if(epoch!==this.epoch)throw new Error(this.text('Задача изменилась. Повторите выбор.','The task changed. Retry selection.'));
@@ -132,9 +137,10 @@ export class ReviewViewer {
     // Return an authoritative snapshot to both the embedded and detached peers.
     this.publish();if(!same(previous.ngState?.projectionOrientation,ngState.projectionOrientation)||previous.ngState?.projectionScale!==ngState.projectionScale)window.dispatchEvent(new CustomEvent('dendritic:native-camera'));if(changed)this.load();else if(!plane)this.say(this.text('Косой вид в Neuroglancer; исходный 2D-срез остаётся ортогональным.','Oblique Neuroglancer view; native 2D evidence remains orthogonal.'),'ready');
   }
-  detach(){if(!this.task)return null;this.publish();return window.open(this.nativeUrl(),'dendritic-'+this.session);}
+  detach(){if(!this.task)return null;this.ensureNative();return window.open(this.nativeUrl(),'dendritic-'+this.session);}
   async exportPlane(){if(this.loadedKey!==planeKey(this.view))throw new Error(this.text('Новый срез ещё загружается. Дождитесь загрузки.','The new plane is still loading. Wait for it to finish.'));const sequence=this.sequence;const result=await exportFigure({task:this.task,view:this.view,plane:this.plane,rawCanvas:this.rawCanvas,marks:this.overlays,segments:this.segments,language:this.language});if(sequence!==this.sequence)throw new Error(this.text('Срез изменился во время экспорта. Повторите сохранение.','The plane changed during export. Retry saving.'));return result;}
   async exportNavigationFigure(){
+    this.ensureNative();
     if(!this.task||!this.frame?.contentWindow)throw new Error(this.text('Neuroglancer ещё не открыт.','Neuroglancer is not open yet.'));
     const taskId=this.task.id||this.task.taskId,epoch=this.epoch,revision=this.revision,started=performance.now();let ready=false,native,synchronized=false;
     const unchanged=()=>{if(this.epoch!==epoch||this.revision!==revision)throw new Error(this.text('Вид изменился во время экспорта. Повторите сохранение.','The view changed during export. Retry saving.'));};

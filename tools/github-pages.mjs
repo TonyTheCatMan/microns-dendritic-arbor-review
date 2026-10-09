@@ -12,6 +12,7 @@ function git(argv,{input,encoding='utf8'}={}){
   if(result.status!==0)throw new Error('Git command failed: '+argv[0]);return result.stdout;
 }
 function audit(){
+  const binaryAsset=path=>/\.(?:bin(?:\.gz)?|wasm|png|jpe?g|woff2?)$/i.test(path);
   const commits=git(['rev-list','--all']).trim().split('\n').filter(Boolean),objects=new Map(),paths=new Set(),findings=[];
   for(const commit of commits)for(const line of git(['ls-tree','-r','-z',commit]).split('\0').filter(Boolean)){
     const match=line.match(/^\d+ blob ([0-9a-f]+)\t([\s\S]+)$/);if(!match)continue;
@@ -19,14 +20,19 @@ function audit(){
   }
   const patterns=[[/\bgh[pousr]_[a-zA-Z0-9]{20,}\b/,'GitHub token'],[/\bgithub_pat_[a-zA-Z0-9_]{30,}\b/,'GitHub token'],[/\bAKIA[A-Z0-9]{16}\b/,'AWS access key'],[/\bxox[baprs]-[a-zA-Z0-9-]{20,}\b/,'Slack token'],[/\bsk-(?:proj-)?[a-zA-Z0-9_-]{30,}\b/,'API secret'],[/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,'private key'],[/[?&]X-Amz-(?:Credential|Signature)=[a-zA-Z0-9%/]{20,}/i,'signed source URL']];
   const inspect=(text,path)=>{for(const [pattern,kind] of patterns)if(pattern.test(text))findings.push({path,kind});};
-  const objectList=[...objects.keys()],batch=git(['cat-file','--batch'],{input:objectList.join('\n')+'\n',encoding:null});let cursor=0;
-  for(const object of objectList){
+  // Native image and mesh assets have source/hash validation, not UTF-8 text.
+  // Keep credential scans bounded as the public prepared-data inventory grows.
+  const objectList=[...objects.keys()].filter(id=>!binaryAsset(objects.get(id)));
+  for(let offset=0;offset<objectList.length;offset+=16){
+  const group=objectList.slice(offset,offset+16),batch=git(['cat-file','--batch'],{input:group.join('\n')+'\n',encoding:null});let cursor=0;
+  for(const object of group){
     const end=batch.indexOf(10,cursor),header=batch.subarray(cursor,end).toString(),length=Number(header.split(' ')[2]);
     if(!Number.isInteger(length))throw new Error('Invalid Git object audit response');
     inspect(batch.subarray(end+1,end+1+length).toString('utf8'),objects.get(object));cursor=end+1+length+1;
   }
+  }
   const tracked=git(['ls-files','-z']).split('\0').filter(Boolean);
-  for(const path of tracked){paths.add(path);if(existsSync(path))inspect(readFileSync(path,'utf8'),path);}
+  for(const path of tracked){paths.add(path);if(existsSync(path)&&!binaryAsset(path))inspect(readFileSync(path,'utf8'),path);}
   for(const path of paths)if(/(^|\/)(?:\.env(?:\.|$)|\.local\/|review-exports\/|node_modules\/)|\.(?:p12|pfx|pem|key|zip)$/i.test(path))findings.push({path,kind:'private or generated artifact path'});
   const blank=JSON.parse(readFileSync('data/decisions-blank-v2.json','utf8'));
   const rows=blank.tasks||blank.decisions||[];
@@ -40,6 +46,11 @@ async function checkPublic(){
   const repositoryMetadata=await repositoryResponse.json();
   if(repositoryMetadata.private!==false||repositoryMetadata.full_name!==repository)throw new Error('Unexpected public repository metadata');
   const paths=['','app.js','app.css','data/catalog.json','viewer/ReviewViewer.js','viewer/LegacySurface.js','viewer/familiar-shell.js','viewer/native-surface-adapter.js','reference-ui/viewer.css','reference-viewer/surface3d.js','vendor/neuroglancer/bridge-v2.js','vendor/neuroglancer/index.html','vendor/neuroglancer/main.e9945dcc2df22b9e.js','vendor/neuroglancer/09f21dcf7b4f13e8.wasm'],results=[];
+  paths.push('viewer/raw-source.js','viewer/prepared-source.js','viewer/starter-meshes.js','data/prepared-em/manifest.json','data/starter-meshes/manifest.json');
+  const prepared=JSON.parse(readFileSync('data/prepared-em/manifest.json','utf8')),starter=prepared.volumes.flatMap(v=>v.planes).find(p=>p.taskIds.includes('MC298937.soma_identity'));
+  paths.push('data/prepared-em/'+starter.file,...starter.warmVolumeIds.map(id=>'data/prepared-em/'+prepared.volumes.find(v=>v.id===id).file));
+  const meshes=JSON.parse(readFileSync('data/starter-meshes/manifest.json','utf8'));
+  paths.push(...Object.values(meshes.recipients).map(entry=>'data/starter-meshes/'+entry.file));
   for(const path of paths){
     const response=await fetch(new URL(path,publicUrl)),body=new Uint8Array(await response.arrayBuffer());
     results.push({path:path||'index.html',status:response.status,bytes:body.length});
