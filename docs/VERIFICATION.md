@@ -8,7 +8,7 @@ Four adjacent full-resolution browser plane changes required zero new source byt
 
 Three fresh single-image workers independently inspected the original page, restored page, and completed 3D scene. The coordinator saw no images. Text findings confirmed the original page/control structure and a fully framed branching 3D object; surface opacity was then raised to improve contrast. Screenshots are excluded from source/build.
 
-**Hosting is not complete:** source is private; GitHub Pages setup rejects this account plan (HTTP 422). Anonymous source and requested website both return 404 after propagation. Application build succeeds. No alternative host or visibility workaround has been used. See public-hosting.md and CHECKPOINT.md.
+**Public deployment verified:** on 2026-10-09 the user explicitly authorized making the existing repository public and hosting through GitHub Pages like the original website. This supersedes the earlier private-source requirement and its HTTP 422 Pages restriction. [Run 37929719755](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37929719755) successfully deployed restored application commit `a5368cf3b6927a31e9eb52f07a899a03aae437ca`. Anonymous repository access returned HTTP 200 with `private: false`; all 14 essential website assets returned HTTP 200 and exactly matched local checkout bytes. The live catalog contains 50 tasks. All six restored-interface browser checks passed against the public URL with zero page errors: actual 3D candidate `864691136389585015` with 77,559 triangles; four adjacent sections with zero new source bytes and 8.4–12.5 ms latency; camera save/reload, brightness, navigation and bilingual controls. The live receipt is `restored-browser-witness.json`. See public-hosting.md and CHECKPOINT.md.
 
 ## Earlier implementation verification (historical)
 
@@ -46,7 +46,7 @@ A fresh worker inspected exactly one default UI screenshot and returned text onl
 - The four release661-to-v1300 identities remain unresolved. A tested public soma spatial pick is documented only as a candidate; it does not certify the recipient identity or any arbor partition.
 - Original prepared volumes cover only part of the anatomy. Public EM additions depend on source availability; missing chunks are explicit and incomplete native planes cannot export as complete evidence.
 - A Neuroglancer navigation capture can show a partially loaded multiscale scene. Such a figure has a visible partial-loading banner and readiness metadata. It supplements raw EM and is never represented as a native-resolution or complete anatomical reconstruction.
-- Browser storage is local. Export/import is the transfer and backup mechanism; this release has no multi-user cloud synchronization. Private hosting is owner-accessible; collaborators need an authorized copy and exchanged files.
+- Browser storage is local. Export/import is the transfer and backup mechanism; this release has no multi-user cloud synchronization. Public hosting makes the application accessible to collaborators; it does not publish or synchronize their browser-local annotations.
 - WebGL2 and modern Chromium/Edge are tested. Arbitrary browsers, complete whole-cell anatomical coverage and expert anatomy conclusions are not certified.
 - The native evidence pane is bounded to an 8.192 µm field per request to keep browser memory and requests manageable. It can pan through the public volume; Neuroglancer provides the wider multiscale overview.
 

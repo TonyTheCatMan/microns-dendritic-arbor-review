@@ -1,5 +1,7 @@
 {
-  "checkedAt": "2026-10-09T12:07:09.010Z",
+  "checkedAt": "2026-10-09T12:25:04.386Z",
+  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "deploymentRun": "https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37929719755",
   "checks": [
     "Original surface renderer displays actual source mesh after the visible Show 3D action",
     "Four neighboring sections reuse source chunks without downloads",
@@ -51,10 +53,10 @@
   "cache": {
     "additionalBytes": 0,
     "times": [
-      14.799999997019768,
-      10.299999997019768,
-      9.600000008940697,
-      7.699999988079071
+      12.5,
+      10.400000005960464,
+      12.399999991059303,
+      8.400000005960464
     ]
   },
   "errors": [],

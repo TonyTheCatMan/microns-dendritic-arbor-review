@@ -4,13 +4,13 @@ A browser-based anatomy review workspace for the Interneuron Dendritic Input Org
 
 ## Open
 
-- Private repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
-- Requested public hosting: GitHub Pages backed by this private repository. GitHub currently rejects setup with HTTP 422: “Your current plan does not support GitHub Pages for this repository.” The public URL is not live. See `docs/public-hosting.md`. The older GPT-hosted preview is not the current version or the requested final host.
+- Public repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
+- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The public repository and GitHub Pages match the original website's hosting arrangement, as authorized on 2026-10-09. Deployment succeeded, and anonymous checks verified the current application and all 14 essential assets. See `docs/public-hosting.md`. The older GPT-hosted preview is not the current version or the final host.
 - Local preview: run `npm start`, then open http://127.0.0.1:8874. Node.js is needed only for this development server; a deployed static copy runs entirely in the browser.
 - Build a static hosting directory: `npm run build`. Serve `dist/` through HTTPS or localhost. Keep the bundled `vendor/neuroglancer/` directory intact. No server-side application or database is required.
 - Direct task links use `?task=MC264649.boundary_origin3944`.
 
-Current implementation, tests and the hosting limitation are recorded in `CHECKPOINT.md` and `docs/VERIFICATION.md`. Source remains private; review exports can be imported into another copy of this application.
+Current implementation, tests and deployment status are recorded in `CHECKPOINT.md` and `docs/VERIFICATION.md`. Reviewer annotations remain browser-local; review exports can be imported into another copy of this application.
 
 ## Review
 

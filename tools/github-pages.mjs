@@ -5,8 +5,8 @@ import {readFileSync,existsSync} from 'node:fs';
 const repository='TonyTheCatMan/microns-dendritic-arbor-review';
 const publicUrl='https://tonythecatman.github.io/microns-dendritic-arbor-review/';
 const args=new Set(process.argv.slice(2));
-const supported=new Set(['--audit','--status','--dispatch','--check-public']);
-for(const arg of args)if(!supported.has(arg))throw new Error('Unsupported command. This helper never changes repository visibility.');
+const supported=new Set(['--audit','--status','--dispatch','--check-public','--publish-public']);
+for(const arg of args)if(!supported.has(arg))throw new Error('Unsupported command. Use --publish-public only with explicit authorization to publish this repository.');
 function git(argv,{input,encoding='utf8'}={}){
   const result=spawnSync('git',argv,{input,encoding,maxBuffer:100*1024*1024,windowsHide:true,env:{...process.env,GIT_TERMINAL_PROMPT:'0',GCM_INTERACTIVE:'never'}});
   if(result.status!==0)throw new Error('Git command failed: '+argv[0]);return result.stdout;
@@ -36,21 +36,24 @@ function audit(){
 }
 async function checkPublic(){
   const repositoryResponse=await fetch('https://api.github.com/repos/'+repository,{headers:{Accept:'application/vnd.github+json'}});
-  if(repositoryResponse.status!==404)throw new Error('Expected private repository to be unavailable anonymously; HTTP '+repositoryResponse.status);
-  const paths=['','app.js','app.css','data/catalog.json','viewer/ReviewViewer.js','vendor/neuroglancer/index.html','vendor/neuroglancer/main.e9945dcc2df22b9e.js','vendor/neuroglancer/09f21dcf7b4f13e8.wasm'],results=[];
+  if(repositoryResponse.status!==200)throw new Error('Expected public repository to be available anonymously; HTTP '+repositoryResponse.status);
+  const repositoryMetadata=await repositoryResponse.json();
+  if(repositoryMetadata.private!==false||repositoryMetadata.full_name!==repository)throw new Error('Unexpected public repository metadata');
+  const paths=['','app.js','app.css','data/catalog.json','viewer/ReviewViewer.js','viewer/LegacySurface.js','viewer/familiar-shell.js','viewer/native-surface-adapter.js','reference-ui/viewer.css','reference-viewer/surface3d.js','vendor/neuroglancer/bridge-v2.js','vendor/neuroglancer/index.html','vendor/neuroglancer/main.e9945dcc2df22b9e.js','vendor/neuroglancer/09f21dcf7b4f13e8.wasm'],results=[];
   for(const path of paths){
     const response=await fetch(new URL(path,publicUrl)),body=new Uint8Array(await response.arrayBuffer());
     results.push({path:path||'index.html',status:response.status,bytes:body.length});
     if(!response.ok||!body.length)throw new Error('Public asset unavailable: '+(path||'index.html'));
+    if(!readFileSync(path||'index.html').equals(Buffer.from(body)))throw new Error('Public asset differs from the current checkout: '+(path||'index.html'));
     if(path===''){const html=new TextDecoder().decode(body);if(!html.includes('emCanvas')||!html.includes('app.js'))throw new Error('Unexpected public entry page');}
     if(path==='data/catalog.json'){const catalog=JSON.parse(new TextDecoder().decode(body));if(catalog.tasks.length!==50)throw new Error('Unexpected public catalog');}
   }
   console.log(JSON.stringify({repository:'https://github.com/'+repository,anonymousRepositoryHttpStatus:repositoryResponse.status,publicUrl,unauthenticatedAssets:results},null,2));
 }
 
-if(args.has('--audit'))audit();
+if(args.has('--audit')||args.has('--publish-public'))audit();
 if(args.has('--check-public'))await checkPublic();
-if(args.has('--status')||args.has('--dispatch')){
+if(args.has('--status')||args.has('--dispatch')||args.has('--publish-public')){
   const origin=git(['remote','get-url','origin']).trim().replace(/\.git$/,'');
   if(origin!=='https://github.com/'+repository)throw new Error('Unexpected origin; refusing repository administration');
   const credential=git(['credential','fill'],{input:'protocol=https\nhost=github.com\n\n'});
@@ -62,15 +65,28 @@ if(args.has('--status')||args.has('--dispatch')){
     if(!response.ok&&response.status!==404)throw new Error(`GitHub ${response.status}: ${json?.message||'request failed'}`);
     return {status:response.status,json};
   }
-  const route='/repos/'+repository;const repo=await request(route);
+  const route='/repos/'+repository;let repo=await request(route);
   if(repo.status===404||!repo.json.permissions?.admin)throw new Error('Existing repository administrator access required');
-  if(args.has('--dispatch')){
-    if(repo.json.private!==true)throw new Error('Refusing deployment: this repository must remain private.');
+  if(repo.json.full_name!==repository||repo.json.id!==1411697205)throw new Error('Unexpected repository identity');
+  if(args.has('--publish-public')){
+    // The user explicitly authorized public source and Pages hosting on 2026-10-09.
+    if(repo.json.private)repo=await request(route,'PATCH',{private:false});
+    if(repo.json.private!==false)throw new Error('Public visibility was not confirmed');
     const currentPages=await request(route+'/pages');
-    if(currentPages.status===404)throw new Error('GitHub Pages is unavailable for this private repository. Check account eligibility; this helper will not alter visibility or purchase a plan.');
+    const enabled=currentPages.status===404
+      ?await request(route+'/pages','POST',{build_type:'workflow'})
+      :currentPages.json.build_type!=='workflow'
+        ?await request(route+'/pages','PUT',{build_type:'workflow'})
+        :currentPages;
+    if(enabled.status===404)throw new Error('Pages enablement failed');
+  }
+  if(args.has('--dispatch')){
+    if(repo.json.private!==false)throw new Error('Public deployment requires the explicitly authorized public repository.');
+    const currentPages=await request(route+'/pages');
+    if(currentPages.status===404)throw new Error('GitHub Pages is unavailable. Enable the authorized public deployment first.');
     await request(route+'/actions/workflows/pages.yml/dispatches','POST',{ref:'main'});
   }
   const [pages,runs]=await Promise.all([request(route+'/pages'),request(route+'/actions/workflows/pages.yml/runs?per_page=3')]);
   console.log(JSON.stringify({repository:repo.json.html_url,private:repo.json.private,pages:pages.status===404?{httpStatus:404,message:pages.json.message}:{url:pages.json.html_url,status:pages.json.status,buildType:pages.json.build_type,public:pages.json.public},runs:(runs.json?.workflow_runs||[]).map(run=>({id:run.id,sha:run.head_sha,status:run.status,conclusion:run.conclusion,url:run.html_url}))},null,2));
 }
-if(!args.size)console.log('Use --audit, --status, --dispatch, or --check-public. Repository visibility is never changed.');
+if(!args.size)console.log('Use --audit, --status, --dispatch, or --check-public. --publish-public makes this repository public and enables Pages; explicit user authorization is required.');
