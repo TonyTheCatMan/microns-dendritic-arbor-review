@@ -451,7 +451,7 @@
     }
     bind() {
       $('surfaceReset').addEventListener('click',()=>this.reset());$('surfaceXY').addEventListener('click',()=>this.alignTo2D());
-      for(const id of ['surfacePlane','surfaceBox'])$(id).addEventListener('change',()=>this.schedule());
+      for(const id of ['surfacePlane','surfaceBox'])$(id)?.addEventListener('change',()=>this.schedule());
       $('surfaceOpacity').addEventListener('input',e=>{this.alpha=Number(e.target.value)/100;$('surfaceOpacityReadout').textContent=e.target.value+'%';this.schedule();});
       $('surfaceContextMode')?.addEventListener('change',e=>this.setContextMode(e.target.value));
       $('surfaceSegmentation')?.addEventListener('change',e=>this.setSegmentationVisible(e.target.checked));
@@ -493,7 +493,7 @@
       const visible=this.meshes.filter(m=>this.visibleMesh(m));
       for(const opaque of [true,false])for(const mesh of visible){const alpha=mesh.context?this.contextAlpha:this.alpha;if(alpha<=0||(alpha===1)!==opaque)continue;gl.depthMask(opaque);this.drawGeometry(mesh.geometry,[...(mesh.id===this.selectedObjectId?[1,.5,.24]:mesh.color),alpha]);}
       gl.depthMask(true);gl.disable(gl.BLEND);gl.disable(gl.DEPTH_TEST);
-      if($('surfaceBox').checked){this.drawGeometry(this.boxGeometry,[.39,.56,.62,1],1,gl.LINES);this.drawGeometry(this.axisGeometry,[.86,.91,.94,1],1,gl.LINES);}
+      if($('surfaceBox')?.checked){this.drawGeometry(this.boxGeometry,[.39,.56,.62,1],1,gl.LINES);this.drawGeometry(this.axisGeometry,[.86,.91,.94,1],1,gl.LINES);}
       const targets=this.targetsVisible?[...this.targets]:[];if(this.target&&this.showMarker)targets.push(this.target);
       // T markers use the same distinct canvas symbols as the 2D view.
       this.drawLabels(ctx,camera);
@@ -506,7 +506,7 @@
     drawLabels(ctx,camera) {
       ctx.save();ctx.scale(this.ratio,this.ratio);ctx.font='12px system-ui';ctx.lineJoin='round';ctx.lineWidth=4;ctx.strokeStyle='#13212c';ctx.fillStyle='#e4edf0';
       const text=(s,x,y)=>{ctx.strokeText(s,x,y);ctx.fillText(s,x,y);};
-      if($('surfaceBox').checked)for(const [label,p] of [['X',[this.axisLength,0,0]],['Y',[0,this.axisLength,0]],['Z',[0,0,this.axisLength]]]){const [x,y]=this.project(p,camera);text(label,x+5,y-5);}
+      if($('surfaceBox')?.checked)for(const [label,p] of [['X',[this.axisLength,0,0]],['Y',[0,this.axisLength,0]],['Z',[0,0,this.axisLength]]]){const [x,y]=this.project(p,camera);text(label,x+5,y-5);}
       const targets=this.targetsVisible?[...this.targets]:[];if(this.target&&this.showMarker)targets.push(this.target);
       this.targetHits=[];for(const target of targets){const [x,y]=this.project(target.position,camera);if(x<0||y<0||x>this.stage.clientWidth||y>this.stage.clientHeight)continue;MarkerStyles.draw(ctx,x,y,6,target.key);if(finite3(target.nm))this.targetHits.push({id:target.id,key:target.key,nm:[...target.nm],x,y});ctx.fillStyle=MarkerStyles.styles[target.key]?.color||'#edc229';ctx.strokeStyle='#13212c';ctx.lineWidth=4;ctx.font='12px system-ui';text(target.label||target.id,x+11,y-10);}
       this.annotationHits=[];
@@ -526,7 +526,7 @@
       if((this.segmentationVisible||this.contextVisible&&this.contextMode==='slice')&&!this.validSliceSegmentation())throw new Error('Дождитесь сегментации текущего среза или скройте её перед сохранением.');
       return {schema_version:1,source_view:'3d',source:'seg_m1300',case_id:this.caseId,volume_id:this.volume.volume_id,local_z:this.slice?.z??null,
         camera:{yaw:this.yaw,pitch:this.pitch,zoom:this.zoom,center_nm:[...this.center],frame_height_nm:this.frameHeight,radius_nm:this.radius,...(this.cameraBasis?{basis:structuredClone(this.cameraBasis)}:{})},opacity:this.alpha,
-        plane_visible:$('surfacePlane').checked,box_visible:$('surfaceBox').checked,context_visible:this.contextVisible,
+        plane_visible:$('surfacePlane').checked,box_visible:!!$('surfaceBox')?.checked,context_visible:this.contextVisible,
         context_mode:this.contextMode,context_opacity:this.contextAlpha,segmentation_visible:this.segmentationVisible,segmentation_opacity:this.segmentationAlpha,scale_bar:this.scaleBar(),
         context_limit:this.contextLimit,context_focus:this.contextFocus?[...this.contextFocus]:null,context_focus_label:this.contextFocusLabel,context_shown:[...this.contextShown],
         objects:this.meshes.map(m=>({object_id:m.id,segment_id:m.segment_id||null,visible:!!m.visible})),annotations_visible:this.annotationsVisible,selected_annotation_id:this.selectedAnnotationId,
@@ -559,7 +559,7 @@
       if(Array.isArray(view.context_shown)){this.contextShown=new Set(view.context_shown.filter(id=>this.meshes.some(m=>m.context&&m.id===id)));for(const m of this.meshes)if(m.context&&m.control)m.control.hidden=!this.contextVisible||!this.contextShown.has(m.id);}
       for(const mesh of this.meshes){const setting=view.objects.find(o=>o.segment_id&&mesh.segment_id?o.segment_id===mesh.segment_id:o.object_id===mesh.id);mesh.visible=setting?.visible??(mesh.context&&view.context_mode===undefined);if(mesh.control){const input=mesh.control.querySelector('input');if(input)input.checked=mesh.visible;}}
       this.yaw=cam.yaw;this.pitch=cam.pitch;this.zoom=cam.zoom;this.center=[...cam.center_nm];this.frameHeight=cam.frame_height_nm;this.radius=cam.radius_nm;this.cameraBasis=cameraBasis(cam.basis);this.alpha=view.opacity;
-      $('surfaceOpacity').value=String(Math.round(view.opacity*100));$('surfaceOpacityReadout').textContent=Math.round(view.opacity*100)+'%';$('surfacePlane').checked=!!view.plane_visible;$('surfaceBox').checked=!!view.box_visible;
+      $('surfaceOpacity').value=String(Math.round(view.opacity*100));$('surfaceOpacityReadout').textContent=Math.round(view.opacity*100)+'%';$('surfacePlane').checked=!!view.plane_visible;if($('surfaceBox'))$('surfaceBox').checked=!!view.box_visible;
       this.annotationsVisible=!!view.annotations_visible;this.targetsVisible=!!view.seed_points_visible;this.selectedAnnotationId=view.selected_annotation_id||null;this.refreshSelectedObject();this.updateSliceTextures();this.draw();this.navigationChanged('restore');this.visibilityChanged();return this.getViewState();
     }
     snapshotEvidence() {
