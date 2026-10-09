@@ -1,0 +1,58 @@
+{
+  "testedAt": "2026-10-09T15:38:28.346Z",
+  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "browser": "Edge Chromium headless",
+  "checks": [
+    {
+      "label": "Repeated points and arrows save immediately without a dialog or scrolling away from the image",
+      "passed": true
+    },
+    {
+      "label": "Finish and Enter save open traces without opening the editor; fewer than three vertices cannot close",
+      "passed": true
+    },
+    {
+      "label": "Clicking near the starting vertex joins the tail with a closing edge and no duplicate vertex",
+      "passed": true
+    },
+    {
+      "label": "The selected-trace control reopens and closes the same mark without losing its label, note or vertices",
+      "passed": true
+    },
+    {
+      "label": "The explicit Close trace button joins a draft with at least three vertices",
+      "passed": true
+    },
+    {
+      "label": "Continue explicitly reopens a closed trace, appends a vertex, and preserves its identity and notes",
+      "passed": true
+    },
+    {
+      "label": "The detailed note editor still opens on an explicit Edit action and retains closure",
+      "passed": true
+    },
+    {
+      "label": "A delayed Continue cannot reopen an old trace or steal selection after the user changes tool and draws another mark",
+      "passed": true
+    },
+    {
+      "label": "Automatic saving and reload preserve every open and closed trace, notes and native coordinates without changing anatomical decisions",
+      "passed": true
+    },
+    {
+      "label": "ZIP download, fresh-profile upload and reload preserve closed traces exactly",
+      "passed": true
+    },
+    {
+      "label": "JSON download, fresh-profile upload and reload preserve closed traces exactly",
+      "passed": true
+    },
+    {
+      "label": "No uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "screenshotsTaken": 0,
+  "anatomicalReview": false
+}
