@@ -5,7 +5,7 @@ A browser-based anatomy review workspace for the Interneuron Dendritic Input Org
 ## Open
 
 - Public repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
-- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The cutout camera, 50% default and persistent image/mesh cache update is **deployed and publicly verified** at code commit `76cba0729ecdc915120a52bdaf651b459b2bd879`, via [run 37939970809](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37939970809). All 31 checked assets returned HTTP 200 and matched the checkout. See `docs/public-hosting.md`. The older GPT-hosted preview is not the final host.
+- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The image-markup and notes update is **deployed and publicly verified** at code commit `8f760201be3795b3afa9308dfe721dffa69a7738`, via [run 37947487194](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37947487194). All 37 checked assets returned HTTP 200 and matched the checkout. See `docs/public-hosting.md`. The older GPT-hosted preview is not the final host.
 - Local preview: run `npm start`, then open http://127.0.0.1:8874. Node.js is needed only for this development server; a deployed static copy runs entirely in the browser.
 - Build a static hosting directory: `npm run build`. Serve `dist/` through HTTPS or localhost. Keep the bundled `vendor/neuroglancer/` directory intact. No server-side application or database is required.
 - Direct task links use `?task=MC264649.boundary_origin3944`.

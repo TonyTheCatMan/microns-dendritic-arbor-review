@@ -203,4 +203,3 @@ try{
 }catch(error){
   console.error(error);await fs.writeFile('.local/annotation-browser-failure.json',JSON.stringify({message:error.message,stack:error.stack,checks,errors,body:await page.locator('body').innerText()},null,2));process.exitCode=1;
 }finally{await browser.close();}
-
