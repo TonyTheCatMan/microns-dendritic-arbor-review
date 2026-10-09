@@ -61,7 +61,8 @@ export async function installFamiliarShell(viewer,callbacks){host=viewer;api=cal
   $('blackInput').onchange=$('whiteInput').onchange=displayWindow;
   const windowPreset=(b,w)=>{$('blackInput').value=b;$('whiteInput').value=w;displayWindow();};
   $('rawButton').onclick=()=>windowPreset(0,255);$('windowButton').onclick=()=>windowPreset(110,160);
-  $('fitButton').onclick=()=>host.setView({centerNm:host.task.anchorNm,spanNm:4096});
+  // Fit changes only zoom, preserving the current section and panned position.
+  $('fitButton').onclick=()=>host.setView({spanNm:4096});
   $('zoomSelect').onchange=()=>host.setView({spanNm:4096/Number($('zoomSelect').value)});
   $('syncNeuroglancerMain').onchange=()=>{host.syncEnabled=$('syncNeuroglancerMain').checked;if(host.syncEnabled)host.publish(true);};
   $('show3D').onclick=async()=>{if(busy)return;busy=true;$('syncNeuroglancerMain').checked=true;$('show3D').disabled=true;$('meshStatus').textContent=text('Выбор сегмента и загрузка реальной 3D-сетки…','Selecting segment and loading its real 3D mesh…');try{const segment=await host.pickCenter();$('meshStatus').textContent=text(`Кандидат ${segment.id}. Идентичность не подтверждена.`,`Candidate ${segment.id}. Identity unconfirmed.`);}catch(e){$('meshStatus').textContent=e.message;}finally{busy=false;$('show3D').disabled=false;}};
