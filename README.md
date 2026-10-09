@@ -5,11 +5,12 @@ A browser-based anatomy review workspace for the Interneuron Dendritic Input Org
 ## Open
 
 - Private repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
+- Private online preview: https://microns-dendritic-arbor-review.anthtony.chatgpt.site (owner access).
 - Local preview: run `npm start`, then open http://127.0.0.1:8874. Node.js is needed only for this development server; a deployed static copy runs entirely in the browser.
 - Build a static hosting directory: `npm run build`. Serve `dist/` through HTTPS or localhost. Keep the bundled `vendor/neuroglancer/` directory intact. No server-side application or database is required.
 - Direct task links use `?task=MC264649.boundary_origin3944`.
 
-The hosted preview and final verification receipt are recorded in `CHECKPOINT.md` and `docs/VERIFICATION.md` when deployment is complete. Private hosting requires the owner's authorized access; exports can be imported into another copy of this same application.
+The exact deployed code commit, successful deployment receipt and final verification details are recorded in `CHECKPOINT.md` and `docs/VERIFICATION.md`. Private hosting requires the owner's authorized access; exports can be imported into another copy of this same application.
 
 ## Review
 
