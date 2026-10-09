@@ -1,0 +1,25 @@
+{
+  "testedAt": "2026-10-09T14:47:32.322Z",
+  "origin": "http://127.0.0.1:8874/",
+  "checks": [
+    {
+      "label": "Undo then Ctrl+S and reload cannot resurrect the removed trace vertex",
+      "passed": true
+    },
+    {
+      "label": "Legacy object and uppercase planes import, display, navigate and filter while prior decisions remain intact",
+      "passed": true
+    },
+    {
+      "label": "Editing section coordinates exports the new depth with visible SVG and colored annotated PNG, retaining zoom and note",
+      "passed": true
+    },
+    {
+      "label": "No uncaught browser errors during annotation integrity regressions",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "screenshotsTaken": 0,
+  "anatomicalReview": false
+}

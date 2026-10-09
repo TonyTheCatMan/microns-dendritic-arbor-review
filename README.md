@@ -24,7 +24,9 @@ All 50 tasks have an exact native starter plane and 80 nearby sections served fr
 
 Downloaded prepared images, mesh files and their verified source manifests persist in browser Cache Storage. Reloading or restarting can reuse them without source downloads; adjacent sections also reuse native chunks. Storage is bounded and separate from review annotations. See `docs/cutout-and-cache.md`.
 
-Create points, open traces, rectangular regions and distances. Each item has its own name, note, visibility and stable ID. Edit vertices numerically; delete, undo and redo are available. Traces never close automatically or interpolate between sections. An unfinished mark autosaves explicitly as a draft.
+Use the prominent 2D drawing toolbar for arrows, points, open traces, freehand lines, boxes, ellipses and measured distances. Drag shapes directly on the image; click vertices and finish for an open trace. Each mark has a label, note, meaning, color, line width and stable ID. Select a mark to move its body or handles; its note and properties remain editable in the inspector. Filter the list to the current section, hide overlays, return to a mark, and use undo/redo. The task-decision form has been removed; earlier decision data remains compatible with saved files.
+
+Download annotations as editable ZIP or JSON, then upload them through the same toolbar. A separate button saves the current marked image as PNG; ZIP can include native PNG, annotated PNG, SVG and exact metadata. The controls cover the current task, selected items and all 50 tasks. See `docs/ANNOTATIONS.md`.
 
 Save a named selection to retain a view, chosen structures, checked marks and any explicitly focused source-contact record. Exact contact or source-root search loads the complete source footprint, retaining pre/post/center coordinates and exclusions.
 
@@ -52,7 +54,7 @@ Technical validation and export never certify membrane identity, anatomy or the 
 
 ## Development and verification
 
-`npm install` installs the browser-test dependency. `npm test` runs 73 catalog, exchange, source-coordinate and viewer tests. With the local server running, the browser workflow, storage, starter-mesh and viewer integration tools exercise real browser behavior. Test profiles are temporary; demo marks and reviewer files are not part of the delivered default project.
+`npm install` installs the browser-test dependency. `npm test` runs 85 catalog, exchange, source-coordinate and viewer tests. With the local server running, the browser workflow, storage, starter-mesh and viewer integration tools exercise real browser behavior. Test profiles are temporary; demo marks and reviewer files are not part of the delivered default project.
 
 `node tools/prepare-em.mjs` reproducibly acquires the bounded public EM assets. `node tools/verify-prepared-em.mjs` independently verifies every compressed asset and native chunk, all starter pixels and the ±32-section coverage contract. Prepared EM assets total 669,479,702 bytes; the complete static site is about 699.8 MB, with no individual asset larger than 4.30 MB. Only requested crops are downloaded, not the whole site.
 

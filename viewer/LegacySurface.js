@@ -4,6 +4,7 @@ import '../reference-viewer/marker-styles.js';
 import '../reference-viewer/surface3d.js';
 import {RESOLUTION_NM,PLANES} from './coordinates.js';
 import {cutoutFrame,isLegacyOverview} from './cutout-camera.js';
+import {drawMark,markPoints,markPlane,ellipsePointsNm} from './mark-drawing.js';
 const $=id=>document.getElementById(id);
 export class LegacySurface extends window.LocalSurfaceView {
   constructor(host){super();this.host=host;this.rawMeshes=new Map();this.language='ru';}
@@ -60,7 +61,17 @@ export class LegacySurface extends window.LocalSurfaceView {
   setMarks(marks){this.reviewMarks=marks.filter(m=>m.visible!==false);this.annotations=[];this.schedule();}
   drawLabels(ctx,camera){
     ctx.save();ctx.scale(this.ratio,this.ratio);ctx.font='12px system-ui';ctx.lineWidth=2;
-    for(const mark of this.reviewMarks||[]){let points=mark.pointsNm;if(mark.kind==='roi'&&points.length===2){const a=points[0],b=points[1],[u,v]={xy:[0,1],xz:[0,2],yz:[1,2]}[mark.plane];const c=[...a],d=[...a];c[u]=b[u];d[v]=b[v];points=[a,c,b,d,a];}const pts=points.map(p=>this.project(p.map((n,i)=>n-this.originNm[i]),camera));ctx.strokeStyle=ctx.fillStyle=mark.color||'#ffd166';ctx.beginPath();if(pts.length===1){ctx.arc(...pts[0],5,0,Math.PI*2);}else{ctx.moveTo(...pts[0]);for(const p of pts.slice(1))ctx.lineTo(...p);}ctx.stroke();if(pts[0]&&mark.label)ctx.fillText(mark.label,pts[0][0]+8,pts[0][1]-8);}
+    for(const mark of this.reviewMarks||[]){
+      let points=markPoints(mark),kind=mark.kind||mark.type;const axes=PLANES[markPlane(mark)];
+      if(['roi','ellipse'].includes(kind)&&points.length>=2&&axes){
+        const a=points[0],b=points.at(-1),[u,v]=axes;
+        if(kind==='roi'){const c=[...a],d=[...a];c[u]=b[u];d[v]=b[v];points=[a,c,b,d,a];}
+        else points=ellipsePointsNm(mark);
+        kind='trace';
+      }
+      const pts=points.map(p=>{const q=this.project(p.map((n,i)=>n-this.originNm[i]),camera);return {x:q[0],y:q[1],onPlane:true};});drawMark(ctx,{...mark,kind,type:kind},pts,{offset:0});
+      if(pts[0]&&mark.label){ctx.fillStyle=mark.color||'#ffd166';ctx.fillText(mark.label,pts[0].x+8,pts[0].y-8);}
+    }
     const b=this.scaleBar(camera),x=18,y=this.stage.clientHeight-22;ctx.fillStyle='#101c29dd';ctx.fillRect(8,y-24,Math.max(b.pixels+25,135),42);ctx.strokeStyle=ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+b.pixels,y);ctx.stroke();ctx.fillText(`${b.nm>=1000?b.nm/1000+' µm':b.nm+' nm'} · ${this.text('плоскость экрана','screen plane')}`,x,y-9);ctx.restore();
   }
   pickAt(clientX,clientY){
@@ -74,6 +85,6 @@ export class LegacySurface extends window.LocalSurfaceView {
     if(Math.abs(direction[d])<1e-12)return hit;const t=(plane.depthNm-origin[d])/direction[d],distance=hit.point_nm.reduce((n,p,i)=>n+(p-origin[i])*direction[i],0),point=origin.map((n,i)=>n+t*direction[i]);
     return t>0&&t<=distance+.001&&[u,v].every(i=>point[i]>=plane.begin[i]*RESOLUTION_NM[i]&&point[i]<plane.end[i]*RESOLUTION_NM[i])?null:hit;
   }
-  annotationClick(event){const hit=this.pickAt(event.clientX,event.clientY);if(!hit)return;this.selectedObjectId=hit.object_id;const segment=this.host.getSegments().find(s=>s.id===hit.segment_id);if(this.host.interactionMode==='point')this.host.onPoint({pointNm:hit.point_nm,plane:this.host.view.plane,sourceBinding:{source:'seg_m1300',sourceUrl:segment?.sourceUrl||'',segmentId:hit.segment_id,selectionMethod:'mesh-surface-point',coordinateConvention:'global_nm',identityConfirmed:false,representation:'multiresolution-navigation-mesh'}});else if(segment)window.dispatchEvent(new CustomEvent('dendritic:edit-segment',{detail:segment}));this.schedule();}
+  annotationClick(event){const hit=this.pickAt(event.clientX,event.clientY);if(!hit)return;this.selectedObjectId=hit.object_id;const segment=this.host.getSegments().find(s=>s.id===hit.segment_id);if(this.host.interactionMode==='point')this.host.onPoint({pointNm:hit.point_nm,plane:this.host.view.plane,taskId:this.host.task?.id,sourceBinding:{source:'seg_m1300',sourceUrl:segment?.sourceUrl||'',segmentId:hit.segment_id,selectionMethod:'mesh-surface-point',coordinateConvention:'global_nm',identityConfirmed:false,representation:'multiresolution-navigation-mesh'}});else if(segment)window.dispatchEvent(new CustomEvent('dendritic:edit-segment',{detail:segment}));this.schedule();}
   async exportPNG(){try{if(!this.modelReady)throw new Error(this.text('Сначала загрузите 3D-структуру.','Load a 3D structure first.'));this.draw();const c=document.createElement('canvas');c.width=this.canvas.width;c.height=this.canvas.height+52;const ctx=c.getContext('2d');ctx.drawImage(this.canvas,0,0);ctx.drawImage(this.labels,0,0);ctx.fillStyle='#fff';ctx.fillRect(0,this.canvas.height,c.width,52);ctx.fillStyle='#17313d';ctx.font='13px system-ui';ctx.fillText(this.text('Сегментация v1300 · доступные фрагменты · навигация, не исходный ЭМ','v1300 segmentation · available fragments · navigation, not native EM'),10,this.canvas.height+21);ctx.fillText(this.caseId+' · '+this.text('Идентичность не подтверждена','Identity unconfirmed'),10,this.canvas.height+42);const blob=await new Promise(r=>c.toBlob(r)),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=this.caseId+'-3d-navigation.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){this.setStatus(e.message,'error');}}
 }

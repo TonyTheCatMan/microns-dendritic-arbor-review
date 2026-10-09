@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-09T13:55:21.636Z",
+  "checkedAt": "2026-10-09T14:49:10.133Z",
   "browser": "Microsoft Edge, headless, clean ephemeral profile",
   "screenshotsTaken": 0,
   "initial": {
@@ -7,8 +7,8 @@
     "complete": true,
     "width": 512,
     "height": 512,
-    "firstUsefulMs": 90,
-    "elapsedMs": 90,
+    "firstUsefulMs": 86.90000000596046,
+    "elapsedMs": 86.90000000596046,
     "networkBytes": 0
   },
   "position": [
@@ -60,7 +60,7 @@
     ]
   },
   "warmedNextSlice": {
-    "elapsedMs": 11.900000005960464,
+    "elapsedMs": 12,
     "networkBytes": 0
   },
   "hostToDetached": true,
@@ -71,8 +71,8 @@
   "nativeArrowCharacters": [],
   "preExportSynchronization": {
     "revision": 15,
-    "quietMs": 774,
-    "elapsedMs": 779,
+    "quietMs": 760,
+    "elapsedMs": 765,
     "peers": 2
   },
   "export": {

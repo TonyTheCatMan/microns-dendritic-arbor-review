@@ -1,13 +1,13 @@
 {
-  "testedAt": "2026-10-09T13:42:15.555Z",
+  "testedAt": "2026-10-09T14:44:46.764Z",
   "origin": "http://127.0.0.1:8874",
   "browser": "Edge Chromium headless",
   "checks": [
     {
       "label": "native full-resolution first useful task",
       "passed": true,
-      "wallMs": 472,
-      "elapsed": 111,
+      "wallMs": 482,
+      "elapsed": 93.8999999910593,
       "totalChunks": 25,
       "bytes": 0,
       "shape": [
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "label": "50 task controls and blank human decision defaults",
+      "label": "50 task controls, useful task notes and preserved unreviewed state",
       "passed": true
     },
     {
@@ -29,7 +29,7 @@
       "passed": true
     },
     {
-      "label": "reload restores marks, decisions and saved views",
+      "label": "reload restores marks, task notes, saved views and unreviewed state",
       "passed": true
     },
     {

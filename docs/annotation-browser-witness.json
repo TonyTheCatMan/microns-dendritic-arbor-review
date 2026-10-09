@@ -1,0 +1,80 @@
+{
+  "testedAt": "2026-10-09T14:40:16.198Z",
+  "origin": "http://127.0.0.1:8874",
+  "browser": "Edge Chromium headless",
+  "checks": [
+    {
+      "name": "50 tasks load without the decision form; anatomy remains unreviewed",
+      "passed": true
+    },
+    {
+      "name": "seven tools draw native-coordinate point, arrow, open trace, freehand, rectangle, ellipse and calibrated distance",
+      "passed": true,
+      "kinds": [
+        "arrow",
+        "point",
+        "trace",
+        "freehand",
+        "roi",
+        "ellipse",
+        "distance"
+      ],
+      "freehandVertices": 15
+    },
+    {
+      "name": "clicking a mark selects its editable note, label, color, width and anatomical category",
+      "passed": true
+    },
+    {
+      "name": "dragging a selected endpoint edits geometry; undo and redo restore exact coordinates",
+      "passed": true
+    },
+    {
+      "name": "dragging a mark body translates the whole geometry on the same source section",
+      "passed": true
+    },
+    {
+      "name": "marks belong to their source section; current-section filtering never alters saved geometry",
+      "passed": true
+    },
+    {
+      "name": "a section change saves an unfinished open trace without connecting separate sections",
+      "passed": true
+    },
+    {
+      "name": "Ctrl+S and reload preserve every mark, style, note, selected structure and saved view exactly",
+      "passed": true
+    },
+    {
+      "name": "English labels leave handwritten labels and notes unchanged",
+      "passed": true
+    },
+    {
+      "name": "one-click annotated image downloads a real PNG",
+      "passed": true,
+      "bytes": 300078
+    },
+    {
+      "name": "complete 50-task ZIP and compact task JSON preserve exact geometry, styles, notes and provenance",
+      "passed": true
+    },
+    {
+      "name": "selected evidence ZIP contains source-linked raw PNG, annotated PNG, vector arrow and metadata",
+      "passed": true
+    },
+    {
+      "name": "fresh-profile ZIP upload and reload restore exact work; conflicting upload defaults to keep",
+      "passed": true
+    },
+    {
+      "name": "fresh-profile JSON upload and reload restore exact work; conflicting upload defaults to keep",
+      "passed": true
+    },
+    {
+      "name": "no uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "anatomicalReview": false,
+  "defaultProjectUnchanged": true
+}

@@ -1,4 +1,5 @@
-import {EM_URL, SEG_URL, RESOLUTION_NM, nmToNg, normalizeSegments} from './coordinates.js';
+import {EM_URL, SEG_URL, RESOLUTION_NM, PLANES, nmToNg, normalizeSegments} from './coordinates.js';
+import {markPoints, markPlane, ellipsePointsNm} from './mark-drawing.js';
 export const EM_LAYER='EM · MICrONS';
 export const SEG_LAYER='seg_m1300';
 export const MARK_LAYER='review-marks';
@@ -23,11 +24,21 @@ export function makeNgState(task,view,segments=[],marks=[],language='ru') {
   const dimensions=Object.fromEntries(['x','y','z'].map((a,i)=>[a,[RESOLUTION_NM[i]*1e-9,'m']]));
   const selected=normalizeSegments(segments).filter(s=>s.visible),annotations=[];
   for(const mark of marks.filter(m=>m.visible!==false)) {
-    const points=mark.pointsNm||mark.points||(mark.pointNm?[mark.pointNm]:[]),kind=mark.type||mark.kind;
+    const points=markPoints(mark),kind=mark.kind||mark.type;
     const description=[mark.label,mark.note].filter(Boolean).join('\n');
+    const line=(id,a,b)=>annotations.push({id,type:'line',pointA:nmToNg(a),pointB:nmToNg(b),description});
     if(points.length===1)annotations.push({id:mark.id,type:'point',point:nmToNg(points[0]),description});
     else if(kind==='roi'&&points.length>=2) annotations.push({id:mark.id,type:'axis_aligned_bounding_box',pointA:nmToNg(points[0]),pointB:nmToNg(points.at(-1)),description});
-    else for(let i=1;i<points.length;i++)annotations.push({id:mark.id+'-'+i,type:'line',pointA:nmToNg(points[i-1]),pointB:nmToNg(points[i]),description});
+    else if(kind==='ellipse') {const ring=ellipsePointsNm(mark);for(let i=1;i<ring.length;i++)line(mark.id+'-ellipse-'+i,ring[i-1],ring[i]);}
+    else if(kind==='arrow'&&points.length>=2){
+      const a=points[0],b=points.at(-1),axes=PLANES[markPlane(mark)];line(mark.id+'-shaft',a,b);
+      if(axes){const [u,v]=axes,dx=b[u]-a[u],dy=b[v]-a[v],length=Math.hypot(dx,dy);
+        if(length){const head=Math.min(256,length*.3),half=head*.45,ux=dx/length,uy=dy/length;
+          for(const sign of [-1,1]){const corner=[...b];corner[u]-=ux*head+sign*uy*half;corner[v]-=uy*head-sign*ux*half;line(mark.id+'-head-'+(sign<0?'a':'b'),b,corner);}
+        }
+      }
+    }
+    else for(let i=1;i<points.length;i++)line(mark.id+'-'+i,points[i-1],points[i]);
   }
   const orientation=ORIENTATIONS[view.plane];
   return {title:task.id||task.taskId||'Dendritic review',dimensions,position:nmToNg(view.centerNm),

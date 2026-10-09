@@ -1,11 +1,7 @@
-import {projectPoint} from './coordinates.js';
 import {sha256} from './raw-source.js';
+import {escapeSvg as esc, visibleMarks, markSvg, markStyle} from './mark-drawing.js';
+export {markPoints, visibleMarks} from './mark-drawing.js';
 
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
-export const markPoints=m=>m.pointsNm||m.points||(m.pointNm?[m.pointNm]:[]);
-export function visibleMarks(marks,plan) {
-  return marks.filter(m=>m.visible!==false&&(!m.plane||m.plane===plan.plane)).map(m=>({...m,projected:markPoints(m).map(p=>projectPoint(plan,p))}));
-}
 export function scaleBar(plan) {
   const target=plan.physicalSizeNm[0]/4,power=10**Math.floor(Math.log10(target));
   const nm=[1,2,5,10].map(n=>n*power).filter(n=>n<=target).at(-1)||power;
@@ -25,12 +21,8 @@ export function overlaySvg(plan,marks,language='ru') {
   const unit=Math.min(...plan.pixelSizeNm),w=plan.physicalSizeNm[0]/unit,h=plan.physicalSizeNm[1]/unit;
   const sx=plan.pixelSizeNm[0]/unit,sy=plan.pixelSizeNm[1]/unit,rows=[];
   for(const mark of visibleMarks(marks,plan)) {
-    const points=mark.projected,kind=mark.type||mark.kind,color=/^#[0-9a-f]{6}$/i.test(mark.color||'')?mark.color:'#ffcc55';
-    const point=p=>[(p.x+0.5)*sx,(p.y+0.5)*sy];let shape='';
-    if(points.length===1&&points[0].onPlane){const [x,y]=point(points[0]);shape=`<circle cx="${x}" cy="${y}" r="5"/>`;}
-    else if(kind==='roi'&&points.length>=2&&points[0].onPlane&&points.at(-1).onPlane){const [a,b]=[point(points[0]),point(points.at(-1))];shape=`<rect x="${Math.min(a[0],b[0])}" y="${Math.min(a[1],b[1])}" width="${Math.abs(a[0]-b[0])}" height="${Math.abs(a[1]-b[1])}"/>`;}
-    else for(let i=1;i<points.length;i++)if(points[i-1].onPlane&&points[i].onPlane){const [a,b]=[point(points[i-1]),point(points[i])];shape+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`;}
-    if(shape){const p=points.find(p=>p.onPlane),[x,y]=point(p);rows.push(`<g id="${esc(mark.id)}" stroke="${color}" stroke-width="2" fill="none"><title>${esc([mark.label,mark.note].filter(Boolean).join(': '))}</title>${shape}</g><text x="${x+8}" y="${y-8}" font-size="12" fill="${color}" stroke="#111" stroke-width="2" paint-order="stroke">${esc(mark.label||'')}</text>`);}
+    const points=mark.projected,{color,strokeWidth}=markStyle(mark),shape=markSvg(mark,points,{sx,sy});
+    if(shape){const p=points.find(p=>p.onPlane),x=(p.x+.5)*sx,y=(p.y+.5)*sy;rows.push(`<g id="${esc(mark.id)}" data-kind="${esc(mark.kind||mark.type)}" stroke="${color}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" fill="none"><title>${esc([mark.label,mark.note].filter(Boolean).join(': '))}</title>${shape}</g><text x="${x+8}" y="${y-8}" font-size="12" fill="${color}" stroke="#111" stroke-width="2" paint-order="stroke">${esc(mark.label||'')}</text>`);}
   }
   const bar=scaleBar(plan),bx=20,by=h-23;
   rows.push(`<rect x="8" y="${h-53}" width="${Math.max(bar.nm/unit+30,180)}" height="46" fill="#000" fill-opacity="0.75"/><path d="M${bx} ${by}h${bar.nm/unit}" stroke="#fff" stroke-width="4"/><text x="${bx}" y="${by-10}" font-family="sans-serif" font-size="13" fill="#fff">${bar.label}</text>`);

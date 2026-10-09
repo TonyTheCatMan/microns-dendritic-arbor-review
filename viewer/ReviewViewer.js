@@ -1,16 +1,19 @@
-import {RESOLUTION_NM,PLANES,EM_URL,normalizeView,normalizeSegments,ngToNm,pixelToNm,planePlan} from './coordinates.js';
+import {RESOLUTION_NM,PLANES,EM_URL,normalizeView,normalizeSegments,ngToNm,planePlan} from './coordinates.js';
 import {RawSource,ChunkCache,sha256} from './raw-source.js';
 import {PreparedSource} from './prepared-source.js';
 import {clearPreparedAssetCache} from './asset-cache.js';
 import {makeNgState,mergeNativeSegments,orthogonalPlane,assertNativeSources} from './neuroglancer-state.js';
 import {visibleMarks,scaleBar,exportFigure,canvasBlob} from './figure.js';
 import {displayedGray} from '../reference-viewer/image-display.js';
+import {drawMark} from './mark-drawing.js';
+import {DRAG_TOOLS,editableOnPlane,markScreenPoints,handleIndices,hitAnnotation,samplePoint,moveAnnotation,validDraw} from './annotation-interaction.js';
 
 const clone=x=>structuredClone(x),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 export const planeKey=view=>{const p=planePlan(view,{resolution:RESOLUTION_NM});return JSON.stringify([p.plane,p.begin,p.end]);};
 export class ReviewViewer {
-  constructor({canvas,frame,status=()=>{},onViewChange=()=>{},onPoint=()=>{},onSegmentsChange=()=>{},onSave=()=>{}}) {
+  constructor({canvas,frame,status=()=>{},onViewChange=()=>{},onPoint=()=>{},onMark=()=>{},onMarkSelect=()=>{},onMarkEdit=()=>{},onSegmentsChange=()=>{},onSave=()=>{}}) {
     this.canvas=canvas;this.frame=frame;this.status=status;this.onViewChange=onViewChange;this.onPoint=onPoint;this.onSegmentsChange=onSegmentsChange;this.onSave=onSave;
+    this.onMark=onMark;this.onMarkSelect=onMarkSelect;this.onMarkEdit=onMarkEdit;this.activeMarkId=null;
     this.language='ru';this.interactionMode='navigate';this.task=null;this.view=normalizeView();this.segments=[];this.overlays=[];this.plane=null;this.sequence=0;
     this.rawCanvas=document.createElement('canvas');this.rawCanvas.width=1;this.rawCanvas.height=1;this.partialCanvas=document.createElement('canvas');
     this.source=new RawSource({cache:new ChunkCache({onWarning:message=>this.say(message,'warning')}),prepared:new PreparedSource({onWarning:message=>this.say(message,'warning')})});
@@ -29,12 +32,13 @@ export class ReviewViewer {
     else if(p)this.say(this.text(`ЭМ: ${p.loaded} / ${p.total} блоков`,`EM: ${p.loaded} / ${p.total} chunks`));
     else if(this.task)this.say(this.text('Загрузка исходного ЭМ · 8 × 8 × 40 нм…','Loading native EM · 8 × 8 × 40 nm…'));
   }
-  setTool(mode){this.interactionMode=mode;this.canvas.style.cursor=mode==='navigate'?'grab':'crosshair';}
+  setTool(mode){this.cancelInteraction();this.interactionMode=mode;this.canvas.style.cursor=mode==='navigate'?'grab':mode==='select'?'default':'crosshair';this.draw();}
   setDisplayWindow(black,white){black=Math.max(0,Math.min(254,Number(black)));white=Math.max(black+1,Math.min(255,Number(white)));if(!Number.isFinite(black)||!Number.isFinite(white))return;this.view.displayWindow=[black,white];if(this.plane){this.makeRaster(this.plane);this.draw();}this.onViewChange(this.getView());}
   getView(){return clone(this.view);}
   getSegments(){return clone(this.segments);}
   getSourceBinding(){return {source:EM_URL,scale:this.source.scale?.key||'8_8_40',resolutionNm:[...RESOLUTION_NM],infoSha256:this.source.infoHash,convention:'integer-sampling-no-half-voxel'};}
   async setTask(task,view,segments=[]) {
+    this.cancelInteraction();this.activeMarkId=null;
     this.task=task;this.epoch=crypto.randomUUID();this.view=normalizeView(view||{},task.anchorNm);this.segments=normalizeSegments(segments);this.overlays=[];this.plane=null;this.loadedKey=null;this.loadingKey=null;
     this.surface?.setTask(task,this.view);this.onViewChange(this.getView());this.publish(globalThis.location?.hash==='#neuroglancer');
     const epoch=this.epoch;
@@ -42,13 +46,14 @@ export class ReviewViewer {
     return this.load();
   }
   async setView(view) {
+    this.cancelInteraction?.();
     const ngState={...(view.ngState||this.view.ngState||{})};
     if(view.plane&&view.plane!==this.view.plane)delete ngState.crossSectionOrientation;
     if(view.spanNm!==undefined&&view.spanNm!==this.view.spanNm)delete ngState.crossSectionScale;
     this.view=normalizeView({...this.view,...view,ngState,nativeOblique:view.plane&&view.plane!==this.view.plane?false:!!this.view.nativeOblique},this.task?.anchorNm);this.onViewChange(this.getView());this.publish();return this.load();
   }
   updateSegments(segments) {if(!this.view.defaultStructuresInitialized){this.view.defaultStructuresInitialized=true;this.onViewChange(this.getView());}this.segments=normalizeSegments(segments);this.surface?.updateSegments(this.segments);this.publish();const epoch=this.epoch;Promise.resolve(this.loadSelectedStructures?.()).catch(error=>{if(epoch===this.epoch)this.surface?.setStatus(error.message,'error');});return this.getSegments();}
-  setOverlays(marks=[]) {this.overlays=clone(marks);this.surface?.setMarks(marks);this.draw();this.publish();}
+  setOverlays(marks=[],activeId=this.activeMarkId) {this.overlays=clone(marks);this.activeMarkId=marks.some(m=>m.id===activeId)?activeId:null;this.surface?.setMarks(marks);this.draw();this.publish();}
   async retry(){return this.load();}
   async clearCache(){this.source.prepared?.stopWarming();await this.source.cache.clear();await clearPreparedAssetCache();this.source.indexes.clear();this.say(this.text('Кэш изображений очищен. Сохранённые заметки не изменены.','Image cache cleared. Saved notes are unchanged.'),'ready');}
   async load() {
@@ -85,29 +90,63 @@ export class ReviewViewer {
     const p=this.plane,scale=Math.min(w/p.physicalSizeNm[0],h/p.physicalSizeNm[1]),dw=p.physicalSizeNm[0]*scale,dh=p.physicalSizeNm[1]*scale,x=(w-dw)/2+(this.dragPreview?.[0]||0),y=(h-dh)/2+(this.dragPreview?.[1]||0);
     this.drawRect={x,y,w:dw,h:dh};ctx.imageSmoothingEnabled=false;ctx.drawImage(this.partialCanvas,x,y,dw,dh);
     const sx=dw/p.width,sy=dh/p.height;ctx.lineWidth=2;ctx.textAlign='left';ctx.font='12px system-ui';
-    for(const mark of visibleMarks(this.overlays,p)){
-      const pts=mark.projected,kind=mark.type||mark.kind;ctx.strokeStyle=ctx.fillStyle=mark.color||'#ffd166';const pos=t=>[x+(t.x+.5)*sx,y+(t.y+.5)*sy];ctx.beginPath();
-      if(pts.length===1&&pts[0].onPlane){const a=pos(pts[0]);ctx.arc(a[0],a[1],5,0,Math.PI*2);}
-      else if(kind==='roi'&&pts.length>=2&&pts[0].onPlane&&pts.at(-1).onPlane){const a=pos(pts[0]),b=pos(pts.at(-1));ctx.rect(a[0],a[1],b[0]-a[0],b[1]-a[1]);}
-      else for(let i=1;i<pts.length;i++)if(pts[i-1].onPlane&&pts[i].onPlane){ctx.moveTo(...pos(pts[i-1]));ctx.lineTo(...pos(pts[i]));}
-      ctx.stroke();const first=pts.find(t=>t.onPlane);if(first&&mark.label){const a=pos(first);ctx.fillText(mark.label,a[0]+8,a[1]-8);}
-      if(mark.editing)for(const point of pts.filter(q=>q.onPlane)){const a=pos(point);ctx.fillRect(a[0]-3,a[1]-3,6,6);}
+    const preview=this.annotationPreview,marks=preview?[...this.overlays.filter(m=>m.id!==preview.id),preview]:this.overlays;
+    ctx.save();ctx.beginPath();ctx.rect(x,y,dw,dh);ctx.clip();
+    for(const mark of visibleMarks(marks,p)){
+      const pts=mark.projected;drawMark(ctx,mark,pts,{x,y,sx,sy});
+      const first=pts.find(t=>t.onPlane);if(first&&(mark.label||mark.kind==='distance')){const a=[x+(first.x+.5)*sx,y+(first.y+.5)*sy];let label=mark.label||'';if(mark.kind==='distance'&&mark.pointsNm?.length===2){const [a,b]=mark.pointsNm;label+=`${label?' · ':''}${(Math.hypot(...a.map((n,i)=>n-b[i]))/1000).toFixed(3)} µm`;}ctx.strokeStyle='#101b25';ctx.lineWidth=3;ctx.strokeText(label,a[0]+8,a[1]-8);ctx.fillStyle=mark.color||'#ffd166';ctx.fillText(label,a[0]+8,a[1]-8);}
+      if(mark.id===this.activeMarkId&&editableOnPlane(mark,p)&&this.loadedKey===planeKey(this.view)&&p.complete){const pts=markScreenPoints(mark,p,this.drawRect);ctx.fillStyle='#fff';ctx.strokeStyle='#111';ctx.lineWidth=1.5;for(const index of handleIndices(mark)){const a=pts[index];ctx.fillRect(a[0]-4,a[1]-4,8,8);ctx.strokeRect(a[0]-4,a[1]-4,8,8);}}
     }
+    ctx.restore();
     const bar=scaleBar(p),length=bar.nm*scale;ctx.fillStyle='#000b';ctx.fillRect(x+8,y+dh-49,length+30,40);ctx.strokeStyle=ctx.fillStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+20,y+dh-18);ctx.lineTo(x+20+length,y+dh-18);ctx.stroke();ctx.fillText(bar.label,x+20,y+dh-28);
     ctx.fillStyle='#000b';ctx.fillRect(x,y,dw,26);ctx.fillStyle='#fff';ctx.fillText(`${p.plane.toUpperCase()} · ${['X','Y','Z'][p.axes[2]]}=${p.depthNm} nm · ${p.pixelSizeNm.join(' × ')} nm`,x+10,y+17);
     if(this.loadedKey!==planeKey(this.view)){ctx.fillStyle='#523b12ed';ctx.fillRect(x,y+26,dw,30);ctx.fillStyle='#fff';ctx.fillText(this.text('Предыдущий вид · новый загружается','Previous view · new position loading'),x+10,y+46);}
   }
-  canvasPoint(event){const rect=this.canvas.getBoundingClientRect(),r=this.drawRect;if(!r||!this.plane)return null;const x=(event.clientX-rect.left-r.x)/r.w*this.plane.width,y=(event.clientY-rect.top-r.y)/r.h*this.plane.height;if(x<0||y<0||x>=this.plane.width||y>=this.plane.height)return null;return {x,y};}
+  canvasPoint(event,clamp=false){const rect=this.canvas.getBoundingClientRect(),r=this.drawRect;if(!r||!this.plane)return null;const x=(event.clientX-rect.left-r.x)/r.w*this.plane.width,y=(event.clientY-rect.top-r.y)/r.h*this.plane.height;if(clamp)return {x:Math.max(0,Math.min(this.plane.width-1,x)),y:Math.max(0,Math.min(this.plane.height-1,y))};if(x<0||y<0||x>=this.plane.width||y>=this.plane.height)return null;return {x,y};}
+  canEditPlane(){return !!this.task&&!!this.plane?.complete&&this.loadedKey===planeKey(this.view);}
+  cancelInteraction(){this.drag=null;this.annotationPreview=null;this.dragPreview=null;}
+  markEvent(pointsNm,kind){return {kind,pointsNm,plane:this.plane.plane,sourceBinding:this.getSourceBinding(),taskId:this.task.id||this.task.taskId};}
   installControls() {
-    this.canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;this.drag={x:e.clientX,y:e.clientY,center:[...this.view.centerNm],moved:false};this.canvas.setPointerCapture(e.pointerId);});
-    this.canvas.addEventListener('pointermove',e=>{if(!this.drag||this.interactionMode!=='navigate')return;const dx=e.clientX-this.drag.x,dy=e.clientY-this.drag.y;this.drag.moved=Math.hypot(dx,dy)>3;this.dragPreview=[dx,dy];this.draw();});
-    this.canvas.addEventListener('pointerup',e=>{
-      const drag=this.drag;this.drag=null;if(!drag)return;const point=this.canvasPoint(e),r=this.drawRect;this.dragPreview=null;
-      if(this.interactionMode==='navigate'&&drag.moved&&r&&this.plane){const p=this.plane,next=[...drag.center];next[p.axes[0]]-=(e.clientX-drag.x)/r.w*p.physicalSizeNm[0];next[p.axes[1]]-=(e.clientY-drag.y)/r.h*p.physicalSizeNm[1];this.setView({centerNm:next});}
-      else if(this.interactionMode!=='navigate'&&point){const i=Math.floor(point.y)*this.plane.width+Math.floor(point.x);if(this.loadedKey!==planeKey(this.view)||!this.plane.coverage[i]){this.say(this.text('Эта часть нового среза ещё не загружена.','This part of the new plane has not loaded yet.'),'error');return;}this.onPoint({pointNm:pixelToNm(this.plane,point.x,point.y),plane:this.view.plane,sourceBinding:this.getSourceBinding(),taskId:this.task.id||this.task.taskId});}
+    this.canvas.style.touchAction='none';
+    this.canvas.addEventListener('pointerdown',e=>{
+      if(this.drag||![0,1].includes(e.button)||!this.task)return;
+      const point=this.canvasPoint(e),pan=this.interactionMode==='navigate'||e.button===1||e.shiftKey;if(!point&&!pan)return;
+      if(!pan&&!this.canEditPlane()){this.say(this.text('Дождитесь полной загрузки текущего среза, чтобы рисовать или менять метки.','Wait for the current section to finish loading before drawing or editing marks.'),'error');return;}
+      e.preventDefault();const rect=this.canvas.getBoundingClientRect(),mode=pan?'navigate':this.interactionMode,startNm=point?samplePoint(this.plane,point):null;
+      let hit=null;if(mode==='select'){hit=hitAnnotation(this.overlays,this.plane,this.drawRect,[e.clientX-rect.left,e.clientY-rect.top],{activeId:this.activeMarkId});this.activeMarkId=hit?.mark.id||null;this.onMarkSelect(this.activeMarkId);}
+      this.drag={x:e.clientX,y:e.clientY,center:[...this.view.centerNm],moved:false,pointerId:e.pointerId,epoch:this.epoch,key:this.loadedKey,mode,startNm,hit,points:startNm?[startNm]:[]};
+      if(DRAG_TOOLS.has(mode))this.annotationPreview={kind:mode,plane:this.plane.plane,pointsNm:[startNm,startNm],visible:true,color:this.markColor||'#ffd166',strokeWidth:this.markStrokeWidth||2};
+      this.canvas.setPointerCapture(e.pointerId);this.draw();
+    });
+    this.canvas.addEventListener('pointermove',e=>{
+      const drag=this.drag;if(!drag||drag.pointerId!==e.pointerId)return;
+      if(drag.epoch!==this.epoch||drag.key!==this.loadedKey){this.cancelInteraction();this.draw();return;}
+      const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved=drag.moved||Math.hypot(dx,dy)>3;
+      if(drag.mode==='navigate'){this.dragPreview=[dx,dy];this.draw();return;}
+      if(!this.canEditPlane()){this.cancelInteraction();this.draw();return;}
+      const point=this.canvasPoint(e,true),nm=samplePoint(this.plane,point);
+      if(drag.mode==='select'&&drag.hit&&drag.moved)this.annotationPreview={...drag.hit.mark,pointsNm:moveAnnotation(drag.hit.mark,this.plane,drag.startNm,nm,drag.hit.index)};
+      else if(DRAG_TOOLS.has(drag.mode)){
+        if(drag.mode==='freehand'){const last=drag.points.at(-1);if(nm.some((n,i)=>n!==last[i])&&drag.points.length<4096)drag.points.push(nm);this.annotationPreview.pointsNm=drag.points;}
+        else this.annotationPreview.pointsNm=[drag.startNm,nm];
+      }
       this.draw();
     });
-    this.canvas.addEventListener('pointercancel',()=>{this.drag=null;this.dragPreview=null;this.draw();});
+    this.canvas.addEventListener('pointerup',e=>{
+      const drag=this.drag;if(!drag||drag.pointerId!==e.pointerId)return;const point=this.canvasPoint(e,true),r=this.drawRect,preview=this.annotationPreview;
+      this.cancelInteraction();if(this.canvas.hasPointerCapture(e.pointerId))this.canvas.releasePointerCapture(e.pointerId);
+      if(drag.epoch!==this.epoch||drag.key!==this.loadedKey){this.draw();return;}
+      if(drag.mode==='navigate'&&drag.moved&&r&&this.plane){const p=this.plane,next=[...drag.center];next[p.axes[0]]-=(e.clientX-drag.x)/r.w*p.physicalSizeNm[0];next[p.axes[1]]-=(e.clientY-drag.y)/r.h*p.physicalSizeNm[1];this.setView({centerNm:next});}
+      else if(this.canEditPlane()&&point){
+        const nm=samplePoint(this.plane,point);
+        if(drag.mode==='select'&&drag.hit&&drag.moved){const pointsNm=moveAnnotation(drag.hit.mark,this.plane,drag.startNm,nm,drag.hit.index);this.onMarkEdit({id:drag.hit.mark.id,pointsNm,taskId:this.task.id||this.task.taskId});}
+        else if(DRAG_TOOLS.has(drag.mode)&&drag.moved){const points=drag.mode==='freehand'?(preview?.pointsNm||drag.points):[drag.startNm,nm];if(drag.mode==='freehand'&&nm.some((n,i)=>n!==points.at(-1)[i]))points.push(nm);if(validDraw(drag.mode,points,this.plane))this.onMark(this.markEvent(points,drag.mode));}
+        else if(['point','trace'].includes(drag.mode)&&!drag.moved)this.onPoint({pointNm:nm,...this.markEvent([nm],drag.mode)});
+      }
+      this.draw();
+    });
+    const cancel=()=>{this.cancelInteraction();this.draw();};this.canvas.addEventListener('pointercancel',cancel);this.canvas.addEventListener('lostpointercapture',()=>{if(this.drag)cancel();});
+    this.keyListener=e=>{if(e.key==='Escape'&&this.drag){e.preventDefault();cancel();}};document.addEventListener('keydown',this.keyListener);
     this.canvas.addEventListener('wheel',e=>{e.preventDefault();if(e.shiftKey){const centerNm=[...this.view.centerNm],axis=PLANES[this.view.plane][2];centerNm[axis]+=Math.sign(e.deltaY)*RESOLUTION_NM[axis];this.setView({centerNm});}else this.setView({spanNm:this.view.spanNm*(e.deltaY>0?1.25:0.8)});},{passive:false});
   }
   state(){return makeNgState(this.task||{},this.view,this.segments,this.overlays,this.language);}
@@ -166,5 +205,5 @@ export class ReviewViewer {
       identityCaution:'Spatial picks in seg_m1300 do not certify release661 identity or dendritic arbor partitions; meshes do not add EM resolution.'};
     return {metadata,files:[{name:'navigation-neuroglancer.png',blob},{name:'navigation-metadata.json',blob:new Blob([JSON.stringify(metadata,null,2)],{type:'application/json'})}]};
   }
-  destroy(){this.controller?.abort();this.channel.close();this.resizeObserver.disconnect();}
+  destroy(){this.controller?.abort();this.channel.close();this.resizeObserver.disconnect();document.removeEventListener('keydown',this.keyListener);}
 }

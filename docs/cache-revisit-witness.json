@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-09T13:46:57.450Z",
+  "checkedAt": "2026-10-09T14:44:53.581Z",
   "url": "http://127.0.0.1:8874/",
   "screenshotsTaken": 0,
   "httpCacheDisabled": true,
@@ -15,7 +15,7 @@
   "phases": [
     {
       "name": "first visit: HTTP cache disabled",
-      "startedAt": "2026-10-09T13:46:57.451Z",
+      "startedAt": "2026-10-09T14:44:53.582Z",
       "attemptedSources": [
         "http://127.0.0.1:8874/data/prepared-em/manifest.json",
         "http://127.0.0.1:8874/data/starter-meshes/manifest.json",
@@ -53,12 +53,12 @@
           "encodedDataLength": 151949
         },
         {
-          "url": "http://127.0.0.1:8874/data/prepared-em/crop-42485d9931e7a845.bin.gz",
-          "encodedDataLength": 3760637
-        },
-        {
           "url": "http://127.0.0.1:8874/data/prepared-em/crop-2809c8649d637b0c.bin.gz",
           "encodedDataLength": 3778250
+        },
+        {
+          "url": "http://127.0.0.1:8874/data/prepared-em/crop-42485d9931e7a845.bin.gz",
+          "encodedDataLength": 3760637
         },
         {
           "url": "http://127.0.0.1:8874/data/prepared-em/crop-81ddefc984f88349.bin.gz",
@@ -105,7 +105,7 @@
     },
     {
       "name": "same tab reload: all data sources blocked",
-      "startedAt": "2026-10-09T13:47:24.858Z",
+      "startedAt": "2026-10-09T14:45:15.589Z",
       "attemptedSources": [],
       "blockedSources": [],
       "finishedSources": [],
@@ -113,7 +113,7 @@
     },
     {
       "name": "task and section revisits: all data sources blocked",
-      "startedAt": "2026-10-09T13:47:26.376Z",
+      "startedAt": "2026-10-09T14:45:17.358Z",
       "attemptedSources": [],
       "blockedSources": [],
       "finishedSources": [],
@@ -121,7 +121,7 @@
     },
     {
       "name": "new page: all data sources blocked",
-      "startedAt": "2026-10-09T13:47:27.041Z",
+      "startedAt": "2026-10-09T14:45:17.900Z",
       "attemptedSources": [],
       "blockedSources": [],
       "finishedSources": [],
@@ -129,7 +129,7 @@
     },
     {
       "name": "browser restart: same profile, all data sources blocked",
-      "startedAt": "2026-10-09T13:47:43.710Z",
+      "startedAt": "2026-10-09T14:45:20.079Z",
       "attemptedSources": [],
       "blockedSources": [],
       "finishedSources": [],
@@ -137,7 +137,7 @@
     },
     {
       "name": "explicit image-cache clear",
-      "startedAt": "2026-10-09T13:47:46.334Z",
+      "startedAt": "2026-10-09T14:45:22.560Z",
       "attemptedSources": [],
       "blockedSources": [],
       "finishedSources": [],
@@ -145,7 +145,7 @@
     },
     {
       "name": "refill after image-cache clear",
-      "startedAt": "2026-10-09T13:47:46.353Z",
+      "startedAt": "2026-10-09T14:45:22.590Z",
       "attemptedSources": [
         "http://127.0.0.1:8874/data/prepared-em/manifest.json",
         "http://127.0.0.1:8874/data/starter-meshes/manifest.json",
@@ -176,20 +176,20 @@
           "encodedDataLength": 151949
         },
         {
-          "url": "http://127.0.0.1:8874/data/prepared-em/crop-42485d9931e7a845.bin.gz",
-          "encodedDataLength": 3760637
-        },
-        {
           "url": "http://127.0.0.1:8874/data/prepared-em/crop-2809c8649d637b0c.bin.gz",
           "encodedDataLength": 3778250
         },
         {
-          "url": "http://127.0.0.1:8874/data/prepared-em/crop-81ddefc984f88349.bin.gz",
-          "encodedDataLength": 3796513
+          "url": "http://127.0.0.1:8874/data/prepared-em/crop-42485d9931e7a845.bin.gz",
+          "encodedDataLength": 3760637
         },
         {
           "url": "http://127.0.0.1:8874/data/prepared-em/crop-5b86f0060439e8d7.bin.gz",
           "encodedDataLength": 3837556
+        },
+        {
+          "url": "http://127.0.0.1:8874/data/prepared-em/crop-81ddefc984f88349.bin.gz",
+          "encodedDataLength": 3796513
         },
         {
           "url": "http://127.0.0.1:8874/data/prepared-em/crop-fdd6350a45209031.bin.gz",
@@ -1231,7 +1231,7 @@
       ],
       "spanNm": 4096
     },
-    "imageStatus": "Исходный ЭМ · 512 × 512 пикселей · 0.8 с",
+    "imageStatus": "Исходный ЭМ · 512 × 512 пикселей · 1.7 с",
     "nativeFrameStarted": false,
     "assetStats": {
       "cacheHits": 0,
@@ -3380,7 +3380,7 @@
       ],
       "spanNm": 4096
     },
-    "imageStatus": "Исходный ЭМ · 512 × 512 пикселей · 0.0 с",
+    "imageStatus": "Исходный ЭМ · 512 × 512 пикселей · 0.1 с",
     "nativeFrameStarted": false,
     "assetStats": {
       "cacheHits": 4,
@@ -3392,12 +3392,14 @@
       "note": "QA durable cache keeps reviewer notes",
       "marks": [
         {
-          "id": "8ead6c4b-7d9f-4095-8fdc-572eb5ed24da",
+          "id": "609b1173-9f0d-4bb2-a05d-4bf09f75ba47",
           "kind": "point",
           "category": "membrane",
           "label": "QA durable cache point",
           "note": "Exact source coordinates survive cache reuse",
           "visible": true,
+          "color": "#ffd166",
+          "strokeWidth": 3,
           "pointsNm": [
             [
               752960,
@@ -3485,8 +3487,8 @@
             "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
             "convention": "integer-sampling-no-half-voxel"
           },
-          "createdAt": "2026-10-09T13:47:15.544Z",
-          "updatedAt": "2026-10-09T13:47:15.590Z",
+          "createdAt": "2026-10-09T14:45:07.492Z",
+          "updatedAt": "2026-10-09T14:45:07.553Z",
           "draft": false
         }
       ],
@@ -3532,22 +3534,22 @@
   "sections": [
     {
       "offset": 1,
-      "wallMs": 45,
+      "wallMs": 48,
       "hash": "afb08c82e31c9c86db03dfa998a80467949a4892a93f42fca53c066065896786"
     },
     {
       "offset": 2,
-      "wallMs": 45,
+      "wallMs": 48,
       "hash": "2314264e10bd3cf81c187c3f77212d7728c0d8ef75924a9e16b9cdbb0bad328b"
     },
     {
       "offset": -1,
-      "wallMs": 47,
+      "wallMs": 49,
       "hash": "03d983b7b4ba78f498c440dc229ffeb0fadb1b139a28c1f45d4e67a4ce4a5592"
     },
     {
       "offset": 0,
-      "wallMs": 49,
+      "wallMs": 48,
       "hash": "31bd3da3b680ebb2112809eed5046fcaaab78df56b86519d3037e28c53a2778f"
     }
   ],
@@ -4594,12 +4596,14 @@
       "note": "QA durable cache keeps reviewer notes",
       "marks": [
         {
-          "id": "8ead6c4b-7d9f-4095-8fdc-572eb5ed24da",
+          "id": "609b1173-9f0d-4bb2-a05d-4bf09f75ba47",
           "kind": "point",
           "category": "membrane",
           "label": "QA durable cache point",
           "note": "Exact source coordinates survive cache reuse",
           "visible": true,
+          "color": "#ffd166",
+          "strokeWidth": 3,
           "pointsNm": [
             [
               752960,
@@ -4687,8 +4691,8 @@
             "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
             "convention": "integer-sampling-no-half-voxel"
           },
-          "createdAt": "2026-10-09T13:47:15.544Z",
-          "updatedAt": "2026-10-09T13:47:15.590Z",
+          "createdAt": "2026-10-09T14:45:07.492Z",
+          "updatedAt": "2026-10-09T14:45:07.553Z",
           "draft": false
         }
       ],
@@ -5774,12 +5778,14 @@
       "note": "QA durable cache keeps reviewer notes",
       "marks": [
         {
-          "id": "8ead6c4b-7d9f-4095-8fdc-572eb5ed24da",
+          "id": "609b1173-9f0d-4bb2-a05d-4bf09f75ba47",
           "kind": "point",
           "category": "membrane",
           "label": "QA durable cache point",
           "note": "Exact source coordinates survive cache reuse",
           "visible": true,
+          "color": "#ffd166",
+          "strokeWidth": 3,
           "pointsNm": [
             [
               752960,
@@ -5867,8 +5873,8 @@
             "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
             "convention": "integer-sampling-no-half-voxel"
           },
-          "createdAt": "2026-10-09T13:47:15.544Z",
-          "updatedAt": "2026-10-09T13:47:15.590Z",
+          "createdAt": "2026-10-09T14:45:07.492Z",
+          "updatedAt": "2026-10-09T14:45:07.553Z",
           "draft": false
         }
       ],
@@ -6943,7 +6949,7 @@
       ],
       "spanNm": 4096
     },
-    "imageStatus": "Исходный ЭМ · 512 × 512 пикселей · 0.3 с",
+    "imageStatus": "Исходный ЭМ · 512 × 512 пикселей · 0.2 с",
     "nativeFrameStarted": false,
     "assetStats": {
       "cacheHits": 0,
@@ -6955,12 +6961,14 @@
       "note": "QA durable cache keeps reviewer notes",
       "marks": [
         {
-          "id": "8ead6c4b-7d9f-4095-8fdc-572eb5ed24da",
+          "id": "609b1173-9f0d-4bb2-a05d-4bf09f75ba47",
           "kind": "point",
           "category": "membrane",
           "label": "QA durable cache point",
           "note": "Exact source coordinates survive cache reuse",
           "visible": true,
+          "color": "#ffd166",
+          "strokeWidth": 3,
           "pointsNm": [
             [
               752960,
@@ -7048,8 +7056,8 @@
             "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
             "convention": "integer-sampling-no-half-voxel"
           },
-          "createdAt": "2026-10-09T13:47:15.544Z",
-          "updatedAt": "2026-10-09T13:47:15.590Z",
+          "createdAt": "2026-10-09T14:45:07.492Z",
+          "updatedAt": "2026-10-09T14:45:07.553Z",
           "draft": false
         }
       ],

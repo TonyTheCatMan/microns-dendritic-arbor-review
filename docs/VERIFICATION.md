@@ -2,6 +2,10 @@
 
 This records software and source-binding checks. All 50 anatomy decisions remain unreviewed. The automatic-branch and prepared-imagery correction has passed local source, workflow and full native integration checks, and is now deployed with verified public assets and a passing clean public-browser run.
 
+## Image markup follow-up
+
+The current markup update passes 85 Node tests, 15 actual-pointer annotation workflows, four focused editing/import regressions, all 16 established review/exchange workflows and six durable-cache workflows. Checks cover all seven mark geometries, exact native samples, per-mark notes and styles, body/handle dragging, undo/save consistency, legacy plane formats, edited-section evidence, 50-task and selected exports, fresh-profile ZIP/JSON import, and visible annotation pixels in decoded PNGs. A fresh single-image worker found the toolbar, arrow handles, mark list and note inspector clear, with no overlap; the ambiguous cancel/undo labels were subsequently clarified. Public verification is pending. See [ANNOTATIONS.md](ANNOTATIONS.md).
+
 ## Cutout camera and durable cache follow-up
 
 The latest local checks pass: six durable-cache workflows with all source endpoints blocked and HTTP caching disabled, 11 camera/rendering checks, and the 16 existing review/exchange workflows. The cache checks include a full browser restart and independently verify actual native pixels and complete mesh bytes. GPU reads confirm 50% blending without multiple transparent faces accumulating opacity. The close-up remains limited by source-mesh detail; use native EM for fine anatomy. See [cutout-and-cache.md](cutout-and-cache.md). Code `76cba0729ecdc915120a52bdaf651b459b2bd879` deployed successfully in [run 37939970809](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37939970809); all 31 public asset checks match. The [live cache witness](live-cache-revisit-witness.json) passes all six workflows with zero source requests/bytes on reload, task revisits, new pages and browser restart.
@@ -12,7 +16,7 @@ The previous four-step warm test stayed within an already downloaded 16-section 
 
 ## Current source and browser evidence
 
-**73 Node tests pass.** Coverage includes catalog/exchange invariants, exact large string IDs, source identity, integer coordinates, XY/XZ/YZ anisotropy, source sharding, shared cancellation and bounded caching, native mesh transforms, stale-plane protection, and prepared-data integrity. New prepared-source tests show the first plane before held background packs, verify every pixel through 80 sections across four chunk boundaries with no additional requests after warming, reject corrupted assets and changed public metadata, and preserve source binding after cache clearing.
+**85 Node tests pass.** Coverage includes catalog/exchange invariants, exact large string IDs, source identity, integer coordinates, XY/XZ/YZ anisotropy, source sharding, shared cancellation and bounded caching, native mesh transforms, stale-plane protection, and prepared-data integrity. New prepared-source tests show the first plane before held background packs, verify every pixel through 80 sections across four chunk boundaries with no additional requests after warming, reject corrupted assets and changed public metadata, and preserve source binding after cache clearing.
 
 `node tools/verify-prepared-em.mjs` independently verified:
 

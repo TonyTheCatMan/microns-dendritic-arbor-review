@@ -3,6 +3,7 @@ export const PROJECT_ID = 'microns-dendritic-arbor-review';
 export const SCHEMA_VERSION = 2;
 export const COORDINATE_SYSTEM = 'global_nm_integer_sample';
 export const SEGMENTATION_URL = 'https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300';
+export const MARK_KINDS = Object.freeze(['point', 'arrow', 'ellipse', 'freehand', 'trace', 'roi', 'distance']);
 export const clone = value => structuredClone(value);
 export const newId = () => globalThis.crypto.randomUUID();
 export class ReviewError extends Error {
@@ -45,6 +46,30 @@ function timestamp(value, label, optional = false) {
 }
 export function validatePoint(point) {
   invariant(Array.isArray(point) && point.length === 3 && point.every(Number.isFinite), 'COORDINATE', 'Expected three finite nanometre coordinates');
+}
+/** Geometry-only validation is also used before applying edits in the annotation dialog. */
+export function validateMarkGeometry(mark) {
+  invariant(MARK_KINDS.includes(mark.kind), 'MARK_KIND', 'Unknown annotation kind');
+  invariant(mark.draft === undefined || typeof mark.draft === 'boolean', 'MARK_DRAFT', 'Invalid annotation draft state');
+  invariant(Array.isArray(mark.pointsNm) && mark.pointsNm.length >= 1 && mark.pointsNm.length <= 100000, 'POINTS', 'Annotation requires finite points');
+  mark.pointsNm.forEach(validatePoint);
+  invariant(mark.kind !== 'point' || mark.pointsNm.length === 1, 'POINTS', 'Point annotations contain one point');
+  invariant(mark.kind === 'point' || mark.pointsNm.length >= 2 || mark.draft === true, 'POINTS', 'Finished shapes require at least two points; incomplete drafts must be explicit');
+  invariant(!['arrow', 'ellipse'].includes(mark.kind) || mark.pointsNm.length <= 2, 'POINTS', 'Arrows and ellipses contain two endpoints');
+  invariant(!['trace', 'freehand'].includes(mark.kind) || mark.closed !== true, 'CLOSED_TRACE', 'An open route must not be silently closed');
+  invariant(['xy', 'xz', 'yz', 'XY', 'XZ', 'YZ'].includes(mark.plane) || plain(mark.plane), 'PLANE', 'Annotation requires a plane');
+  const planeValue = typeof mark.plane === 'string' ? mark.plane : mark.plane.plane ?? ({x:'yz',y:'xz',z:'xy'}[mark.plane.axis]);
+  const plane = typeof planeValue === 'string' ? planeValue.toLowerCase() : undefined;
+  const depthAxis = { xy: 2, xz: 1, yz: 0 }[plane];
+  invariant(depthAxis !== undefined, 'PLANE', 'Annotation plane must identify XY, XZ or YZ');
+  invariant(mark.pointsNm.every(point => Math.abs(point[depthAxis] - mark.pointsNm[0][depthAxis]) <= 1e-6), 'NONCOPLANAR_MARK', 'A 2D mark cannot interpolate between sections; save a separate mark on each plane');
+  if (mark.draft !== true && ['arrow', 'ellipse', 'freehand'].includes(mark.kind)) {
+    invariant(mark.pointsNm.some(point => point.some((value, axis) => Math.abs(value - mark.pointsNm[0][axis]) > 1e-6)), 'DEGENERATE_MARK', 'A finished shape must span distinct points');
+    if (mark.kind === 'ellipse') invariant([0,1,2].filter(axis => axis !== depthAxis).every(axis => Math.abs(mark.pointsNm[1][axis] - mark.pointsNm[0][axis]) > 1e-6), 'DEGENERATE_MARK', 'An ellipse needs width and height within its plane');
+  }
+  if (mark.color !== undefined) invariant(typeof mark.color === 'string' && /^#[0-9a-f]{6}$/i.test(mark.color), 'MARK_COLOR', 'Annotation color must be a six-digit hex RGB value');
+  if (mark.strokeWidth !== undefined) invariant(Number.isFinite(mark.strokeWidth) && mark.strokeWidth >= 1 && mark.strokeWidth <= 12, 'MARK_STROKE', 'Annotation line width must be between 1 and 12');
+  return mark;
 }
 export function validateBinding(binding, ctx) {
   invariant(plain(binding) && Object.keys(binding).length > 0, 'SOURCE_BINDING', 'Annotation needs an explicit source binding');
@@ -137,19 +162,9 @@ export function validateTask(input, catalog) {
   for (const mark of input.marks) {
     string(mark.id, 'mark ID', 200);
     invariant(!ids.has(mark.id), 'DUPLICATE_ID', 'Duplicate mark ID'); ids.add(mark.id);
-    invariant(['point', 'trace', 'roi', 'distance'].includes(mark.kind), 'MARK_KIND', 'Unknown annotation kind');
+    validateMarkGeometry(mark);
     string(mark.category, 'category', 200); string(mark.label, 'mark label', 10000); string(mark.note, 'mark note');
     invariant(typeof mark.visible === 'boolean', 'VISIBILITY', 'Invalid mark visibility');
-    invariant(Array.isArray(mark.pointsNm) && mark.pointsNm.length >= 1 && mark.pointsNm.length <= 100000, 'POINTS', 'Annotation requires finite points');
-    mark.pointsNm.forEach(validatePoint);
-    invariant(mark.kind !== 'point' || mark.pointsNm.length === 1, 'POINTS', 'Point annotations contain one point');
-    invariant(!['trace', 'roi', 'distance'].includes(mark.kind) || mark.pointsNm.length >= 2 || mark.draft === true, 'POINTS', 'Finished trace, ROI and distance require at least two points; incomplete drafts must be explicit');
-    invariant(mark.kind !== 'trace' || mark.closed !== true, 'CLOSED_TRACE', 'An open route must not be silently closed');
-    invariant(['xy', 'xz', 'yz', 'XY', 'XZ', 'YZ'].includes(mark.plane) || plain(mark.plane), 'PLANE', 'Annotation requires a plane');
-    const plane = typeof mark.plane === 'string' ? mark.plane.toLowerCase() : mark.plane.plane ?? ({x:'yz',y:'xz',z:'xy'}[mark.plane.axis]);
-    const depthAxis = { xy: 2, xz: 1, yz: 0 }[plane];
-    invariant(depthAxis !== undefined, 'PLANE', 'Annotation plane must identify XY, XZ or YZ');
-    invariant(mark.pointsNm.every(point => Math.abs(point[depthAxis] - mark.pointsNm[0][depthAxis]) <= 1e-6), 'NONCOPLANAR_MARK', 'A 2D mark cannot interpolate between sections; save a separate mark on each plane');
     validateBinding(mark.sourceBinding, ctx);
     timestamp(mark.createdAt, 'mark creation'); timestamp(mark.updatedAt, 'mark update');
   }
