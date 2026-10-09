@@ -1,6 +1,6 @@
 # Current correction verification — 2026-10-09
 
-This records software and source-binding checks. All 50 anatomy decisions remain unreviewed. The automatic-branch and prepared-imagery correction has passed local source, workflow and full native integration checks. Public deployment and clean public-site timing remain pending.
+This records software and source-binding checks. All 50 anatomy decisions remain unreviewed. The automatic-branch and prepared-imagery correction has passed local source, workflow and full native integration checks, and is now deployed with verified public assets and a passing clean public-browser run.
 
 ## What the earlier checks missed
 
@@ -19,7 +19,9 @@ The previous four-step warm test stayed within an already downloaded 16-section 
 
 The local browser receipt `cold-start-witness.json` verifies seven workflows: clean entry with actual branches and an exact native plane without a hidden native iframe; 64 serial steps through +32 and −32 offsets; new-task source binding; rapid task switches; reselecting the current task while a change is pending; saved notes/large IDs after reload; and cache clearing without losing review work. It records the first complete plane **439 ms after navigation**, branches at about 419 ms, and section steps at **14.7–25.9 ms**, with zero live-source bytes and independently matching native pixel hashes.
 
-These are **localhost results**, not a numerical public-host speed comparison. Clean-visit measurements of the corrected public deployment remain to be made.
+Those are **localhost results** and remain separate from the [public browser witness](live-cold-start-witness.json), which passed the same seven workflows on the deployed website. The clean public visit displayed its complete plane at **3,468.4 ms** and automatic branches at **3,445.7 ms**. The source-plane operation took 682.2 ms, transferring a 151,694-byte starter. This compares with the earlier public observations of 17.04 seconds for this site and 4.29 seconds for the original; these are individual measured runs rather than a controlled repeated benchmark.
+
+The 64 public section moves all matched independently reconstructed native pixels and required no BossDB/GCS requests or hidden Neuroglancer instance. Median latency was about 17.5 ms; the maximum was 749.7 ms on the first move while a pack completed. The sixth move took 184.7 ms, and the remaining prepared moves took 15.2–24.3 ms; the negative-direction maximum was 23.9 ms. The first anchor's 80 sections cover offsets −42 through +37, including the full ±32 test. Network latency can still affect background packs and unprepared regions.
 
 `starter-mesh-witness.json` records five browser checks: automatic first-open branches, all four recipients, rapid switching, saved camera/selection restoration and persistent explicit removal. `starter-recovery-witness.json` adds metadata-failure retry and live-source fallback checks. The four prepared meshes retain source, physical transforms, source fragment identity and binary hashes; their default candidate status is documented in `default-branches.md`.
 
@@ -39,4 +41,4 @@ Review annotations remain browser-local. Public hosting publishes the app and pr
 
 Prepared EM assets total **669,479,702 bytes**. Starter planes range from 137,365 to 167,084 compressed bytes, with 151,694 bytes for the first task. The complete static build is about **699.8 MB**; its largest asset is **4,295,881 bytes**. The browser fetches requested task regions and bounded neighbors, not the entire package. Full Neuroglancer starts on demand; wider or uncovered regions still require public-source access.
 
-The current prior public deployment is `d342c6b`, with the same application code as interface-restoration commit `a5368cf3b6927a31e9eb52f07a899a03aae437ca`, originally deployed by [run 37929719755](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37929719755). Those historical live checks do not establish deployment of this correction. See `public-hosting.md` and `CHECKPOINT.md` for the pending publication and public verification work.
+Code commit `9d995624a48171dfc596794d71ab99a4bc2523de` was successfully deployed by [run 37935498264](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37935498264). Anonymous requests for all 29 checked assets returned HTTP 200 and exactly matched local bytes. The [live browser witness](live-cold-start-witness.json) passed all seven checks with no reported failures. This deployment supersedes `d342c6b`; prior deployment checks remain in Git history. The current `restored-browser-witness.json` covers automatic branches and basic caching. See `public-hosting.md` and `CHECKPOINT.md` for deployment details.

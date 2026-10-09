@@ -1,0 +1,2600 @@
+{
+  "at": "2026-10-09T13:17:50.311Z",
+  "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "checks": [
+    "Clean visit automatically displays actual branch mesh and independently verified native plane, with no unsolicited Neuroglancer or live-source request",
+    "Every section across +32 and -32 offsets remains correctly positioned and matches independently reconstructed exact native chunk pixels where prepared",
+    "A newly opened task gets its own correct native pixels and automatic branches",
+    "Rapid task changes leave the final task, plane, mesh and saved work consistent",
+    "Reselecting the current task cancels a pending asynchronous task change",
+    "Reload preserves source-bound marks, notes and large string segment IDs",
+    "Image-cache clear and reload refill from prepared assets while reviewer work is retained"
+  ],
+  "first": {
+    "timings": {
+      "status": "Исходный ЭМ · 512 × 512 пикселей · 0.7 с",
+      "changes": [
+        {
+          "time": 777.8000000119209,
+          "status": ""
+        },
+        {
+          "time": 2943.5,
+          "status": "Загрузка новых блоков ЭМ…"
+        },
+        {
+          "time": 3468.4000000059605,
+          "status": "Исходный ЭМ · 512 × 512 пикселей · 0.7 с"
+        }
+      ],
+      "mesh": 3445.7000000029802,
+      "plane": 3468.4000000059605
+    },
+    "elapsed": 3469.4000000059605,
+    "planeMs": 682.2000000029802,
+    "firstUsefulMs": 682.2000000029802,
+    "triangles": 77559,
+    "nativeSrc": null,
+    "sourceBytes": 0,
+    "preparedBytes": 151694,
+    "preparedVolumeId": "crop-42485d9931e7a845",
+    "anchor": [
+      752960,
+      646592,
+      858640
+    ],
+    "task": "MC298937.soma_identity",
+    "decision": "unreviewed"
+  },
+  "steps": [
+    {
+      "offset": 1,
+      "elapsed": 749.7000000029802,
+      "rawElapsed": 735.9000000059605,
+      "depthNm": 858680,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 3760381,
+      "preparedPacks": 1,
+      "cacheHits": 21,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 2,
+      "elapsed": 20.599999994039536,
+      "rawElapsed": 11.700000002980232,
+      "depthNm": 858720,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 3,
+      "elapsed": 19.200000002980232,
+      "rawElapsed": 10.300000011920929,
+      "depthNm": 858760,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 4,
+      "elapsed": 16.599999994039536,
+      "rawElapsed": 7.799999997019768,
+      "depthNm": 858800,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 5,
+      "elapsed": 18.69999998807907,
+      "rawElapsed": 8.899999991059303,
+      "depthNm": 858840,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 6,
+      "elapsed": 184.70000000298023,
+      "rawElapsed": 176.29999999701977,
+      "depthNm": 858880,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 3777994,
+      "preparedPacks": 1,
+      "cacheHits": 21,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 7,
+      "elapsed": 16.80000001192093,
+      "rawElapsed": 7.399999991059303,
+      "depthNm": 858920,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 8,
+      "elapsed": 21.19999998807907,
+      "rawElapsed": 8.800000011920929,
+      "depthNm": 858960,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 9,
+      "elapsed": 20.700000002980232,
+      "rawElapsed": 11.200000002980232,
+      "depthNm": 859000,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 10,
+      "elapsed": 18.100000008940697,
+      "rawElapsed": 9.400000005960464,
+      "depthNm": 859040,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 11,
+      "elapsed": 15.699999988079071,
+      "rawElapsed": 7.9000000059604645,
+      "depthNm": 859080,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 12,
+      "elapsed": 21.5,
+      "rawElapsed": 10.299999997019768,
+      "depthNm": 859120,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 13,
+      "elapsed": 17.299999997019768,
+      "rawElapsed": 9,
+      "depthNm": 859160,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 14,
+      "elapsed": 17.799999997019768,
+      "rawElapsed": 8,
+      "depthNm": 859200,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 15,
+      "elapsed": 16,
+      "rawElapsed": 8,
+      "depthNm": 859240,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 16,
+      "elapsed": 16.099999994039536,
+      "rawElapsed": 7.799999997019768,
+      "depthNm": 859280,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 17,
+      "elapsed": 16.399999991059303,
+      "rawElapsed": 8.100000008940697,
+      "depthNm": 859320,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 18,
+      "elapsed": 16.900000005960464,
+      "rawElapsed": 8.600000008940697,
+      "depthNm": 859360,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 19,
+      "elapsed": 17.700000002980232,
+      "rawElapsed": 9,
+      "depthNm": 859400,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 20,
+      "elapsed": 18.5,
+      "rawElapsed": 9.100000008940697,
+      "depthNm": 859440,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 21,
+      "elapsed": 24.299999997019768,
+      "rawElapsed": 10.5,
+      "depthNm": 859480,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 22,
+      "elapsed": 17,
+      "rawElapsed": 8.400000005960464,
+      "depthNm": 859520,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 23,
+      "elapsed": 17.900000005960464,
+      "rawElapsed": 8.299999997019768,
+      "depthNm": 859560,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 24,
+      "elapsed": 19.900000005960464,
+      "rawElapsed": 10.200000002980232,
+      "depthNm": 859600,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 25,
+      "elapsed": 18.299999997019768,
+      "rawElapsed": 8.699999988079071,
+      "depthNm": 859640,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 26,
+      "elapsed": 17.400000005960464,
+      "rawElapsed": 8.599999994039536,
+      "depthNm": 859680,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 27,
+      "elapsed": 17.100000008940697,
+      "rawElapsed": 8.399999991059303,
+      "depthNm": 859720,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 28,
+      "elapsed": 17.5,
+      "rawElapsed": 8.699999988079071,
+      "depthNm": 859760,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 29,
+      "elapsed": 21.799999997019768,
+      "rawElapsed": 10.899999991059303,
+      "depthNm": 859800,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 30,
+      "elapsed": 17.900000005960464,
+      "rawElapsed": 8.600000008940697,
+      "depthNm": 859840,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 31,
+      "elapsed": 17.299999997019768,
+      "rawElapsed": 9.400000005960464,
+      "depthNm": 859880,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": 32,
+      "elapsed": 20,
+      "rawElapsed": 10.5,
+      "depthNm": 859920,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -1,
+      "elapsed": 17.399999991059303,
+      "rawElapsed": 8.5,
+      "depthNm": 858600,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -2,
+      "elapsed": 23.899999991059303,
+      "rawElapsed": 7.9000000059604645,
+      "depthNm": 858560,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -3,
+      "elapsed": 19,
+      "rawElapsed": 10,
+      "depthNm": 858520,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -4,
+      "elapsed": 17.599999994039536,
+      "rawElapsed": 7.700000002980232,
+      "depthNm": 858480,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -5,
+      "elapsed": 17,
+      "rawElapsed": 7.9000000059604645,
+      "depthNm": 858440,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -6,
+      "elapsed": 17.19999998807907,
+      "rawElapsed": 8.300000011920929,
+      "depthNm": 858400,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -7,
+      "elapsed": 16.400000005960464,
+      "rawElapsed": 8.099999994039536,
+      "depthNm": 858360,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -8,
+      "elapsed": 17.299999997019768,
+      "rawElapsed": 8.700000002980232,
+      "depthNm": 858320,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -9,
+      "elapsed": 16.5,
+      "rawElapsed": 7.700000002980232,
+      "depthNm": 858280,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -10,
+      "elapsed": 16.5,
+      "rawElapsed": 7.4000000059604645,
+      "depthNm": 858240,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -11,
+      "elapsed": 16.700000002980232,
+      "rawElapsed": 7.5999999940395355,
+      "depthNm": 858200,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -12,
+      "elapsed": 18,
+      "rawElapsed": 9.899999991059303,
+      "depthNm": 858160,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -13,
+      "elapsed": 17,
+      "rawElapsed": 8.100000008940697,
+      "depthNm": 858120,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -14,
+      "elapsed": 20,
+      "rawElapsed": 7.700000002980232,
+      "depthNm": 858080,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -15,
+      "elapsed": 16.299999997019768,
+      "rawElapsed": 7.5999999940395355,
+      "depthNm": 858040,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -16,
+      "elapsed": 16,
+      "rawElapsed": 7.5999999940395355,
+      "depthNm": 858000,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -17,
+      "elapsed": 18.599999994039536,
+      "rawElapsed": 8.599999994039536,
+      "depthNm": 857960,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -18,
+      "elapsed": 15.699999988079071,
+      "rawElapsed": 7.800000011920929,
+      "depthNm": 857920,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -19,
+      "elapsed": 15.900000005960464,
+      "rawElapsed": 7.5,
+      "depthNm": 857880,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -20,
+      "elapsed": 18.100000008940697,
+      "rawElapsed": 10.200000002980232,
+      "depthNm": 857840,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -21,
+      "elapsed": 15.200000002980232,
+      "rawElapsed": 7.299999997019768,
+      "depthNm": 857800,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -22,
+      "elapsed": 17.799999997019768,
+      "rawElapsed": 8.200000002980232,
+      "depthNm": 857760,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -23,
+      "elapsed": 22,
+      "rawElapsed": 10.700000002980232,
+      "depthNm": 857720,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -24,
+      "elapsed": 16.700000002980232,
+      "rawElapsed": 8.700000002980232,
+      "depthNm": 857680,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -25,
+      "elapsed": 16,
+      "rawElapsed": 7.700000002980232,
+      "depthNm": 857640,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -26,
+      "elapsed": 16,
+      "rawElapsed": 7.9000000059604645,
+      "depthNm": 857600,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -27,
+      "elapsed": 17.099999994039536,
+      "rawElapsed": 8.899999991059303,
+      "depthNm": 857560,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -28,
+      "elapsed": 21.200000002980232,
+      "rawElapsed": 12.300000011920929,
+      "depthNm": 857520,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -29,
+      "elapsed": 16.5,
+      "rawElapsed": 7.799999997019768,
+      "depthNm": 857480,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -30,
+      "elapsed": 16.599999994039536,
+      "rawElapsed": 8,
+      "depthNm": 857440,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -31,
+      "elapsed": 17.5,
+      "rawElapsed": 9.5,
+      "depthNm": 857400,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    },
+    {
+      "offset": -32,
+      "elapsed": 17.5,
+      "rawElapsed": 7.600000008940697,
+      "depthNm": 857360,
+      "complete": true,
+      "liveBytes": 0,
+      "preparedBytes": 0,
+      "preparedPacks": 0,
+      "cacheHits": 25,
+      "total": 25,
+      "preparedReceipts": 25,
+      "independentHashMatches": true,
+      "expectedPrepared": true
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+      "kind": "document"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/viewer.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/surface3d.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/site.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/annotations.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/app.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/app.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/ReviewViewer.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/familiar-shell.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/store.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/model.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/exchange.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/i18n.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/LegacySurface.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/native-surface-adapter.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/surface-sync.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/starter-meshes.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/coordinates.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/raw-source.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/prepared-source.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/neuroglancer-state.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/figure.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/image-display.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/zip.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/marker-styles.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/surface3d.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/catalog.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/manifest.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/starter-meshes/manifest.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/starter-meshes/MC298937.bin",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/plane-25087976cb368192.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-42485d9931e7a845.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-2809c8649d637b0c.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-81ddefc984f88349.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-5b86f0060439e8d7.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-fdd6350a45209031.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/plane-331d1831aada6bec.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-42de183e68ca6769.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-0e66e721cfc81f1f.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/plane-d80ccfcc8500ab19.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/plane-09b09179c6f83864.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/?task=MC298937.soma_identity",
+      "kind": "document"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-edb64a04962989d8.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-250cd216b2e2b12c.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/viewer.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/surface3d.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/site.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/annotations.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/app.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/app.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/ReviewViewer.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/familiar-shell.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/store.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/model.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/exchange.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/i18n.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/coordinates.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/raw-source.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/prepared-source.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/neuroglancer-state.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/figure.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/image-display.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/LegacySurface.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/native-surface-adapter.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/surface-sync.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/starter-meshes.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/zip.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/marker-styles.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/surface3d.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/catalog.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/manifest.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/starter-meshes/manifest.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/starter-meshes/MC298937.bin",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/plane-25087976cb368192.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-42485d9931e7a845.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-2809c8649d637b0c.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/?task=MC298937.soma_identity",
+      "kind": "document"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-81ddefc984f88349.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-5b86f0060439e8d7.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-fdd6350a45209031.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/viewer.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/surface3d.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/site.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-ui/annotations.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/app.css",
+      "kind": "stylesheet"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/app.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/ReviewViewer.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/familiar-shell.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/store.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/model.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/exchange.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/i18n.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/coordinates.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/raw-source.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/prepared-source.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/neuroglancer-state.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/figure.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/image-display.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/LegacySurface.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/native-surface-adapter.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/surface-sync.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/viewer/starter-meshes.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/core/zip.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/marker-styles.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/reference-viewer/surface3d.js",
+      "kind": "script"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/catalog.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/favicon.svg",
+      "kind": "other"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/manifest.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/starter-meshes/manifest.json",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/starter-meshes/MC298937.bin",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/plane-25087976cb368192.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-42485d9931e7a845.bin.gz",
+      "kind": "fetch"
+    },
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-2809c8649d637b0c.bin.gz",
+      "kind": "fetch"
+    }
+  ],
+  "errors": [],
+  "failures": [
+    {
+      "url": "https://tonythecatman.github.io/microns-dendritic-arbor-review/data/prepared-em/crop-edb64a04962989d8.bin.gz",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "coverage": {
+    "startZ": 21424,
+    "endZExclusive": 21504,
+    "sections": 80,
+    "relativeFirst": -42,
+    "relativeLast": 37,
+    "warmVolumeIds": [
+      "crop-42485d9931e7a845",
+      "crop-2809c8649d637b0c",
+      "crop-81ddefc984f88349",
+      "crop-5b86f0060439e8d7",
+      "crop-fdd6350a45209031"
+    ]
+  },
+  "newTask": {
+    "elapsedWall": 398,
+    "task": "MC298937.origin3447_to_soma",
+    "viewerTask": "MC298937.origin3447_to_soma",
+    "depthNm": 858600,
+    "begin": [
+      92311,
+      81161,
+      21465
+    ],
+    "end": [
+      92823,
+      81673,
+      21466
+    ],
+    "width": 512,
+    "height": 512,
+    "complete": true,
+    "receipts": [
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465525",
+        "grid": [
+          613,
+          526,
+          415
+        ],
+        "begin": [
+          92288,
+          81152,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "196a90766b642e65bdb70d530d5a4902f1cd9b6409d2703caea0a011ab9fb08f",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4337201783,
+          4337361743
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465527",
+        "grid": [
+          613,
+          527,
+          415
+        ],
+        "begin": [
+          92288,
+          81280,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "8f7863fcc9d1a884a6554e9fa225e0c8bbd443ba50e3d20d830bffa50b09cb35",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4337519771,
+          4337679650
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465532",
+        "grid": [
+          614,
+          526,
+          415
+        ],
+        "begin": [
+          92416,
+          81152,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "f8c76e8d7e9032a95f6ab4c575340dff06d743737e49b345e78e1f14a415a404",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4338331254,
+          4338492946
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465533",
+        "grid": [
+          615,
+          526,
+          415
+        ],
+        "begin": [
+          92544,
+          81152,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "3b91f779539e06086a8393595dbc404a22c2e50d796a97afe46691f6a133d026",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4338492946,
+          4338655443
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465534",
+        "grid": [
+          614,
+          527,
+          415
+        ],
+        "begin": [
+          92416,
+          81280,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "807b8bb6ab124b950de2065ce9519588d7e571f632cf553f49c2e3962e906ebe",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4338655443,
+          4338815722
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465535",
+        "grid": [
+          615,
+          527,
+          415
+        ],
+        "begin": [
+          92544,
+          81280,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "930506b26d45fac365ec42b5f062faeac0a8fca33aa512534bdb081780093248",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4338815722,
+          4338974979
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465972",
+        "grid": [
+          616,
+          526,
+          415
+        ],
+        "begin": [
+          92672,
+          81152,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "28cd70a0888f563485d82c3f09ef18bcc935f9e5df565d7430dc394670af7f86",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4408506617,
+          4408668478
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465973",
+        "grid": [
+          617,
+          526,
+          415
+        ],
+        "begin": [
+          92800,
+          81152,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "a5abec8170a28f942638ce61be6f555b31361e69a5e5e58b18fbb0accb1f769e",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4408668478,
+          4408828697
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465974",
+        "grid": [
+          616,
+          527,
+          415
+        ],
+        "begin": [
+          92672,
+          81280,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "faa57c8b4196e42cca913212b06a2499f9a933a374f71d8806edaad4be75537e",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4408828697,
+          4408988876
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478465975",
+        "grid": [
+          617,
+          527,
+          415
+        ],
+        "begin": [
+          92800,
+          81280,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "a83cdf2f729fa2cecbfeedec6bccf27a9254ea9d330e632018b8556e09fd9e02",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4408988876,
+          4409148569
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472549",
+        "grid": [
+          613,
+          528,
+          415
+        ],
+        "begin": [
+          92288,
+          81408,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "b5e9cc1867f870cabdfecd4b511539ce8b7ff7e89431595b8ec0924639342624",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4639745113,
+          4639903777
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472551",
+        "grid": [
+          613,
+          529,
+          415
+        ],
+        "begin": [
+          92288,
+          81536,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "164ff87f2fccfefb5414fde6e67449639a00122ef9226d80d8df95138e17fcff",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4640064217,
+          4640226704
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472556",
+        "grid": [
+          614,
+          528,
+          415
+        ],
+        "begin": [
+          92416,
+          81408,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "6af95954194a18444f284df701d68710dfafcf6cd29f0b2133b90d53f44b7ec9",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4640873411,
+          4641032546
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472557",
+        "grid": [
+          615,
+          528,
+          415
+        ],
+        "begin": [
+          92544,
+          81408,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "0eeaa4dd5bc6f6c6918db7db3e511e571eab19d237f6842fceacf742aebeea8d",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4641032546,
+          4641193048
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472558",
+        "grid": [
+          614,
+          529,
+          415
+        ],
+        "begin": [
+          92416,
+          81536,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "e4e08558d84041275d7c74ab6fdc9caef03f1092fe44d1a2b207e89911e2b50b",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4641193048,
+          4641354968
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472559",
+        "grid": [
+          615,
+          529,
+          415
+        ],
+        "begin": [
+          92544,
+          81536,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "e02d77eb4d1a1c85bca5474b6490c8e22b5925cdd3bbab7e662e96d7107a9a86",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4641354968,
+          4641515399
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472565",
+        "grid": [
+          613,
+          530,
+          415
+        ],
+        "begin": [
+          92288,
+          81664,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "1329cfc5e57ed342469e432ee51f10f931fcd0171b63df0af9ef2cf8d6f45840",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4642317271,
+          4642478292
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472572",
+        "grid": [
+          614,
+          530,
+          415
+        ],
+        "begin": [
+          92416,
+          81664,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "5032819d6dab2a4de59ecc49da59df6b23b815cae3588d10f864b4cb3e9b1384",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4643422897,
+          4643583521
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472573",
+        "grid": [
+          615,
+          530,
+          415
+        ],
+        "begin": [
+          92544,
+          81664,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "56618065971cd37247c6384b14a95de6afb2f17a890734d94d1d38180ba7aa36",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4643583521,
+          4643739509
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472996",
+        "grid": [
+          616,
+          528,
+          415
+        ],
+        "begin": [
+          92672,
+          81408,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "4993cdf3b72c75b5602198193197b37b905128c4ba9ac71c73027b309b69528c",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4710287649,
+          4710447104
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472997",
+        "grid": [
+          617,
+          528,
+          415
+        ],
+        "begin": [
+          92800,
+          81408,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "3062dba0f016c14d025a78ae72a64e4e1d7523188a1aefdb57ae47de5441fb5a",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4710447104,
+          4710608031
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472998",
+        "grid": [
+          616,
+          529,
+          415
+        ],
+        "begin": [
+          92672,
+          81536,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "2a55282ff9c57f0936e14edcfec8a797c894092401485717337a7843b2e5c47d",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4710608031,
+          4710766540
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478472999",
+        "grid": [
+          617,
+          529,
+          415
+        ],
+        "begin": [
+          92800,
+          81536,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "e3477fccd93724f283352aa50594d76b5ccf20b6ff2a8c61ae7a14c8008da6d0",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4710766540,
+          4710927843
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478473012",
+        "grid": [
+          616,
+          530,
+          415
+        ],
+        "begin": [
+          92672,
+          81664,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "30d33328eead45ad28685b312f9f174888e9b2c3a31fed5efac5ae92e1d079d1",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4712854790,
+          4713012099
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      },
+      {
+        "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+        "scale": "8_8_40",
+        "chunkId": "478473013",
+        "grid": [
+          617,
+          530,
+          415
+        ],
+        "begin": [
+          92800,
+          81664,
+          21456
+        ],
+        "dimensions": [
+          128,
+          128,
+          16
+        ],
+        "decodedSha256": "955a317afd538a11aedaa1220dc01505d5f39193686be272d4af30af4d2208ff",
+        "url": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em/8_8_40/03909.shard",
+        "rangeBytes": [
+          4713012099,
+          4713170672
+        ],
+        "fromCache": false,
+        "preparedAsset": "plane-331d1831aada6bec.bin.gz",
+        "preparedPlaneSha256": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312"
+      }
+    ],
+    "hash": "69d6a3c3b30599cbb146d0c5b343ba34a88da137040df9b5df9fc9b97d972312",
+    "sourceBinding": {
+      "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+      "scale": "8_8_40",
+      "encoding": "raw",
+      "resolutionNm": [
+        8,
+        8,
+        40
+      ],
+      "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
+      "convention": "integer-sampling-no-half-voxel"
+    },
+    "preparedVolumeId": "crop-42de183e68ca6769"
+  },
+  "rapid": {
+    "task": "MC298937.soma_identity",
+    "viewerTask": "MC298937.soma_identity",
+    "surfaceTask": "MC298937.soma_identity",
+    "view": {
+      "centerNm": [
+        752960,
+        646592,
+        858640
+      ],
+      "plane": "xy",
+      "spanNm": 4096,
+      "resolutionNm": [
+        8,
+        8,
+        40
+      ],
+      "nativeOblique": false,
+      "defaultStructuresInitialized": true,
+      "surfaceCamera": {
+        "yaw": -0.65,
+        "pitch": 0.4,
+        "zoom": 1,
+        "center_nm": [
+          138472,
+          245008,
+          136260
+        ],
+        "frame_height_nm": 700408.2865037255,
+        "radius_nm": 1876093.62456355,
+        "right": [
+          0.7960837985490559,
+          0,
+          -0.6051864057360395
+        ],
+        "up": [
+          0.23567068690945892,
+          -0.9210609940028851,
+          0.310009633169747
+        ],
+        "eye_direction": [
+          -0.5574135924242699,
+          -0.3894183423086505,
+          -0.7332417348011859
+        ],
+        "direction": [
+          0.5574135924242699,
+          0.3894183423086505,
+          0.7332417348011859
+        ],
+        "physical_height_nm": 700408.2865037255,
+        "projection": "orthographic",
+        "originNm": [
+          583480,
+          355440,
+          719960
+        ]
+      },
+      "ngState": {
+        "projectionOrientation": [
+          -0.1882691356442851,
+          0.31294386902951277,
+          0.06343686280319388,
+          0.9287608044261352
+        ],
+        "projectionScale": 87551.03581296568
+      }
+    },
+    "decision": {
+      "status": "unreviewed",
+      "answers": {},
+      "note": "QA persistence across prepared-image and task changes"
+    },
+    "marks": [
+      {
+        "id": "2bae4e4a-4af4-41a7-a4a0-8859c659a60a",
+        "kind": "point",
+        "category": "membrane",
+        "label": "QA source-bound point",
+        "note": "QA exact coordinates retained",
+        "visible": true,
+        "pointsNm": [
+          [
+            752960,
+            646584,
+            858640
+          ]
+        ],
+        "plane": "xy",
+        "view": {
+          "centerNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "plane": "xy",
+          "spanNm": 4096,
+          "resolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "nativeOblique": false,
+          "defaultStructuresInitialized": true,
+          "surfaceCamera": {
+            "yaw": -0.65,
+            "pitch": 0.4,
+            "zoom": 1,
+            "center_nm": [
+              138472,
+              245008,
+              136260
+            ],
+            "frame_height_nm": 700408.2865037255,
+            "radius_nm": 1876093.62456355,
+            "right": [
+              0.7960837985490559,
+              0,
+              -0.6051864057360395
+            ],
+            "up": [
+              0.23567068690945892,
+              -0.9210609940028851,
+              0.310009633169747
+            ],
+            "eye_direction": [
+              -0.5574135924242699,
+              -0.3894183423086505,
+              -0.7332417348011859
+            ],
+            "direction": [
+              0.5574135924242699,
+              0.3894183423086505,
+              0.7332417348011859
+            ],
+            "physical_height_nm": 700408.2865037255,
+            "projection": "orthographic",
+            "originNm": [
+              583480,
+              355440,
+              719960
+            ]
+          },
+          "ngState": {
+            "projectionOrientation": [
+              -0.1882691356442851,
+              0.31294386902951277,
+              0.06343686280319388,
+              0.9287608044261352
+            ],
+            "projectionScale": 87551.03581296568
+          }
+        },
+        "sourceBinding": {
+          "catalogHash": "a418cf860346c65eb04fe0032de39e2d636c3778413259769a2a462ffa49d132",
+          "sourceHash": "f2f20d85a817da34f26fbf79064393cdd0711e4c04833429f3d554e259a5f5cc",
+          "coordinateConvention": "integer-sample",
+          "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+          "scale": "8_8_40",
+          "resolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
+          "convention": "integer-sampling-no-half-voxel"
+        },
+        "createdAt": "2026-10-09T13:17:58.642Z",
+        "updatedAt": "2026-10-09T13:17:58.689Z",
+        "draft": false
+      }
+    ],
+    "segments": [
+      {
+        "id": "864691136389585015",
+        "source": "seg_m1300",
+        "sourceUrl": "https://storage.googleapis.com/iarpa_microns/minnie/minnie65/seg_m1300",
+        "identityStatus": "candidate",
+        "visible": true,
+        "color": "#66d9b4",
+        "sourceBinding": {
+          "coordinateConvention": "integer-sample",
+          "selectionMethod": "prepared-soma-spatial-pick",
+          "positionNm": [
+            752960,
+            646592,
+            858640
+          ],
+          "positionVoxel": [
+            94120,
+            80824,
+            21466
+          ],
+          "coordinateResolutionNm": [
+            8,
+            8,
+            40
+          ],
+          "loadedVoxelSizeNm": [
+            7.999999773744548,
+            7.999999773744548,
+            39.99999975690116
+          ],
+          "identityConfirmed": false,
+          "starterAssetSha256": "0650c5fba7ca5bf7c35121453bbe8c2ae7e1eedd77cdf7b2434f6e92bac6447c",
+          "recipientId": "MC298937"
+        }
+      }
+    ]
+  },
+  "cancelPending": {
+    "requestedLast": "MC298937.soma_identity",
+    "actual": "MC298937.soma_identity",
+    "task": "MC298937.soma_identity",
+    "viewer": "MC298937.soma_identity"
+  },
+  "clearCache": {
+    "before": 7690069,
+    "cacheMemoryBytes": 0,
+    "after": {
+      "sourceBytes": 0,
+      "preparedBytes": 151694,
+      "note": "QA persistence across prepared-image and task changes",
+      "marks": [
+        {
+          "id": "2bae4e4a-4af4-41a7-a4a0-8859c659a60a",
+          "kind": "point",
+          "category": "membrane",
+          "label": "QA source-bound point",
+          "note": "QA exact coordinates retained",
+          "visible": true,
+          "pointsNm": [
+            [
+              752960,
+              646584,
+              858640
+            ]
+          ],
+          "plane": "xy",
+          "view": {
+            "centerNm": [
+              752960,
+              646592,
+              858640
+            ],
+            "plane": "xy",
+            "spanNm": 4096,
+            "resolutionNm": [
+              8,
+              8,
+              40
+            ],
+            "nativeOblique": false,
+            "defaultStructuresInitialized": true,
+            "surfaceCamera": {
+              "yaw": -0.65,
+              "pitch": 0.4,
+              "zoom": 1,
+              "center_nm": [
+                138472,
+                245008,
+                136260
+              ],
+              "frame_height_nm": 700408.2865037255,
+              "radius_nm": 1876093.62456355,
+              "right": [
+                0.7960837985490559,
+                0,
+                -0.6051864057360395
+              ],
+              "up": [
+                0.23567068690945892,
+                -0.9210609940028851,
+                0.310009633169747
+              ],
+              "eye_direction": [
+                -0.5574135924242699,
+                -0.3894183423086505,
+                -0.7332417348011859
+              ],
+              "direction": [
+                0.5574135924242699,
+                0.3894183423086505,
+                0.7332417348011859
+              ],
+              "physical_height_nm": 700408.2865037255,
+              "projection": "orthographic",
+              "originNm": [
+                583480,
+                355440,
+                719960
+              ]
+            },
+            "ngState": {
+              "projectionOrientation": [
+                -0.1882691356442851,
+                0.31294386902951277,
+                0.06343686280319388,
+                0.9287608044261352
+              ],
+              "projectionScale": 87551.03581296568
+            }
+          },
+          "sourceBinding": {
+            "catalogHash": "a418cf860346c65eb04fe0032de39e2d636c3778413259769a2a462ffa49d132",
+            "sourceHash": "f2f20d85a817da34f26fbf79064393cdd0711e4c04833429f3d554e259a5f5cc",
+            "coordinateConvention": "integer-sample",
+            "source": "https://bossdb-open-data.s3.amazonaws.com/iarpa_microns/minnie/minnie65/em",
+            "scale": "8_8_40",
+            "resolutionNm": [
+              8,
+              8,
+              40
+            ],
+            "infoSha256": "95413c657ff900c114757b149b327fb410d465197093d8bcfb0fc97a8133e140",
+            "convention": "integer-sampling-no-half-voxel"
+          },
+          "createdAt": "2026-10-09T13:17:58.642Z",
+          "updatedAt": "2026-10-09T13:17:58.689Z",
+          "draft": false
+        }
+      ],
+      "nativeSrc": null
+    }
+  },
+  "passed": true
+}

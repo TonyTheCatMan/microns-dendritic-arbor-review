@@ -1,6 +1,6 @@
 # Checkpoint — 2026-10-09
 
-Status: AUTOMATIC BRANCHES AND PREPARED NATIVE IMAGERY IMPLEMENTED; local source, workflow and full native integration checks pass. The native zoom race is fixed and covered by a deterministic regression. This correction is NOT YET DEPLOYED. The public Pages URL currently serves prior commit `d342c6b`, with the same application code as interface-restoration commit `a5368cf3b6927a31e9eb52f07a899a03aae437ca`. Do not describe local measurements as results from the corrected public website.
+Status: AUTOMATIC BRANCHES AND PREPARED NATIVE IMAGERY LIVE AND VERIFIED. Code commit `9d995624a48171dfc596794d71ab99a4bc2523de` deployed successfully through [run 37935498264](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37935498264). All 29 anonymous asset checks returned HTTP 200 and exact checkout bytes. The seven public cold-start/workflow checks passed; see [live witness](docs/live-cold-start-witness.json). The native zoom race is fixed and covered by a deterministic regression. Prior public commit `d342c6b` is superseded.
 
 Source: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review (main). Live public website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. Previous version is preserved by tag `before-original-interface-restoration`. Existing browser IndexedDB namespace, schemas, task IDs and ZIP/JSON formats are unchanged. Originals, original website/deployment, collection archive and scientific judgments remain untouched.
 
@@ -22,4 +22,6 @@ Remaining scientific limits: release661-to-v1300 identity is unconfirmed; public
 
 Prepared EM assets total 669,479,702 bytes; the complete static build is about 699.8 MB, with a largest asset of 4.30 MB. This is an intentionally packaged, bounded source-data set, fetched by task as needed. Do not commit `.local` exports/screenshots, credentials, browser profiles, original scientific volumes or transient browser caches.
 
-Remaining before completion: push this correction to the existing public repository, verify Pages deployment and asset integrity, and measure a clean visit to the newly deployed public website. Update this checkpoint only after the corresponding evidence exists.
+Public performance: the first complete plane appeared in 3,468.4 ms and automatic branches in 3,445.7 ms. The source-plane operation took 682.2 ms, using a 151,694-byte starter. All 64 section moves had exact independently checked pixels and no BossDB/GCS requests or hidden Neuroglancer; median latency was about 17.5 ms, maximum 749.7 ms while a pack completed. The sixth move took 184.7 ms; negative-direction moves peaked at 23.9 ms. The first anchor's prepared offsets are −42 through +37. These public measurements are distinct from the local witness above and are not latency guarantees.
+
+Implementation, deployment and public QA are complete. No application changes remain for this correction.

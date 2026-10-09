@@ -5,7 +5,7 @@ A browser-based anatomy review workspace for the Interneuron Dendritic Input Org
 ## Open
 
 - Public repository: https://github.com/TonyTheCatMan/microns-dendritic-arbor-review
-- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The public repository and GitHub Pages match the original website's hosting arrangement, as authorized on 2026-10-09. The previously restored interface (`d342c6b`) is deployed; the current automatic-branch and prepared-imagery correction has passed local integration checks and **awaits deployment and public verification**. See `docs/public-hosting.md`. The older GPT-hosted preview is not the final host.
+- Live website: https://tonythecatman.github.io/microns-dendritic-arbor-review/. The automatic-branch and prepared-imagery correction is **deployed and publicly verified** at code commit `9d995624a48171dfc596794d71ab99a4bc2523de`, via [run 37935498264](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/37935498264). All 29 checked assets returned HTTP 200 and matched the checkout. See `docs/public-hosting.md`. The older GPT-hosted preview is not the final host.
 - Local preview: run `npm start`, then open http://127.0.0.1:8874. Node.js is needed only for this development server; a deployed static copy runs entirely in the browser.
 - Build a static hosting directory: `npm run build`. Serve `dist/` through HTTPS or localhost. Keep the bundled `vendor/neuroglancer/` directory intact. No server-side application or database is required.
 - Direct task links use `?task=MC264649.boundary_origin3944`.
@@ -52,7 +52,9 @@ Technical validation and export never certify membrane identity, anatomy or the 
 
 `npm install` installs the browser-test dependency. `npm test` runs 61 catalog, exchange, source-coordinate and viewer tests. With the local server running, the browser workflow, storage, starter-mesh and viewer integration tools exercise real browser behavior. Test profiles are temporary; demo marks and reviewer files are not part of the delivered default project.
 
-`node tools/prepare-em.mjs` reproducibly acquires the bounded public EM assets. `node tools/verify-prepared-em.mjs` independently verifies every compressed asset and native chunk, all starter pixels and the ±32-section coverage contract. Prepared EM assets total 669,479,702 bytes; the complete static site is about 699.8 MB, with no individual asset larger than 4.30 MB. Only requested crops are downloaded, not the whole site. Local cold-start measurements are recorded separately from public-site measurements; the new public deployment has not yet been timed.
+`node tools/prepare-em.mjs` reproducibly acquires the bounded public EM assets. `node tools/verify-prepared-em.mjs` independently verifies every compressed asset and native chunk, all starter pixels and the ±32-section coverage contract. Prepared EM assets total 669,479,702 bytes; the complete static site is about 699.8 MB, with no individual asset larger than 4.30 MB. Only requested crops are downloaded, not the whole site.
+
+The [public browser witness](docs/live-cold-start-witness.json) passed all seven checks. A clean public visit displayed the complete first plane in 3.47 seconds and automatic branches in 3.45 seconds. Across 64 section moves, median latency was about 17.5 ms; the slowest was 750 ms while a background pack completed. No live EM/segmentation requests or hidden Neuroglancer instance were needed. These are measured runs on the tested connection, not latency guarantees.
 
 See `docs/SOURCE_ADAPTER.md`, `docs/EXCHANGE.md` and `docs/VIEWER.md`. The original malformed decision schema is preserved; the versioned adapter leaves reviewer identity and qualifications null.
 
