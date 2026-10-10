@@ -1,3 +1,4 @@
+import {validateFocusedReview,hasReviewWork,reviewConflictDetails,mergeFocusedReview} from './focused-review.js';
 /** Pure, source-bound review records. Never modifies acquisition or catalog data. */
 export const PROJECT_ID = 'microns-dendritic-arbor-review';
 export const SCHEMA_VERSION = 2;
@@ -87,7 +88,7 @@ export function validateBinding(binding, ctx) {
     invariant(typeof binding.mappingEvidence === 'string' && binding.mappingEvidence.length > 0, 'IDENTITY_MAPPING', 'Confirmed cross-release identity needs mapping evidence');
   }
 }
-function validateSegments(segments, ctx) {
+export function validateSegments(segments, ctx) {
   invariant(Array.isArray(segments), 'SEGMENTS', 'Segments must be an array');
   const ids = new Set();
   for (const segment of segments) {
@@ -106,7 +107,7 @@ function validateSegments(segments, ctx) {
     if (segment.note !== undefined) string(segment.note, 'segment note');
   }
 }
-function uint64String(value, label) {
+export function uint64String(value, label) {
   invariant(typeof value === 'string' && /^[1-9]\d{0,19}$/.test(value) && BigInt(value) <= 18446744073709551615n, 'IDENTIFIER_STRING', `${label} must be a nonzero uint64 decimal string`);
 }
 /** Structural navigation receipts only: authoritative contacts/eligibility are never updated. */
@@ -135,7 +136,7 @@ function validateSourceContacts(contacts, definition) {
     }
   }
 }
-function validateView(view, ctx) {
+export function validateView(view, ctx) {
   invariant(plain(view), 'VIEW', 'View must be an object');
   if (view.positionNm) validatePoint(view.positionNm);
   if (view.centerNm) validatePoint(view.centerNm);
@@ -183,6 +184,7 @@ export function validateTask(input, catalog) {
     timestamp(selection.createdAt, 'selection creation'); timestamp(selection.updatedAt, 'selection update');
   }
   validateSegments(input.segments, ctx); validateView(input.view, ctx);
+  if (input.review !== undefined) validateFocusedReview(input.review,input,ctx);
   return clone(input);
 }
 export function validateState(state, catalog) {
@@ -195,13 +197,13 @@ export function validateState(state, catalog) {
   for (const [id, task] of Object.entries(state.tasks)) { invariant(task.id === id, 'TASK_KEY', 'Task map key differs from its ID'); validateTask(task, ctx); }
   return clone(state);
 }
-export function hasWork(task) { return !!task && (task.revision > 0 || task.decision.status !== 'unreviewed' || task.decision.note !== '' || Object.keys(task.decision.answers).length > 0 || task.marks.length > 0 || task.selections.length > 0 || task.segments.length > 0); }
+export function hasWork(task) { return !!task && (task.revision > 0 || task.decision.status !== 'unreviewed' || task.decision.note !== '' || Object.keys(task.decision.answers).length > 0 || task.marks.length > 0 || task.selections.length > 0 || task.segments.length > 0 || hasReviewWork(task.review)); }
 function content(task) { const value = clone(task); delete value.revision; delete value.updatedAt; return JSON.stringify(value); }
 export function previewConflicts(incoming, local) {
   const localMap = new Map((Array.isArray(local) ? local : Object.values(local)).map(t => [t.id, t]));
   return incoming.map(task => {
     const existing = localMap.get(task.id), identical = !!existing && content(existing) === content(task);
-    return { taskId: task.id, conflict: !!existing && hasWork(existing) && !identical, identical, localRevision: existing?.revision ?? 0, incomingRevision: task.revision, localUpdatedAt: existing?.updatedAt ?? null, incomingUpdatedAt: task.updatedAt, localIsNewer: !!existing?.updatedAt && Date.parse(existing.updatedAt) > Date.parse(task.updatedAt ?? 0), defaultResolution: 'keep' };
+    return { taskId: task.id, conflict: !!existing && hasWork(existing) && !identical, identical, localRevision: existing?.revision ?? 0, incomingRevision: task.revision, localUpdatedAt: existing?.updatedAt ?? null, incomingUpdatedAt: task.updatedAt, localIsNewer: !!existing?.updatedAt && Date.parse(existing.updatedAt) > Date.parse(task.updatedAt ?? 0), defaultResolution: 'keep', ...reviewConflictDetails(existing,task) };
   });
 }
 export function mergeTask(local, incoming, { policy = 'keep', partial = false } = {}) {
@@ -209,7 +211,19 @@ export function mergeTask(local, incoming, { policy = 'keep', partial = false } 
   invariant(['keep', 'replace', 'merge'].includes(policy), 'RESOLUTION', 'Choose keep, replace or merge');
   if (!local || !hasWork(local)) return clone(incoming);
   if (policy === 'keep') return clone(local);
-  if (!partial && policy === 'replace') return clone(incoming);
+  if (!partial && policy === 'replace') {
+    const replacement = {...clone(local),...clone(incoming)};
+    // An older v2 package has no focused-review field and cannot erase additive work.
+    if (incoming.review === undefined && local.review !== undefined) {
+      replacement.review = clone(local.review);
+      const items = [...local.review.decisions,...local.review.contacts,...local.review.issues];
+      const selectionIds = new Set(items.flatMap(item=>item.selectionIds));
+      for (const selection of local.selections) if (selectionIds.has(selection.id) && !replacement.selections.some(item=>item.id===selection.id)) replacement.selections.push(clone(selection));
+      const markIds = new Set([...items.flatMap(item=>item.markIds),...replacement.selections.flatMap(item=>item.markIds)]);
+      for (const mark of local.marks) if (markIds.has(mark.id) && !replacement.marks.some(item=>item.id===mark.id)) replacement.marks.push(clone(mark));
+    }
+    return replacement;
+  }
   const result = clone(local);
   // Partial packages are overlays. Preserve unrelated local work; imported IDs replace
   // only after an explicit replace choice. Merge preserves conflicting local IDs.
@@ -218,6 +232,8 @@ export function mergeTask(local, incoming, { policy = 'keep', partial = false } 
     for (const item of incoming[field]) if (policy === 'replace' || !items.has(item.id ?? item.segmentId)) items.set(item.id ?? item.segmentId, clone(item));
     result[field] = [...items.values()];
   }
+  if (incoming.review !== undefined) result.review = mergeFocusedReview(local.review,incoming.review,{policy});
+  for (const [key,value] of Object.entries(incoming)) if (!Object.hasOwn(result,key)) result[key] = clone(value);
   if (policy === 'replace') { result.decision = clone(incoming.decision); result.view = clone(incoming.view); }
   return result;
 }

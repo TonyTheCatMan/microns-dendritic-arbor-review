@@ -1,0 +1,99 @@
+{
+  "testedAt": "2026-10-10T08:45:08.089Z",
+  "origin": "http://127.0.0.1:8874/",
+  "browser": "Edge Chromium headless",
+  "checks": [
+    {
+      "name": "Russian default retains 50 independent questions in 15 navigation groups, inherited curation and an optional 891-contact concern queue",
+      "passed": true,
+      "navigationGroups": 15,
+      "originalQuestions": 50,
+      "concernContacts": 891,
+      "allSearchableContacts": 27099,
+      "auditSampleSize": null
+    },
+    {
+      "name": "Researcher default is blinded and retains exact 18-digit release661 identities and integer coordinates",
+      "passed": true
+    },
+    {
+      "name": "Existing v2 drafts, exact notes, legacy decision and unknown fields survive additive workflow migration",
+      "passed": true
+    },
+    {
+      "name": "Soma/stem decision with source-bound marks and verbatim notes exports without certifying contacts or rewriting legacy status",
+      "passed": true
+    },
+    {
+      "name": "Selected review figures preserve physical aspect, scale, exact plane/location, linked marks and native source receipts",
+      "passed": true
+    },
+    {
+      "name": "Selected question export carries its linked evidence and restores independently without inventing contact review",
+      "passed": true
+    },
+    {
+      "name": "Current-section Fit and explicitly closed traces remain functional with no automatic note dialog",
+      "passed": true
+    },
+    {
+      "name": "Shared route is stored once and linked to three independent branch questions; uncertain alternative remains unresolved and contacts remain unreviewed",
+      "passed": true,
+      "routeId": "MC264824.origin2601_to_soma",
+      "dependentQuestionIds": [
+        "MC264824.relation_2601_2710",
+        "MC264824.relation_2601_2710_2711",
+        "MC264824.relation_2601_2711"
+      ]
+    },
+    {
+      "name": "Missing coverage saves an unresolved decision and reusable request; next unresolved and reload resume permit continuing other work",
+      "passed": true
+    },
+    {
+      "name": "Explicit contact check retains exact pre/post/center coordinates, 18-digit roots and row pointers; shared decisions certify no other contact",
+      "passed": true,
+      "contactId": "171510858",
+      "sourceRootId": "864691135561790148",
+      "sourceLine": 2479,
+      "footprintLine": 2632
+    },
+    {
+      "name": "An exact contact outside the concern queue remains searchable with its complete seven-contact source footprint and begins unreviewed",
+      "passed": true
+    },
+    {
+      "name": "Question and per-contact positions survive context switches; marks from contact A are not attached to contact B",
+      "passed": true
+    },
+    {
+      "name": "Russian and English preserve original notes; all-work ZIP and JSON carry all 50 original tasks, focused decisions and exact evidence bindings",
+      "passed": true
+    },
+    {
+      "name": "Fresh profiles restore stem, branch, contact and coverage work from both JSON and ZIP, including drafts and exact camera/coordinate state",
+      "passed": true
+    },
+    {
+      "name": "Conflicting decisions are visible, default to keep-local, survive merge, and change only with explicit replace",
+      "passed": true
+    },
+    {
+      "name": "Changed workflow identity and altered original contact coordinates are rejected without mutating local review",
+      "passed": true
+    },
+    {
+      "name": "A delayed contact source fetch cannot replace a newer explicit question navigation",
+      "passed": true
+    },
+    {
+      "name": "No uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "screenshotsTaken": 0,
+  "anatomicalReview": false,
+  "syntheticTemporaryProfileOnly": true,
+  "sourceRecordsModified": false
+}

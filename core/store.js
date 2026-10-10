@@ -1,3 +1,4 @@
+import {ensureReviewContactSources} from './focused-review.js';
 import { PROJECT_ID, SCHEMA_VERSION, ReviewError, catalogContext, clone, createTask, invariant, validateTask } from './model.js';
 
 const DB_NAME = 'microns-dendritic-arbor-review-v2';
@@ -60,6 +61,7 @@ export async function openStore(catalog, { indexedDB = globalThis.indexedDB, dbN
       await tail;
       if (dirty.has(taskId)) return clone(dirty.get(taskId));
       const result = await storage.read(taskId) ?? createTask(taskId);
+      await ensureReviewContactSources([result],catalog);
       const validated = validateTask(result, ctx); revisions.set(taskId, validated.revision); return validated;
     },
     save(task, { expectedRevision } = {}) {
@@ -79,7 +81,8 @@ export async function openStore(catalog, { indexedDB = globalThis.indexedDB, dbN
     },
     async all() {
       await tail;
-      const result = new Map((await storage.all()).map(task => [task.id, validateTask(task, ctx)]));
+      const rows=await storage.all(); await ensureReviewContactSources(rows,catalog);
+      const result = new Map(rows.map(task => [task.id, validateTask(task, ctx)]));
       for (const [id, task] of dirty) result.set(id, clone(task));
       return [...result.values()];
     },

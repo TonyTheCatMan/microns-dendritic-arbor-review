@@ -39,10 +39,13 @@ export class ReviewViewer {
   getSourceBinding(){return {source:EM_URL,scale:this.source.scale?.key||'8_8_40',resolutionNm:[...RESOLUTION_NM],infoSha256:this.source.infoHash,convention:'integer-sampling-no-half-voxel'};}
   async setTask(task,view,segments=[]) {
     this.cancelInteraction();this.activeMarkId=null;
-    this.task=task;this.epoch=crypto.randomUUID();this.view=normalizeView(view||{},task.anchorNm);this.segments=normalizeSegments(segments);this.overlays=[];this.plane=null;this.loadedKey=null;this.loadingKey=null;
+    const nextView=normalizeView(view||{},task.anchorNm),retained=this.plane?.complete&&this.loadedKey===planeKey(nextView)?this.plane:null;
+    this.controller?.abort();this.sequence++;clearTimeout(this.loadingNotice);
+    this.task=task;this.epoch=crypto.randomUUID();this.view=nextView;this.segments=normalizeSegments(segments);this.overlays=[];this.plane=retained;this.loadedKey=retained?planeKey(nextView):null;this.loadingKey=null;
     this.surface?.setTask(task,this.view);this.onViewChange(this.getView());this.publish(globalThis.location?.hash==='#neuroglancer');
     const epoch=this.epoch;
     this.defaultStructuresPromise=Promise.resolve().then(()=>this.loadDefaultStructures?.()).catch(error=>{if(epoch===this.epoch)this.surface?.setStatus(error.message,'error');});
+    if(retained){this.makeRaster(retained);this.draw();this.setLanguage(this.language);}
     return this.load();
   }
   async setView(view) {

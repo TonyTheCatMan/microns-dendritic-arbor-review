@@ -48,6 +48,7 @@ async function checkPublic(){
   const paths=['','app.js','app.css','data/catalog.json','viewer/ReviewViewer.js','viewer/LegacySurface.js','viewer/familiar-shell.js','viewer/native-surface-adapter.js','reference-ui/viewer.css','reference-viewer/surface3d.js','vendor/neuroglancer/bridge-v2.js','vendor/neuroglancer/index.html','vendor/neuroglancer/main.e9945dcc2df22b9e.js','vendor/neuroglancer/09f21dcf7b4f13e8.wasm'],results=[];
   paths.push('i18n.js','core/model.js','viewer/figure.js','viewer/neuroglancer-state.js','viewer/mark-drawing.js','viewer/annotation-interaction.js','viewer/asset-cache.js','viewer/cutout-camera.js','viewer/raw-source.js','viewer/prepared-source.js','viewer/starter-meshes.js','data/prepared-em/manifest.json','data/starter-meshes/manifest.json');
   const prepared=JSON.parse(readFileSync('data/prepared-em/manifest.json','utf8')),starter=prepared.volumes.flatMap(v=>v.planes).find(p=>p.taskIds.includes('MC298937.soma_identity'));
+  paths.push('viewer/coordinates.js','viewer/focused-workflow.js','viewer/focused-data.js','core/focused-review.js','core/exchange.js','core/store.js','data/focused-workflow.json','docs/FOCUSED_WORKFLOW.md','docs/FOCUSED_SOURCES.md');
   paths.push('data/prepared-em/'+starter.file,...starter.warmVolumeIds.map(id=>'data/prepared-em/'+prepared.volumes.find(v=>v.id===id).file));
   const meshes=JSON.parse(readFileSync('data/starter-meshes/manifest.json','utf8'));
   paths.push(...Object.values(meshes.recipients).map(entry=>'data/starter-meshes/'+entry.file));
