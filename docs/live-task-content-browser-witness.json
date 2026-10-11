@@ -1,0 +1,142 @@
+{
+  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "timestamp": "2026-10-11T13:52:05.632Z",
+  "catalogHash": "a418cf860346c65eb04fe0032de39e2d636c3778413259769a2a462ffa49d132",
+  "workflowHash": "473df1ed4e3e044c93c1088031aa20bcca714f96fdb4e76d24d79b60a18ca58b",
+  "scopeHash": "220dfcdd907063548b79402d12056665e493d5fe79b837b0b0ea0bec7bfe7144",
+  "checks": [
+    {
+      "name": "MC298937.cut4475 uses retained child 4661 as its primary typed check and exact source bookmark; sibling 4315 remains optional",
+      "passed": true,
+      "id": "MC298937.cut4475",
+      "cut": "4475",
+      "retained": "4661",
+      "optional": "4315",
+      "contacts": 62,
+      "sources": 48,
+      "broaderCounts": {
+        "contacts": 65,
+        "sources": 50
+      },
+      "retainedNm": [
+        756552,
+        624288,
+        873680
+      ]
+    },
+    {
+      "name": "MC264824.cut869 uses retained child 837 as its primary typed check and exact source bookmark; sibling 870 remains optional",
+      "passed": true,
+      "id": "MC264824.cut869",
+      "cut": "869",
+      "retained": "837",
+      "optional": "870",
+      "contacts": 1,
+      "sources": 1,
+      "broaderCounts": {
+        "contacts": 1,
+        "sources": 1
+      },
+      "retainedNm": [
+        634048,
+        718088,
+        846080
+      ]
+    },
+    {
+      "name": "Compartment and attachment answers stay independent for each child and pool, including optional siblings, notes and linked marks; reload never certifies contacts",
+      "passed": true,
+      "primaryFieldAnswers": {
+        "compartment": "unresolved",
+        "child_4661_compartment": "axon or ambiguous child",
+        "child_4661_attachment": "obscured",
+        "child_4315_compartment": "unresolved",
+        "child_4315_attachment": "outside_available_coverage"
+      },
+      "broaderAttachment": "outside_available_coverage"
+    },
+    {
+      "name": "Current and selected JSON plus ZIP transfer structured child answers, both scope histories, markings, notes and exact saved positions into fresh profiles",
+      "passed": true,
+      "formats": [
+        {
+          "scope": "current",
+          "path": ".local/task-content-current.json",
+          "completeness": {
+            "MC298937.soma_identity": "partial",
+            "MC298937.origin4480_to_soma": "partial",
+            "MC298937.cut4475": "full"
+          }
+        },
+        {
+          "scope": "current",
+          "path": ".local/task-content-current.zip",
+          "completeness": {
+            "MC298937.soma_identity": "partial",
+            "MC298937.origin4480_to_soma": "partial",
+            "MC298937.cut4475": "full"
+          }
+        },
+        {
+          "scope": "selected",
+          "path": ".local/task-content-selected.json",
+          "completeness": {
+            "MC298937.soma_identity": "partial",
+            "MC298937.origin4480_to_soma": "partial",
+            "MC298937.cut4475": "partial"
+          }
+        },
+        {
+          "scope": "selected",
+          "path": ".local/task-content-selected.zip",
+          "completeness": {
+            "MC298937.soma_identity": "partial",
+            "MC298937.origin4480_to_soma": "partial",
+            "MC298937.cut4475": "partial"
+          }
+        }
+      ]
+    },
+    {
+      "name": "An older flattened generic answer stays read-only context and never pre-fills a child compartment or attachment field; explicit new fields retain its legacy snapshot",
+      "passed": true
+    },
+    {
+      "name": "Relation guidance starts by reusing existing route evidence; pair/triple answers stay independent, and RU/EN retained-child guidance uses the same canonical fields",
+      "passed": true
+    },
+    {
+      "name": "UI Replace of a current-route package replaces supplied dependency evidence while retaining an unlinked local soma mark, for JSON, ZIP and an older package without completeness metadata",
+      "passed": true,
+      "currentTask": "MC298937.origin3447_to_soma",
+      "partialDependency": "MC298937.soma_identity",
+      "linkedMarkId": "951ad630-e691-4090-b186-eca3879975f4",
+      "retainedUnlinkedMarkId": "9a3561ca-cafa-4049-96bc-8b5c5729bf0a"
+    },
+    {
+      "name": "Retained-child search finds the corrected cut task and the ordinary Next button still skips excluded origin 3639; no synthetic question answer certifies contacts",
+      "passed": true
+    },
+    {
+      "name": "Legacy generic or optional-sibling-only raw outcomes stay Unreviewed across questions, groups, progress and contact links; retained child fields remain incomplete and old notes survive structured edits",
+      "passed": true,
+      "tested": [
+        {
+          "id": "MC298937.cut4475",
+          "retained": "4661",
+          "optional": "4315",
+          "contactId": "181974680",
+          "legacyNotePreserved": true
+        },
+        {
+          "id": "MC264824.cut869",
+          "retained": "837",
+          "optional": "870",
+          "contactId": "122265436",
+          "legacyNotePreserved": true
+        }
+      ]
+    }
+  ],
+  "pageErrors": []
+}
