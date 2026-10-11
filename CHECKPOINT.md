@@ -1,3 +1,13 @@
+# Guided per-cell review - 2026-10-11
+
+Status: IMPLEMENTED AND LOCALLY VERIFIED; public deployment verification pending. The default researcher workflow now has a separate cell selector, one bold source-based anatomical instruction with supporting steps and bookmarks, and prominent Previous/Next case buttons next to the original answer fields and notes. One canonical sequence crosses all categories: MC298937 7, MC264649 10, MC264920 12, MC264824 16 (45 total). The five optional questions and targeted contact tools remain in Advanced. Import/export stays visible. No duplicated task cards were restored.
+
+Navigation saves current work without choosing an anatomical outcome. Each cell and pool remembers its case and queue end; unresolved and uncertain cases stay accessible, and proceeding to the next cell is explicit. Empty queues keep the selected cell through advanced navigation, reload and pool changes. Scoped coverage/relevance text drafts survive navigation but become exported records only after explicit application. Existing notes, marks, trace drafts, structured answer fields, partial-import protection, pool separation and the physical 3D close-up fix are preserved. Frozen catalog, source, workflow and scope hashes are unchanged.
+
+Local validation: all 198 unit tests pass. All 10 grouped browser checks pass with zero page errors, covering all 45 exact source scenes/IDs, every canonical answer field, no automatic answers, per-cell resume, end states, both languages, notes/points/trace drafts, retained-cut fields, JSON/ZIP fresh-profile imports, pool isolation, scoped drafts, all-deferred queues and same-task reload. Every case has a fully visible Next button and at least 300 px of EM plus 200 px of 3D at 1680x1250. Receipt: docs/guided-review-browser-witness.json. Fresh one-image visual QA found no blocking overlap/clipping; instruction, Next, fields and note are visible together with useful portions of both viewers. Original mesh surfaces may look crowded/coarse at close magnification; no geometry is altered. Static build succeeds. Guide: docs/FOCUSED_WORKFLOW.md.
+
+## Previous verified physical zoom correction
+
 # Physical 3D close-up zoom - 2026-10-11
 
 Replaced the 0.08 frame-relative input floor with a physical close-up limit: min(0.08, 256 nm / reference-frame height). Whole-neuron and saved overview cameras can now reach the same 256 nm screen height despite different mesh sizes. Existing closer cutout/native cameras retain their range; inward input does not jump outward. The maximum zoom-out ratio remains 18. Native synchronization no longer rebases small ratios, and saved/evidence cameras accept finite positive zoom below 0.08. No source geometry, scientific records, 2D sampling or task controls changed.
