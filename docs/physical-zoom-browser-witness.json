@@ -1,0 +1,83 @@
+{
+  "origin": "http://127.0.0.1:8874/",
+  "checkedAt": "2026-10-11T17:03:11.932Z",
+  "browser": "Microsoft Edge, headless, fresh ephemeral profiles",
+  "screenshotsTaken": 1,
+  "checks": [
+    {
+      "name": "MC298937 wheel crosses the former whole-neuron stop; both input paths reach 256 nm and retain zoom-out maximum 18",
+      "passed": true,
+      "taskId": "MC298937.soma_identity",
+      "triangles": 77559,
+      "overviewHeightNm": 700408.2865037255,
+      "formerMinimumHeightNm": 56032.66292029804,
+      "newMinimumHeightNm": 256,
+      "minimumRatio": 0.00036550110119041023,
+      "unchangedCenterOrientationAndEM": true
+    },
+    {
+      "name": "MC264649 wheel crosses the former whole-neuron stop; both input paths reach 256 nm and retain zoom-out maximum 18",
+      "passed": true,
+      "taskId": "MC264649.soma_identity",
+      "triangles": 68279,
+      "overviewHeightNm": 739480.4001397177,
+      "formerMinimumHeightNm": 59158.43201117742,
+      "newMinimumHeightNm": 256,
+      "minimumRatio": 0.0003461890267160986,
+      "unchangedCenterOrientationAndEM": true
+    },
+    {
+      "name": "MC264920 wheel crosses the former whole-neuron stop; both input paths reach 256 nm and retain zoom-out maximum 18",
+      "passed": true,
+      "taskId": "MC264920.soma_identity",
+      "triangles": 133334,
+      "overviewHeightNm": 799513.6831471252,
+      "formerMinimumHeightNm": 63961.094651770014,
+      "newMinimumHeightNm": 256,
+      "minimumRatio": 0.0003201946450651193,
+      "unchangedCenterOrientationAndEM": true
+    },
+    {
+      "name": "MC264824 wheel crosses the former whole-neuron stop; both input paths reach 256 nm and retain zoom-out maximum 18",
+      "passed": true,
+      "taskId": "MC264824.soma_identity",
+      "triangles": 76955,
+      "overviewHeightNm": 872296.260902165,
+      "formerMinimumHeightNm": 69783.7008721732,
+      "newMinimumHeightNm": 256,
+      "minimumRatio": 0.00029347827277768473,
+      "unchangedCenterOrientationAndEM": true
+    },
+    {
+      "name": "A saved close camera below the old ratio floor survives a real browser reload",
+      "passed": true,
+      "heightNm": 256,
+      "zoom": 0.00029347827277768473
+    },
+    {
+      "name": "Current-question JSON export and import into a fresh browser profile retain the close physical camera",
+      "passed": true,
+      "taskId": "MC264824.soma_identity",
+      "heightNm": 256,
+      "zoom": 0.00029347827277768473
+    },
+    {
+      "name": "A closer native Neuroglancer camera synchronizes without rebasing the frame or jumping outward on the next inward key",
+      "passed": true,
+      "nativeHeightNm": 127.99999983596273,
+      "zoom": 0.0001467391362007901,
+      "frameHeightNm": 872296.260902165
+    },
+    {
+      "name": "Captured one uninspected side-by-side EM and 3D screenshot at the source anchor below the former zoom stop",
+      "passed": true,
+      "heightNm": 4270.211815200281,
+      "screenshot": ".local/physical-zoom-near.png"
+    },
+    {
+      "name": "No uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "pageErrors": []
+}
