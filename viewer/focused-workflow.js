@@ -10,13 +10,12 @@ function element(tag,attrs={},...children){const node=document.createElement(tag
 
 /** A navigation layer over the original tasks, not a new set of scientific decisions. */
 export function createFocusedWorkflow(catalog,host){
- const workflow=catalog.focusedWorkflow,questions=workflow.questions,groups=workflow.groups,qmap=new Map(questions.map(q=>[q.id,q]));
+ const workflow=catalog.focusedWorkflow,questions=workflow.questions,qmap=new Map(questions.map(q=>[q.id,q]));
  let context={viewId:'stems'},contact=null,footprint=null,footprintContacts=[],contactResults=[],navEpoch=0,queuePage=0,scopeChanging=false;
  const L=(ru,en)=>host.language()==='en'?en:ru,loc=x=>typeof x==='string'?x:x?.[host.language()]||x?.en||x?.ru||'';
  const outcomeText=value=>({unreviewed:L('Не проверено','Unreviewed'),supported:L('Подтверждается','Supported'),contradicted:L('Противоречит наблюдениям','Contradicted'),uncertain:L('Неопределённо','Uncertain'),insufficient_coverage:L('Недостаточно изображений','Insufficient image coverage')})[value]||value;
  const states=()=>host.states(),question=()=>qmap.get(context.questionId),pool=()=>activeReviewScope(catalog).pool;
  const allMaterials=()=>!!$('reviewMaterials')?.checked;
- const applicable=q=>scopeQuestionStatus(states(),catalog,q.id).applicable;
  const scopedDecision=()=>context.viewId==='contacts'?findScopedContactDecision(states(),context.contactId,catalog):findScopedQuestionDecision(states(),context.questionId,catalog);
  const priorDecision=()=>context.viewId==='contacts'?host.task()?.review?.contacts.find(d=>d.contactId===context.contactId):findQuestionDecision(states(),context.questionId);
  const currentDecision=()=>scopedDecision()||priorDecision();
@@ -59,18 +58,8 @@ export function createFocusedWorkflow(catalog,host){
  function renderProgress(){if(!host.task())return;const p=progress(),n=navigation();$('focusedProgress').textContent=L(`${p.questions.recorded} / ${p.questions.total} актуальных ответов записано · ${p.questions.unresolved} неопределённых или непроверенных · в текущем списке ${n.summary.total}`,`${p.questions.recorded} / ${p.questions.total} applicable answers recorded · ${p.questions.unresolved} uncertain or unreviewed · ${n.summary.total} in this list`);$('progress').textContent=`${p.questions.recorded} / ${p.questions.total}`;const hasUnresolved=context.viewId==='contacts'?contactQueue().some(c=>!['supported','contradicted'].includes(findScopedContactDecision(states(),c.id,catalog)?.outcome)):filteredQuestions().some(unresolved);$('prevUnresolved').disabled=$('nextUnresolved').disabled=!hasUnresolved;}
  function renderNavigation(){
   const nav=$('focusedNavigation');if(!nav)return;nav.replaceChildren();$('taskList').hidden=context.viewId!=='all';
-  if(context.viewId==='all'){nav.append(para(L('Все исходные вопросы доступны в списке задач ниже.','All original questions are available in the task list below.')));return;}
-  if(context.viewId==='contacts'){renderContactNavigation(nav);return;}
-  const visible=new Set(filteredQuestions().map(q=>q.id));
-  for(const group of groups.filter(g=>g.view===context.viewId&&(!$('cellFilter').value||g.recipientId===$('cellFilter').value))){
-   const qq=group.questionIds.map(id=>qmap.get(id)).filter(q=>visible.has(q.id));if(!qq.length)continue;
-   const active=qq.filter(applicable),recorded=active.filter(q=>effectiveQuestionOutcome(catalog,findScopedQuestionDecision(states(),q.id,catalog))!=='unreviewed').length,box=element('div',{class:'review-group'});
-   box.append(button(`${loc(group.title)} · ${recorded}/${active.length}`,()=>openQuestion(qq.find(unresolved)?.id||qq[0].id),{'data-review-group':group.id,class:'review-group-heading'}));
-   box.append(element('small',{text:L(`${active.filter(unresolved).length} актуальных без определённого ответа${qq.length>active.length?`; ${qq.length-active.length} контекстных`:''}`,`${active.filter(unresolved).length} applicable without a definite answer${qq.length>active.length?`; ${qq.length-active.length} context records`:''}`)}));
-   for(const q of qq)box.append(button(loc(taskReviewContent(catalog,q.id).title),()=>openQuestion(q.id),{'data-review-question':q.id,'aria-current':String(q.id===context.questionId),class:`review-question${q.id===context.questionId?' active':''}`,title:q.id}),element('small',{class:'review-question-status',text:priorityText(q)+' · '+outcomeText(effectiveQuestionOutcome(catalog,findScopedQuestionDecision(states(),q.id,catalog)))}));
-   nav.append(box);
-  }
-  if(!allMaterials()){const deferred=navigationQuestions(catalog,states(),{...navigationOptions(),includeOptional:true}).filter(q=>!applicable(q));if(deferred.length)nav.append(element('details',{id:'deferredQuestions'},element('summary',{text:L(`Дополнительный контекст: ${deferred.length} отложенных / исключённых вопросов`,`Optional context: ${deferred.length} deferred / excluded questions`)}),...deferred.map(q=>button(`${q.id} · ${priorityText(q)}`,()=>openQuestion(q.id),{'data-review-question':q.id}))));}
+  nav.hidden=context.viewId!=='contacts';
+  if(!nav.hidden)renderContactNavigation(nav);
  }
  function renderContactNavigation(nav){
   const search=element('input',{id:'focusedContactSearch',type:'search',inputmode:'numeric','aria-label':L('ID контакта или исходного корня','Contact or source root ID')});
@@ -181,7 +170,7 @@ export function createFocusedWorkflow(catalog,host){
  const poolSelect=element('select',{id:'reviewPool','aria-label':L('Группа анализа','Analysis pool')});poolSelect.onchange=()=>changePool(poolSelect.value).catch(host.error);
  const materials=element('input',{id:'reviewMaterials',type:'checkbox'});materials.onchange=()=>{queuePage=0;if(context.viewId==='all'&&!materials.checked){const q=qmap.get(host.task()?.id);context=q?{viewId:q.view,groupId:q.groupId,questionId:q.id}:{viewId:'stems'};persistContext();}render();};
  tabs.append(element('div',{class:'review-scope-controls'},poolSelect,element('label',{class:'check'},materials,element('span',{id:'reviewMaterialsLabel'}))),element('p',{id:'reviewScopeSummary'}),element('small',{id:'reviewScopeTargets'}),element('p',{id:'reviewScopeNote',class:'muted'}));
- const nav=element('nav',{id:'focusedNavigation','aria-label':'Focused anatomical questions'});document.querySelector('.task-browser').before(nav);
+ const nav=element('nav',{id:'focusedNavigation','aria-label':'Contact navigation',hidden:''});document.querySelector('.task-browser').before(nav);
  const qpanel=element('div',{id:'focusedQuestionPanel',class:'focused-question'});document.querySelector('.task-current').append(qpanel,element('div',{class:'review-actions'},button('',()=>nextUnresolved(-1),{id:'prevUnresolved'}),button('',()=>nextUnresolved(1),{id:'nextUnresolved'})));
  document.querySelector('.paired-views').after(element('section',{id:'focusedDecisionPanel',class:'focused-decision'}));
  return {get context(){return copy(context);},progress,navigation,priorityLabel:id=>qmap.has(id)?priorityText(qmap.get(id)):String(id),openQuestion,openContact,render,renderNavigation,taskChanged,restore,capturePosition,get currentDecision(){return currentDecision();},reviewItems:listItems};

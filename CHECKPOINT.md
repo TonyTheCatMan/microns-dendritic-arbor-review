@@ -1,3 +1,9 @@
+# Task dropdown simplification - 2026-10-11
+
+Removed duplicate grouped question cards beneath the top task dropdown at the user's request. The dropdown, filtered queues, current-task details, saved review data and contact-view search remain intact. Optional questions remain available through All materials / All original tasks. Local verification: all 178 unit tests pass; five targeted browser checks pass with zero page errors, including both cut4475/damage task selections, note persistence and reload, filter/pool/language changes and separate contact search. Existing browser harnesses now use the retained dropdown. Deployment verification pending.
+
+## Previous verified content correction
+
 # Sample and task content correction — 2026-10-11
 
 Status: LIVE AND VERIFIED. Code `1cc3f712a659dcd6367fe0de4a9bf215b693f188` deployed successfully through [run 38144562469](https://github.com/TonyTheCatMan/microns-dendritic-arbor-review/actions/runs/38144562469). All 51 checked anonymous public assets match the deployed checkout bytes. All 9 local and 9 live browser acceptance groups pass with zero page exceptions; live receipt: docs/live-task-content-browser-witness.json. The user clarified that the required change is the actual samples and review tasks, not another navigation-only status check. A source-derived content layer now foregrounds MC298937 cut4475 / retained child4661 and MC264824 cut869 / retained child837 in task titles, main questions, exact location bookmarks and familiar anchor controls. Excluded/unretained sibling observations remain optional context. The underlying four targets, 23 occupied routes, 45 applicable IDs, original coordinates/images and all scientific hashes stay unchanged.
