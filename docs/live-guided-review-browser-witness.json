@@ -1,0 +1,218 @@
+{
+  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "timestamp": "2026-10-11T18:19:03.870Z",
+  "catalogHash": "a418cf860346c65eb04fe0032de39e2d636c3778413259769a2a462ffa49d132",
+  "workflowHash": "473df1ed4e3e044c93c1088031aa20bcca714f96fdb4e76d24d79b60a18ca58b",
+  "scopeHash": "220dfcdd907063548b79402d12056665e493d5fe79b837b0b0ea0bec7bfe7144",
+  "counts": {
+    "MC298937": 7,
+    "MC264649": 10,
+    "MC264920": 12,
+    "MC264824": 16
+  },
+  "checks": [
+    {
+      "name": "Default page has four separate cell choices, a visible case instruction and Previous/Next; competing navigation is collapsed while import/export remain visible",
+      "passed": true
+    },
+    {
+      "name": "Each complete cell queue reaches all 45 source-ledger questions exactly once across categories, at the proper source scene and with all answer fields; each ends without wrapping or certifying unanswered work",
+      "passed": true,
+      "counts": {
+        "MC298937": 7,
+        "MC264649": 10,
+        "MC264920": 12,
+        "MC264824": 16
+      },
+      "journeys": [
+        {
+          "cell": "MC298937",
+          "caseIds": [
+            "MC298937.soma_identity",
+            "MC298937.origin3447_to_soma",
+            "MC298937.origin4053_to_soma",
+            "MC298937.origin4480_to_soma",
+            "MC298937.origin4667_to_soma",
+            "MC298937.cut4475",
+            "MC298937.damage_cut4475_z872320"
+          ],
+          "kinds": [
+            "identity",
+            "origin_route",
+            "compartment_cut",
+            "targeted_boundary_or_damage"
+          ],
+          "endUnresolved": 7
+        },
+        {
+          "cell": "MC264649",
+          "caseIds": [
+            "MC264649.soma_identity",
+            "MC264649.origin3362_to_soma",
+            "MC264649.origin3944_to_soma",
+            "MC264649.origin3945_to_soma",
+            "MC264649.origin4058_to_soma",
+            "MC264649.origin4507_to_soma",
+            "MC264649.relation_3362_4058",
+            "MC264649.relation_3944_3945",
+            "MC264649.boundary_origin3944",
+            "MC264649.boundary_excluded3639"
+          ],
+          "kinds": [
+            "identity",
+            "origin_route",
+            "branch_relation",
+            "targeted_boundary_or_damage"
+          ],
+          "endUnresolved": 10
+        },
+        {
+          "cell": "MC264920",
+          "caseIds": [
+            "MC264920.soma_identity",
+            "MC264920.origin5149_to_soma",
+            "MC264920.origin5498_to_soma",
+            "MC264920.origin5794_to_soma",
+            "MC264920.origin6123_to_soma",
+            "MC264920.origin6127_to_soma",
+            "MC264920.origin6422_to_soma",
+            "MC264920.relation_5149_5498",
+            "MC264920.relation_5149_5498_6127",
+            "MC264920.relation_5498_6127",
+            "MC264920.boundary_origin5149",
+            "MC264920.boundary_origin5794"
+          ],
+          "kinds": [
+            "identity",
+            "origin_route",
+            "branch_relation",
+            "targeted_boundary_or_damage"
+          ],
+          "endUnresolved": 12
+        },
+        {
+          "cell": "MC264824",
+          "caseIds": [
+            "MC264824.soma_identity",
+            "MC264824.origin2428_to_soma",
+            "MC264824.origin2517_to_soma",
+            "MC264824.origin2601_to_soma",
+            "MC264824.origin2710_to_soma",
+            "MC264824.origin2711_to_soma",
+            "MC264824.origin2721_to_soma",
+            "MC264824.origin2969_to_soma",
+            "MC264824.origin3476_to_soma",
+            "MC264824.cut869",
+            "MC264824.relation_2601_2710",
+            "MC264824.relation_2601_2710_2711",
+            "MC264824.relation_2601_2711",
+            "MC264824.relation_2710_2711",
+            "MC264824.damage_origin2711_z818640",
+            "MC264824.excluded2826_vs2428"
+          ],
+          "kinds": [
+            "identity",
+            "origin_route",
+            "compartment_cut",
+            "branch_relation",
+            "targeted_boundary_or_damage"
+          ],
+          "endUnresolved": 16
+        }
+      ]
+    },
+    {
+      "name": "Previous/Next saves immediate note edits, independent cut attachment/compartment fields, a point and a trace; changing cell and reloading resumes each case without lost annotations",
+      "passed": true,
+      "editedId": "MC298937.cut4475",
+      "secondId": "MC264649.origin3944_to_soma",
+      "markKinds": [
+        "point",
+        "trace"
+      ]
+    },
+    {
+      "name": "End-of-queue state survives reload, clearly retains unresolved cases, offers an unanswered-case return and advances explicitly to the next cell without silently wrapping",
+      "passed": true
+    },
+    {
+      "name": "Both Russian and English show bold anatomical guidance and plain Previous/Next labels, both retained-cut decisions stay separate from optional siblings, and advanced pool switching keeps answers isolated",
+      "passed": true
+    },
+    {
+      "name": "Every required case keeps its bold instruction and Next button onscreen with at least 300px of actual EM image and 200px of 3D scene visible at 1680 by 1250; annotation styling stays collapsed",
+      "passed": true,
+      "bounds": {
+        "next": {
+          "x": 202,
+          "y": 542.125,
+          "width": 152,
+          "height": 42,
+          "right": 354,
+          "bottom": 584.125
+        },
+        "image": {
+          "x": 369,
+          "y": 792.234375,
+          "width": 640,
+          "height": 610,
+          "right": 1009,
+          "bottom": 1402.234375
+        },
+        "surface": {
+          "x": 1010,
+          "y": 869.734375,
+          "width": 641,
+          "height": 515,
+          "right": 1651,
+          "bottom": 1384.734375
+        },
+        "instruction": {
+          "x": 47,
+          "y": 310.75,
+          "width": 1586,
+          "height": 26.09375,
+          "right": 1633,
+          "bottom": 336.84375
+        },
+        "width": 1680,
+        "height": 1250
+      }
+    },
+    {
+      "name": "Visible import/export round-trips the guided case as current JSON and ZIP into fresh profiles, preserving source binding, separate fields, notes, point and trace",
+      "passed": true,
+      "exported": [
+        {
+          "format": "JSON",
+          "taskCompleteness": {
+            "MC298937.soma_identity": "partial",
+            "MC298937.origin4480_to_soma": "partial",
+            "MC298937.cut4475": "full"
+          }
+        },
+        {
+          "format": "ZIP",
+          "taskCompleteness": {
+            "MC298937.soma_identity": "partial",
+            "MC298937.origin4480_to_soma": "partial",
+            "MC298937.cut4475": "full"
+          }
+        }
+      ]
+    },
+    {
+      "name": "End-of-queue belongs to its analysis pool: switching from a primary end to a fresh broader queue clears end state and enables Next; returning restores the primary end",
+      "passed": true
+    },
+    {
+      "name": "Coverage and priority-rationale drafts survive Next, Previous and reload and remain pool-specific; only their explicit action buttons create a coverage issue or relevance change",
+      "passed": true
+    },
+    {
+      "name": "A cell with every question explicitly deferred has an honest empty state, resumes across reload, clears stale empty URLs when returning to the same underlying case, opens its cases when another pool applies, and restores deferred questions through advanced navigation without creating answers",
+      "passed": true
+    }
+  ],
+  "pageErrors": []
+}
