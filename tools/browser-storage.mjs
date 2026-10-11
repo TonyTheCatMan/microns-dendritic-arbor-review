@@ -71,7 +71,7 @@ try {
   const freshContext = await browser.newContext(), fresh = await harness(freshContext); assert.equal((await initialize(fresh, dbName)).existing, 0);
   const reconstruction = await fresh.evaluate(async transfer => {
     const parsed = await exchange.parseImport(new Blob([Uint8Array.from(transfer.all)]),catalog);
-    for(const incoming of parsed.tasks) { const local = await reviewStore.load(incoming.id); await reviewStore.save(model.mergeTask(local,incoming,{policy:'replace',partial:parsed.partial}),{expectedRevision:local.revision}); }
+    for(const incoming of parsed.tasks) { const local = await reviewStore.load(incoming.id); await reviewStore.save(model.mergeTask(local,incoming,{policy:'replace',partial:parsed.taskPartial?.[incoming.id]??parsed.partial}),{expectedRevision:local.revision}); }
     await reviewStore.flush(); const imported = await reviewStore.load(catalog.tasks[0].id), selected = await exchange.parseImport(new Blob([Uint8Array.from(transfer.selected)]),catalog);
     const exactFields = ['decision','marks','selections','segments','view'].every(key=>JSON.stringify(imported[key])===JSON.stringify(transfer.first[key]));
     return { exactFields, tasks:(await reviewStore.all()).length, unreviewed:(await reviewStore.all()).every(t=>t.decision.status==='unreviewed'), evidenceBytes:parsed.files.get('evidence/panel/raw.png').length, selectedTasks:selected.tasks.length, selectedMarks:selected.tasks[0].marks.length, selectedViews:selected.tasks[0].selections.length, partial:selected.partial };

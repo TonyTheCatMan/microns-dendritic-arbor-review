@@ -17,6 +17,25 @@ export function focusedContext(catalog) {
   const questions = list(workflow.questions), groups = list(workflow.groups);
   return {...ctx, workflow, workflowHash:workflow.workflowHash, questionMap:new Map(questions.map(q=>[q.id,q])), groupMap:new Map(groups.map(g=>[g.id,g]))};
 }
+/** Exact canonical answer fields; flattened legacy alternatives are never mapped into them. */
+export function questionAnswerFields(catalog,questionId) {
+  const ctx=focusedContext(catalog),question=ctx.questionMap.get(questionId);
+  invariant(question,'REVIEW_QUESTION','Unknown focused anatomical question');
+  const definition=ctx.taskMap.get(question.taskId??question.ownerTaskId);
+  invariant(definition,'REVIEW_QUESTION','Question source task is missing');
+  return clone(definition.fields??[]);
+}
+function validateQuestionFieldAnswers(answers,catalog,questionId) {
+  if(answers===undefined)return;
+  invariant(plain(answers),'REVIEW_FIELD_ANSWERS','Structured question answers must be an object');
+  const fields=new Map(questionAnswerFields(catalog,questionId).map(field=>[field.key,field]));
+  for(const [key,value]of Object.entries(answers)){
+    const field=fields.get(key);
+    invariant(field,'REVIEW_ANSWER_FIELD',`Unknown canonical question field: ${key}`);
+    invariant(value===null||typeof value==='string','REVIEW_ANSWER_VALUE',`Invalid answer for ${key}`);
+    invariant(value===null||value===''||field.options?.some(option=>(typeof option==='string'?option:option.value)===value),'REVIEW_ANSWER_VALUE',`Unknown canonical answer for ${key}`);
+  }
+}
 export function ensureReview(task, catalog) {
   const ctx=focusedContext(catalog);
   if (!task.review) task.review={version:1,workflowHash:ctx.workflowHash,decisions:[],contacts:[],issues:[]};
@@ -35,8 +54,21 @@ export function setQuestionDecision(task, catalog, questionId, patch={}) {
   const ctx=focusedContext(catalog), question=ctx.questionMap.get(questionId);
   invariant(question,'REVIEW_QUESTION','Unknown focused anatomical question');
   invariant(task.id===question.ownerTaskId,'REVIEW_OWNER','Shared decisions must be saved on their canonical owner task');
-  const review=ensureReview(task,ctx), previous=review.decisions.find(item=>item.questionId===questionId);
-  let item={...newEvidence(ctx,`question:${questionId}`,task,scopedRecord(previous,ctx)??previous),...clone(patch),id:`question:${questionId}`,questionId,groupId:question.groupId,ownerTaskId:question.ownerTaskId,taskIds:clone(question.taskIds),provenance:{...clone(previous?.provenance??{}),...questionProvenance(question)}};
+  const review=ensureReview(task,ctx), previous=review.decisions.find(item=>item.questionId===questionId),current=scopedRecord(previous,ctx);
+  let item={...newEvidence(ctx,`question:${questionId}`,task,current??previous),...clone(patch),id:`question:${questionId}`,questionId,groupId:question.groupId,ownerTaskId:question.ownerTaskId,taskIds:clone(question.taskIds),provenance:{...clone(previous?.provenance??{}),...questionProvenance(question)}};
+  // Notes and legacy alternatives remain available as context; exact field answers
+  // belong only to their original pool unless the reviewer explicitly enters them.
+  if(!current)delete item.legacyInterpretation;
+  if(Object.hasOwn(patch,'fieldAnswers')){
+    invariant(plain(patch.fieldAnswers),'REVIEW_FIELD_ANSWERS','Structured question answers must be an object');
+    validateQuestionFieldAnswers(patch.fieldAnswers,ctx,questionId);
+    item.fieldAnswers={...clone(current?.fieldAnswers??{}),...clone(patch.fieldAnswers)};
+    if(current&&current.fieldAnswers===undefined&&Object.keys(patch.fieldAnswers).length){
+      const legacy=clone(current);delete legacy.scopeHistory;delete legacy.legacyInterpretation;
+      item.legacyInterpretation=legacy;
+      if(!Object.hasOwn(patch,'outcome'))item.outcome='unreviewed';
+    }
+  }else if(!current?.fieldAnswers)delete item.fieldAnswers;
   item=bindScopeRecord(item,previous,ctx,patch);
   const candidate={...review,decisions:[...review.decisions.filter(d=>d.questionId!==questionId),item]};
   validateFocusedReview(candidate,task,ctx); task.review=candidate; return item;
@@ -86,12 +118,27 @@ export function findQuestionDecision(tasks,questionId) {
 export function findContactDecision(tasks,contactId) {
   return list(tasks instanceof Map ? Object.fromEntries(tasks) : tasks).flatMap(t=>t.review?.contacts ?? []).find(d=>d.contactId===contactId) ?? null;
 }
+/** A retained-cut judgment must identify both answers for every retained child. */
+export function effectiveQuestionOutcome(catalog,decision) {
+  if(!decision)return 'unreviewed';
+  const outcome=decision.outcome??'unreviewed';
+  if(!resolved(outcome))return outcome;
+  const fields=questionAnswerFields(catalog,decision.questionId);
+  const answered=key=>{const field=fields.find(item=>item.key===key),value=decision.fieldAnswers?.[key];return value!==undefined&&value!==null&&value!==''&&field?.options?.some(option=>(typeof option==='string'?option:option.value)===value);};
+  const children=[...new Set((activeReviewScope(catalog)?.pool.cutBranches??[]).filter(branch=>branch.questionId===decision.questionId&&branch.branchScope==='immediate-child-descendants'&&branch.contactIds.length>0).map(branch=>String(branch.branchNode)))];
+  if(children.length){
+    // Presence makes the declared outcome specific; it does not establish anatomy.
+    if(!children.every(id=>answered(`child_${id}_attachment`)&&answered(`child_${id}_compartment`)))return 'unreviewed';
+  }else if(fields.length>1&&!fields.some(field=>answered(field.key)))return 'unreviewed';
+  return outcome;
+}
 function counts(items) {const values=items.map(d=>d?.outcome ?? 'unreviewed');return {total:values.length,recorded:values.filter(v=>v!=='unreviewed').length,resolved:values.filter(resolved).length,unresolved:values.filter(v=>!resolved(v)).length,uncertain:values.filter(v=>v==='uncertain').length,insufficientCoverage:values.filter(v=>v==='insufficient_coverage').length,unreviewed:values.filter(v=>v==='unreviewed').length};}
 export function reviewProgress(tasks,catalog) {
   const ctx=focusedContext(catalog), records=list(tasks instanceof Map ? Object.fromEntries(tasks) : tasks), decisions=new Map(records.flatMap(t=>t.review?.decisions ?? []).map(d=>[d.questionId,d]));
   const applicable=[...ctx.questionMap.values()].filter(q=>scopeQuestionStatus(records,ctx,q.id).applicable);
-  const groups=[...ctx.groupMap.values()].map(g=>({id:g.id,...counts(applicable.filter(q=>q.groupId===g.id).map(q=>scopedRecord(decisions.get(q.id),ctx)))}));
-  return {questions:counts(applicable.map(q=>scopedRecord(decisions.get(q.id),ctx))),allQuestions:counts([...ctx.questionMap.keys()].map(id=>decisions.get(id))),deferred:ctx.questionMap.size-applicable.length,priorScope:[...decisions.values()].filter(item=>activeReviewScope(ctx)&&!scopedRecord(item,ctx)).length,groups,contacts:counts(records.flatMap(t=>t.review?.contacts ?? []).map(item=>scopedRecord(item,ctx)).filter(Boolean)),issues:records.flatMap(t=>t.review?.issues ?? []).filter(i=>i.status!=='resolved').length};
+  const effective=record=>record?{...record,outcome:effectiveQuestionOutcome(ctx,record)}:null;
+  const groups=[...ctx.groupMap.values()].map(g=>({id:g.id,...counts(applicable.filter(q=>q.groupId===g.id).map(q=>effective(scopedRecord(decisions.get(q.id),ctx))))}));
+  return {questions:counts(applicable.map(q=>effective(scopedRecord(decisions.get(q.id),ctx)))),allQuestions:counts([...ctx.questionMap.keys()].map(id=>effective(decisions.get(id)))),deferred:ctx.questionMap.size-applicable.length,priorScope:[...decisions.values()].filter(item=>activeReviewScope(ctx)&&!scopedRecord(item,ctx)).length,groups,contacts:counts(records.flatMap(t=>t.review?.contacts ?? []).map(item=>scopedRecord(item,ctx)).filter(Boolean)),issues:records.flatMap(t=>t.review?.issues ?? []).filter(i=>i.status!=='resolved').length};
 }
 function validateEvidence(item,task,ctx) {
   text(item.id,'review item ID',300);text(item.note,'review note');
@@ -139,7 +186,7 @@ export function validateFocusedReview(review,task,catalog) {
   validateScopeRelevance(review,task,ctx);
   const ids=new Set();
   for(const item of [...review.decisions,...review.contacts,...review.issues]){invariant(plain(item),'REVIEW_ITEM','Invalid review item');validateEvidence(item,task,ctx);if(item.scopeHistory!==undefined){invariant(Array.isArray(item.scopeHistory)&&item.scopeHistory.length<=10000,'REVIEW_SCOPE_HISTORY','Invalid scoped decision history');for(const history of item.scopeHistory){invariant(plain(history)&&history.id===item.id&&history.scopeHistory===undefined,'REVIEW_SCOPE_HISTORY','History must retain its canonical ID without nested history');validateFocusedReview({version:review.version,workflowHash:review.workflowHash,decisions:[],contacts:[],issues:[],[review.decisions.includes(item)?'decisions':review.contacts.includes(item)?'contacts':'issues']:[history]},task,ctx);}}invariant(!ids.has(item.id),'DUPLICATE_REVIEW','Duplicate focused review record');ids.add(item.id);}
-  for(const item of review.decisions){const q=ctx.questionMap.get(item.questionId);invariant(q&&item.id===`question:${q.id}`,'REVIEW_QUESTION','Unknown or inconsistent anatomical question');invariant(item.ownerTaskId===q.ownerTaskId&&task.id===q.ownerTaskId&&item.groupId===q.groupId&&sameIds(item.taskIds,q.taskIds),'REVIEW_SCOPE','Shared question scope differs from its exact catalog definition');for(const [key,value]of Object.entries(questionProvenance(q)))invariant(same(item.provenance?.[key],value),'REVIEW_PROVENANCE','Question evidence provenance differs from its frozen source');const options=q.alternatives ?? q.options;if(item.alternative&&Array.isArray(options)&&options.length)invariant(item.alternative==='other'||item.alternative==='custom'||options.some(o=>(typeof o==='string'?o:o.value ?? o.id)===item.alternative),'REVIEW_ALTERNATIVE','Unknown anatomical alternative');}
+  for(const item of review.decisions){const q=ctx.questionMap.get(item.questionId);invariant(q&&item.id===`question:${q.id}`,'REVIEW_QUESTION','Unknown or inconsistent anatomical question');invariant(item.ownerTaskId===q.ownerTaskId&&task.id===q.ownerTaskId&&item.groupId===q.groupId&&sameIds(item.taskIds,q.taskIds),'REVIEW_SCOPE','Shared question scope differs from its exact catalog definition');validateQuestionFieldAnswers(item.fieldAnswers,ctx,q.id);if(item.legacyInterpretation!==undefined){const legacy=item.legacyInterpretation;invariant(plain(legacy)&&legacy.id===item.id&&legacy.questionId===item.questionId&&legacy.fieldAnswers===undefined&&legacy.legacyInterpretation===undefined&&legacy.scopeHistory===undefined&&same(legacy.scopeBinding,item.scopeBinding),'REVIEW_LEGACY_INTERPRETATION','Legacy interpretation must retain the original generic record and its exact scope');validateFocusedReview({version:review.version,workflowHash:review.workflowHash,decisions:[legacy],contacts:[],issues:[]},task,ctx);}for(const [key,value]of Object.entries(questionProvenance(q)))invariant(same(item.provenance?.[key],value),'REVIEW_PROVENANCE','Question evidence provenance differs from its frozen source');const options=q.alternatives ?? q.options;if(item.alternative&&Array.isArray(options)&&options.length)invariant(item.alternative==='other'||item.alternative==='custom'||options.some(o=>(typeof o==='string'?o:o.value ?? o.id)===item.alternative),'REVIEW_ALTERNATIVE','Unknown anatomical alternative');}
   for(const item of review.contacts)validateContact(item,task,ctx);
   for(const item of review.issues){invariant(item.ownerTaskId===task.id&&['open','resolved'].includes(item.status)&&item.kind==='coverage_request','REVIEW_ISSUE','Invalid coverage request');if(item.questionId){const q=ctx.questionMap.get(item.questionId);invariant(q&&q.taskIds.includes(task.id),'REVIEW_SCOPE','Coverage issue belongs to another question');}if(item.contactId)uint64String(item.contactId,'coverage contact ID');}
   if(review.positions!==undefined){

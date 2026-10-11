@@ -1,4 +1,5 @@
 /** One scope-aware source for both familiar and focused navigation. No saved evidence is changed. */
+import {taskReviewContent} from './review-task-content.js';
 import {activeReviewScope,recordScopeStatus,scopeQuestionStatus,scopedRecord} from './review-scope.js';
 
 const rows=value=>value instanceof Map?[...value.values()]:Array.isArray(value)?value:Object.values(value??{});
@@ -8,11 +9,12 @@ const local=(value,language)=>typeof value==='string'?value:value?.[language]??v
 function candidates(catalog,{cellId='',viewId=null,search='',language='ru'}={}) {
   const source=rawCatalog(catalog),questions=new Map((source.focusedWorkflow?.questions??[]).map(q=>[q.id,q]));
   const query=String(search).trim().toLocaleLowerCase();
+  const searchText=q=>{const content=taskReviewContent(source,q.id);return `${q.id} ${local(q.title,language)} ${local(q.question,language)} ${local(content.title,language)} ${local(content.question,language)}`.toLocaleLowerCase();};
   // Keep the original catalog order, even if another consumer sorts the workflow array.
   return source.tasks.map(task=>questions.get(task.id)).filter(q=>q
     &&(!cellId||q.recipientId===cellId)
     &&(!viewId||viewId==='all'||q.view===viewId)
-    &&(!query||`${q.id} ${local(q.title,language)} ${local(q.question,language)}`.toLocaleLowerCase().includes(query)));
+    &&(!query||searchText(q).includes(query)));
 }
 
 export function navigationQuestions(catalog,tasks,options={}) {

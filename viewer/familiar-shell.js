@@ -1,4 +1,5 @@
 import {LegacySurface} from './LegacySurface.js';
+import {taskReviewContent} from '../core/review-task-content.js';
 import {installNativeMeshCapture,extractNativeMesh,nativeMeshReady} from './native-surface-adapter.js';
 import {cameraQuaternion,nativeCamera} from './surface-sync.js';
 import {starterMeshManifest,loadStarterMesh} from './starter-meshes.js';
@@ -9,7 +10,7 @@ export function renderShell(catalog,current,lang,navigation,priorityLabel=()=> '
  language=lang;for(const n of document.querySelectorAll('[data-ru][data-en]'))n.textContent=n.dataset[lang];if(!catalog)return;
  const select=$('taskSelect');if(select){
   const questions=navigation?.questions||[];
-  select.replaceChildren(...questions.map(q=>{const task=catalog.tasks.find(t=>t.id===q.id)||q;return new Option(`${task.id} · ${typeof task.title==='string'?task.title:task.title[lang]} · ${priorityLabel(task.id)}`,task.id);}));
+  select.replaceChildren(...questions.map(q=>{const task=catalog.tasks.find(t=>t.id===q.id)||q,title=taskReviewContent(catalog,q.id).title;return new Option(`${task.id} · ${typeof title==='string'?title:title[lang]} · ${priorityLabel(task.id)}`,task.id);}));
   const listed=questions.some(q=>q.id===current?.id);
   if(!listed){const status=navigation?.currentStatus,label=!questions.length?text('Используйте список контактов или измените фильтры','Use contact search or change filters'):status&&!status.applicable?text('Дополнительный контекст вне очереди','Optional context outside queue'):text('Вне текущего фильтра','Outside current filter');const placeholder=new Option(`${current?.id?current.id+' · ':''}${label}`,current?.id||'',true,true);placeholder.disabled=true;select.prepend(placeholder);}
   select.value=current?.id||'';select.disabled=questions.length===0;

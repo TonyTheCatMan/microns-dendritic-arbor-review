@@ -109,11 +109,15 @@ export function scopeImportCompatibility(tasks,catalog,snapshot) {
 export function mergeScopedRecord(local,incoming,{replace=false}={}) {
   if(!local)return clone(incoming);if(!incoming)return clone(local);
   const chosen=replace?incoming:local,other=replace?local:incoming,result={...clone(other),...clone(chosen)},history=clone(chosen.scopeHistory??[]);
-  const additions=[...(!same(local.scopeBinding,incoming.scopeBinding)?[other]:[]),...(other.scopeHistory??[])];
+  // Missing structured answers mean unanswered, never inheritance from another pool or a legacy record.
+  if(!Object.hasOwn(chosen,'fieldAnswers'))delete result.fieldAnswers;
+  if(!Object.hasOwn(chosen,'legacyInterpretation'))delete result.legacyInterpretation;
+  const preserveGeneric=chosen.fieldAnswers!==undefined&&other.fieldAnswers===undefined;
+  const additions=[...(!same(local.scopeBinding,incoming.scopeBinding)||preserveGeneric?[other]:[]),...(other.scopeHistory??[])];
   for(const value of additions){const snapshot=clone(value);delete snapshot.scopeHistory;if(!history.some(item=>same(item,snapshot)))history.push(snapshot);}
   if(history.length)result.scopeHistory=history;
   return result;
 }
 export function reviewEvidenceRecords(review) {
-  return ['decisions','contacts','issues'].flatMap(field=>(review?.[field]??[]).flatMap(item=>[item,...(item.scopeHistory??[])]));
+  return ['decisions','contacts','issues'].flatMap(field=>(review?.[field]??[]).flatMap(item=>[item,...(item.scopeHistory??[])].flatMap(record=>[record,...(record.legacyInterpretation?[record.legacyInterpretation]:[])])));
 }

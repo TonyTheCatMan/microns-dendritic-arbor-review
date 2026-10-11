@@ -10,16 +10,22 @@ export async function sha256(value) { const bytes = await bytesOf(value), hash =
 const json = value => JSON.stringify(value, null, 2) + '\n';
 function normalizeTasks(tasks) { return Array.isArray(tasks) ? tasks : Object.values(tasks.tasks ?? tasks); }
 
-export function selectExportTasks(catalog, input, { scope = 'all', selectedIds = [], taskId } = {}) {
+export function selectExportTasks(catalog, input, options = {}) { return selectExportPlan(catalog,input,options).tasks; }
+
+function selectExportPlan(catalog, input, { scope = 'all', selectedIds = [], taskId } = {}) {
   const ctx = catalogContext(catalog), supplied = normalizeTasks(input).map(task => validateTask(task, ctx));
   invariant(['all', 'current', 'selected'].includes(scope), 'SCOPE', 'Export scope must be all, current or selected');
   const ids = new Set(selectedIds), byId = new Map(supplied.map(task => [task.id, task]));
-  if (scope === 'all') return [...ctx.taskMap.keys()].map(id => byId.get(id) ?? createTask(id));
+  if (scope === 'all') {
+    const tasks=[...ctx.taskMap.keys()].map(id => byId.get(id) ?? createTask(id));
+    return {tasks,taskCompleteness:Object.fromEntries(tasks.map(task=>[task.id,'full']))};
+  }
+  let currentTaskId;
   const questions=Array.isArray(catalog.focusedWorkflow?.questions)?catalog.focusedWorkflow.questions:[];
   const qMap=new Map(questions.map(q=>[q.id,q]));
   if(scope==='current') {
     const chosen=taskId ?? selectedIds.find(id=>ctx.taskMap.has(id)) ?? (supplied.length===1?supplied[0].id:null);
-    invariant(chosen&&ctx.taskMap.has(chosen),'SCOPE_TASK','Current-task export requires a task ID or one task');ids.add(chosen);
+    invariant(chosen&&ctx.taskMap.has(chosen),'SCOPE_TASK','Current-task export requires a task ID or one task');ids.add(chosen);currentTaskId=chosen;
   } else invariant(ids.size>0,'EMPTY_SELECTION','Choose at least one saved selection, mark or review item');
   // Follow explicit anatomical dependencies from each selected record's original pool.
   // Broad domain context is not cut ancestry and must not add cut decisions here.
@@ -53,7 +59,37 @@ export function selectExportTasks(catalog, input, { scope = 'all', selectedIds =
     result.push(selected);
   }
   invariant(result.length>0,'EMPTY_SELECTION','Selected items are not present in the supplied tasks');
-  return result;
+  return {tasks:result,taskCompleteness:Object.fromEntries(result.map(task=>[task.id,ids.has(task.id)?'full':'partial'])),...(currentTaskId?{currentTaskId}:{})};
+}
+
+// Completeness belongs to each task: a current-task package may also contain
+// filtered dependency owners. Only an explicit full owner supports whole-task Replace.
+function importTaskPartial(manifest,tasks,catalog) {
+  const ids=tasks.map(task=>task.id),selectedIds=manifest.selectedIds??[];
+  invariant(Array.isArray(selectedIds)&&selectedIds.every(id=>typeof id==='string'),'TASK_COMPLETENESS','Invalid selected task/item IDs');
+  const direct=new Set(selectedIds.filter(id=>ids.includes(id)));
+  if(manifest.currentTaskId!==undefined){
+    invariant(manifest.scope==='current'&&ids.includes(manifest.currentTaskId),'TASK_COMPLETENESS','Current task is missing from the package');
+    direct.add(manifest.currentTaskId);
+  }
+  if(manifest.taskCompleteness!==undefined){
+    const values=manifest.taskCompleteness;
+    invariant(values&&typeof values==='object'&&!Array.isArray(values)&&Object.keys(values).sort().join('\n')===[...ids].sort().join('\n'),'TASK_COMPLETENESS','Per-task completeness must cover exactly the exported tasks');
+    invariant(manifest.scope!=='current'||manifest.currentTaskId!==undefined,'TASK_COMPLETENESS','Current-task packages require their explicit owner');
+    for(const id of ids)invariant(values[id]===(manifest.scope==='all'||direct.has(id)?'full':'partial'),'TASK_COMPLETENESS','Task completeness conflicts with explicit export selection');
+    return Object.fromEntries(ids.map(id=>[id,values[id]==='partial']));
+  }
+  if(manifest.scope==='all')return Object.fromEntries(ids.map(id=>[id,false]));
+  if(manifest.scope==='current'&&manifest.currentTaskId===undefined){
+    // Older current exports omitted the chosen owner. Replay their selection closure
+    // for every possible owner. A task is full only if all possible exports agree;
+    // ambiguous or missing provenance remains a safe overlay, never a destructive guess.
+    const signature=[...ids].sort().join('\n');
+    const candidates=tasks.map(task=>selectExportPlan(catalog,tasks,{scope:'current',taskId:task.id,selectedIds}))
+      .filter(plan=>plan.tasks.map(task=>task.id).sort().join('\n')===signature);
+    for(const id of ids)if(candidates.length&&candidates.every(plan=>plan.taskCompleteness[id]==='full'))direct.add(id);
+  }
+  return Object.fromEntries(ids.map(id=>[id,!direct.has(id)]));
 }
 function sourceSnapshot(catalog, tasks) {
   const ctx = catalogContext(catalog);
@@ -81,7 +117,7 @@ function validateEvidenceScope(item,task,catalog){
  */
 export async function createExport(catalog, input, options = {}) {
   const { scope = 'all', selectedIds = [], evidenceFiles = [], language = 'ru' } = options;
-  const tasks = selectExportTasks(catalog, input, options), state = createState(catalog);
+  const {tasks,taskCompleteness,currentTaskId} = selectExportPlan(catalog, input, options), state = createState(catalog);
   state.tasks = Object.fromEntries(tasks.map(task => [task.id, task])); if(catalog.reviewScope)state.reviewScope=scopeSnapshot(catalog); validateState(state, catalog);
   const selected = new Set(selectedIds), exported = new Map(tasks.map(task => [task.id, task]));
   const entries = [
@@ -110,7 +146,7 @@ export async function createExport(catalog, input, options = {}) {
   const files = [];
   for (const entry of entries) { entry.data = await bytesOf(entry.data); files.push({ path: entry.path, bytes: entry.data.length, sha256: await sha256(entry.data) }); }
   const manifest = { format: FORMAT, schemaVersion: SCHEMA_VERSION, projectId: PROJECT_ID, catalogHash: state.catalogHash, sourceHash: state.sourceHash,
-    exportedAt: new Date().toISOString(), language: language === 'en' ? 'en' : 'ru', scope, partial: scope === 'selected', selectedIds: [...selectedIds], taskIds: tasks.map(task => task.id),
+    exportedAt: new Date().toISOString(), language: language === 'en' ? 'en' : 'ru', scope, partial: scope === 'selected', selectedIds: [...selectedIds], taskIds: tasks.map(task => task.id), taskCompleteness, ...(currentTaskId?{currentTaskId}:{}),
     coordinateSystem: COORDINATE_SYSTEM, statePath: 'review.json', files, evidence,
     evidenceMode: evidence.length ? 'included-regional-files' : 'annotations-only',
     selfContainedEvidence: evidence.some(item => /\.(png|tif|tiff|npy)$/i.test(item.path)),
@@ -127,9 +163,9 @@ export async function createExport(catalog, input, options = {}) {
 }
 
 export function createAnnotationExport(catalog, input, options = {}) {
-  const state = createState(catalog), tasks = selectExportTasks(catalog, input, options);
+  const state = createState(catalog), {tasks,taskCompleteness,currentTaskId} = selectExportPlan(catalog, input, options);
   state.tasks = Object.fromEntries(tasks.map(task => [task.id, task])); if(catalog.reviewScope)state.reviewScope=scopeSnapshot(catalog); validateState(state, catalog);
-  const payload = { format: FORMAT, schemaVersion: SCHEMA_VERSION, ...(catalog.reviewScope?{reviewScope:reviewScopeBinding(catalog)}:{}), ...(catalog.focusedWorkflow ? {workflowHash:catalog.focusedWorkflow.workflowHash} : {}), scope: options.scope ?? 'all', partial: options.scope === 'selected', selectedIds: options.selectedIds ?? [], exportedAt: new Date().toISOString(), state };
+  const payload = { format: FORMAT, schemaVersion: SCHEMA_VERSION, ...(catalog.reviewScope?{reviewScope:reviewScopeBinding(catalog)}:{}), ...(catalog.focusedWorkflow ? {workflowHash:catalog.focusedWorkflow.workflowHash} : {}), scope: options.scope ?? 'all', partial: options.scope === 'selected', selectedIds: options.selectedIds ?? [], taskCompleteness, ...(currentTaskId?{currentTaskId}:{}), exportedAt: new Date().toISOString(), state };
   return { blob: new Blob([json(payload)], { type: 'application/json' }), manifest: payload };
 }
 
@@ -177,6 +213,7 @@ export async function parseImport(file, catalog) {
   if (manifest.projectId) invariant(manifest.projectId === state.projectId, 'PROJECT_MISMATCH', 'Manifest project differs from review state');
   invariant(['all', 'current', 'selected'].includes(manifest.scope), 'SCOPE', 'Unknown import scope');
   invariant((manifest.scope === 'selected') === (manifest.partial === true), 'PARTIAL_SCOPE', 'Partial import flag differs from selected-item scope');
+  const taskPartial=importTaskPartial(manifest,Object.values(validated.tasks),catalog);
   for (const entry of manifest.evidence ?? []) {
     validateEvidenceScope(entry,validated.tasks[entry.taskId]??{},catalog);
     invariant(Object.hasOwn(validated.tasks, entry.taskId), 'EVIDENCE_REFERENCE', 'Evidence references a task outside this package');
@@ -184,5 +221,5 @@ export async function parseImport(file, catalog) {
     if (entry.markId) invariant(validated.tasks[entry.taskId].marks.some(m => m.id === entry.markId), 'EVIDENCE_REFERENCE', 'Evidence references an absent mark');
     if (entry.reviewId) invariant(['decisions','contacts','issues'].some(field=>validated.tasks[entry.taskId].review?.[field]?.some(record=>record.id===entry.reviewId)), 'EVIDENCE_REFERENCE', 'Evidence references an absent focused review item');
   }
-  return { tasks: Object.values(validated.tasks), state: validated, manifest, files, scope: manifest.scope, partial: manifest.partial === true, compatibility: { project: true, catalog: true, sources: true, schema: true, ...scopeImportCompatibility(Object.values(validated.tasks),catalog,state.reviewScope) }, conflicts: [] };
+  return { tasks: Object.values(validated.tasks), state: validated, manifest, files, scope: manifest.scope, partial: manifest.partial === true, taskPartial, compatibility: { project: true, catalog: true, sources: true, schema: true, ...scopeImportCompatibility(Object.values(validated.tasks),catalog,state.reviewScope) }, conflicts: [] };
 }
