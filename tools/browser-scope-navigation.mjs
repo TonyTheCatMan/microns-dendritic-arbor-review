@@ -122,4 +122,3 @@ try{
   assert.deepEqual(errors,[],'No page exceptions');
 }catch(error){checks.push({name:'Failure',passed:false,message:error.stack});console.error(error);process.exitCode=1;}
 finally{await writeFile(witness,JSON.stringify({origin,timestamp:new Date().toISOString(),scopeHash:frozen.scopeHash,workflowHash:workflow.workflowHash,checks,pageErrors:errors},null,2)+'\n');for(const context of contexts)await context.close().catch(()=>{});await browser.close();console.log(JSON.stringify({passed:checks.filter(c=>c.passed).length,total:checks.length,pageErrors:errors.length,witness}));}
-

@@ -1,0 +1,85 @@
+{
+  "origin": "https://tonythecatman.github.io/microns-dendritic-arbor-review/",
+  "timestamp": "2026-10-11T12:09:30.426Z",
+  "scopeHash": "220dfcdd907063548b79402d12056665e493d5fe79b837b0b0ea0bec7bfe7144",
+  "workflowHash": "473df1ed4e3e044c93c1088031aa20bcca714f96fdb4e76d24d79b60a18ca58b",
+  "checks": [
+    {
+      "name": "Russian startup has 27 applicable soma/stem choices; dynamic workload distinguishes 38 priority dependencies, seven qualifications and the 50-record archive",
+      "passed": true,
+      "stems": 27,
+      "branches": 18,
+      "applicable": 45,
+      "archive": 50,
+      "headline": "Группа: 38 приоритетных зависимостей · 7 уточнений анатомии",
+      "summary": "0 / 45 актуальных ответов записано · 45 неопределённых или непроверенных · в текущем списке 27"
+    },
+    {
+      "name": "Exact reported next-task reproduction skips excluded origin 3639 in both ordinary and unresolved directions",
+      "passed": true
+    },
+    {
+      "name": "Ordinary previous/next traverses the complete filtered cell queue in both directions with correct endpoint disabled states and denominators",
+      "passed": true,
+      "forward": [
+        "MC264649.soma_identity",
+        "MC264649.origin3362_to_soma",
+        "MC264649.origin3944_to_soma",
+        "MC264649.origin3945_to_soma",
+        "MC264649.origin4058_to_soma",
+        "MC264649.origin4507_to_soma"
+      ],
+      "backward": [
+        "MC264649.origin4507_to_soma",
+        "MC264649.origin4058_to_soma",
+        "MC264649.origin3945_to_soma",
+        "MC264649.origin3944_to_soma",
+        "MC264649.origin3362_to_soma",
+        "MC264649.soma_identity"
+      ]
+    },
+    {
+      "name": "Optional context exposes labeled excluded/deferred records while all seven real qualifications stay in the applicable branch queue",
+      "passed": true,
+      "defaultBranches": 18,
+      "optionalBranches": 20,
+      "optionalStems": 30,
+      "allArchive": 50
+    },
+    {
+      "name": "An excluded saved draft resumes with explicit optional-context guidance and a return-to-applicable control without losing original slice, marks or note",
+      "passed": true,
+      "excludedId": "MC264649.origin3639_to_soma",
+      "markId": "c4f79186-9630-4728-8bac-d15d0edee174"
+    },
+    {
+      "name": "Reasoned expert relevance dynamically restores a deferred question only in its bound pool and updates ordinary navigation, counters and focused navigation without moving the viewer",
+      "passed": true,
+      "restored": "MC264824.cut2638",
+      "primaryApplicable": 46,
+      "broaderApplicable": 45
+    },
+    {
+      "name": "Cell, pool and optional-context controls preserve the active section, camera and image cache; a third click continues the same trace draft after all toggles; Fit and wider zoom remain available",
+      "passed": true,
+      "continuedDraftId": "07777c13-ba6d-46bf-abf8-af764c347b8f",
+      "points": 3
+    },
+    {
+      "name": "Contact mode disables ordinary task traversal; a broader-only saved inspection survives explicit import and reload but stays out of the primary queue until optional context or exact-ID search",
+      "passed": true,
+      "contactId": "128943058",
+      "sourceRootId": "864691135447219028"
+    },
+    {
+      "name": "Legacy raw-contact lookup labels selected-pool membership, preserved exclusions and outside-pool records consistently",
+      "passed": true
+    },
+    {
+      "name": "English labels, scope-aware navigation and optional guidance agree with Russian without introducing functional-result cues",
+      "passed": true,
+      "englishHeadline": "Pool: 38 priority dependencies · 7 anatomical qualifications"
+    }
+  ],
+  "pageErrors": []
+}
