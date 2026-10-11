@@ -6,7 +6,13 @@ export async function attachFocusedData(catalog,contactCache=new Map()){
  if(await assetHash(new TextEncoder().encode(JSON.stringify(sorted(content))))!==workflowHash)throw Error('Focused workflow integrity mismatch');
  if(workflow.catalogHash!==catalog.catalogHash||workflow.sourceHash!==catalog.sourceHash||workflow.coordinateConvention!==catalog.coordinateConvention)throw Error('Focused workflow does not match this catalog');
  if(workflow.questions.length!==catalog.tasks.length||new Set(workflow.questions.map(q=>q.taskId)).size!==catalog.tasks.length||workflow.questions.some(q=>!catalog.tasks.some(t=>t.id===q.taskId&&t.recipientId===q.recipientId)))throw Error('Focused question scopes differ from the catalog');
- catalog.focusedWorkflow=workflow;catalog.focusedContacts=new Map();const pending=new Map();
+ catalog.focusedWorkflow=workflow;
+ const scopeResponse=await fetch(new URL('../data/review-scope.json',import.meta.url));if(!scopeResponse.ok)throw Error(`Review scope HTTP ${scopeResponse.status}`);
+ const scope=await scopeResponse.json(),{scopeHash,...scopeContent}=scope;
+ if(await assetHash(new TextEncoder().encode(JSON.stringify(sorted(scopeContent))))!==scopeHash)throw Error('Review scope integrity mismatch');
+ if(scope.catalogHash!==catalog.catalogHash||scope.sourceHash!==catalog.sourceHash||scope.workflowHash!==workflow.workflowHash||scope.materialization!==661)throw Error('Review scope source/version mismatch');
+ catalog.reviewScope=scope;const savedPool=localStorage.getItem('dendritic-arbor-v2-review-pool');catalog.activeReviewPoolId=scope.pools.some(p=>p.id===savedPool)?savedPool:scope.defaultPoolId;
+ catalog.focusedContacts=new Map();const pending=new Map();
  async function loadContacts(recipientId){
   if(contactCache.has(recipientId))return contactCache.get(recipientId);if(pending.has(recipientId))return pending.get(recipientId);
   const recipient=catalog.recipients.find(r=>r.id===recipientId);if(!recipient)throw Error('Unknown contact recipient');

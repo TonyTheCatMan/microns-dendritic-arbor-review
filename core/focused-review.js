@@ -1,4 +1,5 @@
 /** Additive anatomy review records. Completion never certifies contacts or source axons. */
+import {bindScopeRecord,scopedRecord,validateScopeBinding,validateScopeRelevance,scopeQuestionStatus,activeReviewScope,mergeScopedRecord} from './review-scope.js';
 import {catalogContext, clone, invariant, newId, validateBinding, validatePoint, validateSegments, validateView, uint64String} from './model.js';
 
 export const REVIEW_OUTCOMES = Object.freeze(['unreviewed','supported','contradicted','uncertain','insufficient_coverage']);
@@ -35,7 +36,8 @@ export function setQuestionDecision(task, catalog, questionId, patch={}) {
   invariant(question,'REVIEW_QUESTION','Unknown focused anatomical question');
   invariant(task.id===question.ownerTaskId,'REVIEW_OWNER','Shared decisions must be saved on their canonical owner task');
   const review=ensureReview(task,ctx), previous=review.decisions.find(item=>item.questionId===questionId);
-  const item={...newEvidence(ctx,`question:${questionId}`,task,previous),...clone(patch),id:`question:${questionId}`,questionId,groupId:question.groupId,ownerTaskId:question.ownerTaskId,taskIds:clone(question.taskIds),provenance:{...clone(previous?.provenance??{}),...questionProvenance(question)}};
+  let item={...newEvidence(ctx,`question:${questionId}`,task,scopedRecord(previous,ctx)??previous),...clone(patch),id:`question:${questionId}`,questionId,groupId:question.groupId,ownerTaskId:question.ownerTaskId,taskIds:clone(question.taskIds),provenance:{...clone(previous?.provenance??{}),...questionProvenance(question)}};
+  item=bindScopeRecord(item,previous,ctx,patch);
   const candidate={...review,decisions:[...review.decisions.filter(d=>d.questionId!==questionId),item]};
   validateFocusedReview(candidate,task,ctx); task.review=candidate; return item;
 }
@@ -48,9 +50,10 @@ export function contactOwnerTask(catalog,recipientId) {
 export function setContactDecision(task,catalog,contact,patch={}) {
   const ctx=focusedContext(catalog), review=ensureReview(task,ctx), id=contact.id ?? contact.contactId;
   const previous=review.contacts.find(item=>item.contactId===id), recipient=ctx.catalog.recipients?.find(r=>r.id===(contact.recipientId ?? ctx.taskMap.get(task.id).recipientId));
-  const item={...newEvidence(ctx,`contact:${id}`,task,previous),...clone(patch),id:`contact:${id}`,contactId:id,ownerTaskId:task.id,
+  let item={...newEvidence(ctx,`contact:${id}`,task,scopedRecord(previous,ctx)??previous),...clone(patch),id:`contact:${id}`,contactId:id,ownerTaskId:task.id,
     sourceRootId:contact.sourceRootId,targetRootId:contact.targetRootId ?? recipient?.rootRelease661,recipientId:contact.recipientId ?? ctx.taskMap.get(task.id).recipientId,
     contact:clone(contact)};
+  item=bindScopeRecord(item,previous,ctx,patch);
   if(item.targetRootId===undefined) delete item.targetRootId;
   if(item.recipientId===undefined) delete item.recipientId;
   const candidate={...review,contacts:[...review.contacts.filter(d=>d.contactId!==id),item]};
@@ -58,7 +61,7 @@ export function setContactDecision(task,catalog,contact,patch={}) {
 }
 export function addCoverageIssue(task,catalog,patch={}) {
   const ctx=focusedContext(catalog), review=ensureReview(task,ctx);
-  const item={...newEvidence(ctx,newId(),task),kind:'coverage_request',ownerTaskId:task.id,status:'open',...clone(patch)};
+  const item=bindScopeRecord({...newEvidence(ctx,newId(),task),kind:'coverage_request',ownerTaskId:task.id,status:'open',...clone(patch)},null,ctx,patch);
   const candidate={...review,issues:[...review.issues,item]};
   validateFocusedReview(candidate,task,ctx);task.review=candidate;return item;
 }
@@ -86,8 +89,9 @@ export function findContactDecision(tasks,contactId) {
 function counts(items) {const values=items.map(d=>d?.outcome ?? 'unreviewed');return {total:values.length,recorded:values.filter(v=>v!=='unreviewed').length,resolved:values.filter(resolved).length,unresolved:values.filter(v=>!resolved(v)).length,uncertain:values.filter(v=>v==='uncertain').length,insufficientCoverage:values.filter(v=>v==='insufficient_coverage').length,unreviewed:values.filter(v=>v==='unreviewed').length};}
 export function reviewProgress(tasks,catalog) {
   const ctx=focusedContext(catalog), records=list(tasks instanceof Map ? Object.fromEntries(tasks) : tasks), decisions=new Map(records.flatMap(t=>t.review?.decisions ?? []).map(d=>[d.questionId,d]));
-  const groups=[...ctx.groupMap.values()].map(g=>({id:g.id,...counts([...ctx.questionMap.values()].filter(q=>q.groupId===g.id).map(q=>decisions.get(q.id)))}));
-  return {questions:counts([...ctx.questionMap.keys()].map(id=>decisions.get(id))),groups,contacts:counts(records.flatMap(t=>t.review?.contacts ?? [])),issues:records.flatMap(t=>t.review?.issues ?? []).filter(i=>i.status!=='resolved').length};
+  const applicable=[...ctx.questionMap.values()].filter(q=>scopeQuestionStatus(records,ctx,q.id).applicable);
+  const groups=[...ctx.groupMap.values()].map(g=>({id:g.id,...counts(applicable.filter(q=>q.groupId===g.id).map(q=>scopedRecord(decisions.get(q.id),ctx)))}));
+  return {questions:counts(applicable.map(q=>scopedRecord(decisions.get(q.id),ctx))),allQuestions:counts([...ctx.questionMap.keys()].map(id=>decisions.get(id))),deferred:ctx.questionMap.size-applicable.length,priorScope:[...decisions.values()].filter(item=>activeReviewScope(ctx)&&!scopedRecord(item,ctx)).length,groups,contacts:counts(records.flatMap(t=>t.review?.contacts ?? []).map(item=>scopedRecord(item,ctx)).filter(Boolean)),issues:records.flatMap(t=>t.review?.issues ?? []).filter(i=>i.status!=='resolved').length};
 }
 function validateEvidence(item,task,ctx) {
   text(item.id,'review item ID',300);text(item.note,'review note');
@@ -97,6 +101,7 @@ function validateEvidence(item,task,ctx) {
   invariant(Array.isArray(item.markIds)&&new Set(item.markIds).size===item.markIds.length&&item.markIds.every(id=>task.marks.some(m=>m.id===id)),'REVIEW_MARK_REFERENCE','Review record references a missing mark');
   invariant(Array.isArray(item.selectionIds)&&new Set(item.selectionIds).size===item.selectionIds.length&&item.selectionIds.every(id=>task.selections.some(s=>s.id===id)),'REVIEW_SELECTION_REFERENCE','Review record references a missing saved view');
   validateSegments(item.segments,ctx);validateView(item.view,ctx);validateReviewView(item.view);
+  validateScopeBinding(item.scopeBinding,ctx);
   validateBinding(item.sourceBinding,ctx);
   invariant(item.sourceBinding.catalogHash===ctx.catalogHash&&item.sourceBinding.sourceHash===ctx.sourceHash&&item.sourceBinding.workflowHash===ctx.workflowHash,'REVIEW_BINDING','Review record must retain exact catalog, source and workflow hashes');
   if(ctx.workflow.materialization!==undefined)invariant(item.sourceBinding.materialization===ctx.workflow.materialization,'REVIEW_BINDING','Review materialization differs');
@@ -131,8 +136,9 @@ export function validateFocusedReview(review,task,catalog) {
   invariant(plain(review)&&review.version===1,'WORKFLOW_VERSION','This review record needs an explicit migration');
   invariant(review.workflowHash===ctx.workflowHash,'WORKFLOW_MISMATCH','Focused workflow hash differs; no automatic question remapping is allowed');
   for(const field of ['decisions','contacts','issues'])invariant(Array.isArray(review[field])&&review[field].length<=100000,'REVIEW_ITEMS','Invalid focused review lists');
+  validateScopeRelevance(review,task,ctx);
   const ids=new Set();
-  for(const item of [...review.decisions,...review.contacts,...review.issues]){invariant(plain(item),'REVIEW_ITEM','Invalid review item');validateEvidence(item,task,ctx);invariant(!ids.has(item.id),'DUPLICATE_REVIEW','Duplicate focused review record');ids.add(item.id);}
+  for(const item of [...review.decisions,...review.contacts,...review.issues]){invariant(plain(item),'REVIEW_ITEM','Invalid review item');validateEvidence(item,task,ctx);if(item.scopeHistory!==undefined){invariant(Array.isArray(item.scopeHistory)&&item.scopeHistory.length<=10000,'REVIEW_SCOPE_HISTORY','Invalid scoped decision history');for(const history of item.scopeHistory){invariant(plain(history)&&history.id===item.id&&history.scopeHistory===undefined,'REVIEW_SCOPE_HISTORY','History must retain its canonical ID without nested history');validateFocusedReview({version:review.version,workflowHash:review.workflowHash,decisions:[],contacts:[],issues:[],[review.decisions.includes(item)?'decisions':review.contacts.includes(item)?'contacts':'issues']:[history]},task,ctx);}}invariant(!ids.has(item.id),'DUPLICATE_REVIEW','Duplicate focused review record');ids.add(item.id);}
   for(const item of review.decisions){const q=ctx.questionMap.get(item.questionId);invariant(q&&item.id===`question:${q.id}`,'REVIEW_QUESTION','Unknown or inconsistent anatomical question');invariant(item.ownerTaskId===q.ownerTaskId&&task.id===q.ownerTaskId&&item.groupId===q.groupId&&sameIds(item.taskIds,q.taskIds),'REVIEW_SCOPE','Shared question scope differs from its exact catalog definition');for(const [key,value]of Object.entries(questionProvenance(q)))invariant(same(item.provenance?.[key],value),'REVIEW_PROVENANCE','Question evidence provenance differs from its frozen source');const options=q.alternatives ?? q.options;if(item.alternative&&Array.isArray(options)&&options.length)invariant(item.alternative==='other'||item.alternative==='custom'||options.some(o=>(typeof o==='string'?o:o.value ?? o.id)===item.alternative),'REVIEW_ALTERNATIVE','Unknown anatomical alternative');}
   for(const item of review.contacts)validateContact(item,task,ctx);
   for(const item of review.issues){invariant(item.ownerTaskId===task.id&&['open','resolved'].includes(item.status)&&item.kind==='coverage_request','REVIEW_ISSUE','Invalid coverage request');if(item.questionId){const q=ctx.questionMap.get(item.questionId);invariant(q&&q.taskIds.includes(task.id),'REVIEW_SCOPE','Coverage issue belongs to another question');}if(item.contactId)uint64String(item.contactId,'coverage contact ID');}
@@ -166,7 +172,8 @@ export function mergeFocusedReview(local,incoming,{policy='keep'}={}) {
   if(policy==='keep')return clone(local);
   invariant(local.version===incoming.version&&local.workflowHash===incoming.workflowHash,'WORKFLOW_MISMATCH','Cannot combine different workflow definitions');
   const result={...clone(incoming),...clone(local)};
-  for(const field of ['decisions','contacts','issues']){const map=new Map(local[field].map(i=>[i.id,clone(i)]));for(const item of incoming[field])if(policy==='replace'||!map.has(item.id))map.set(item.id,clone(item));result[field]=[...map.values()];}
+  for(const field of ['decisions','contacts','issues']){const map=new Map(local[field].map(i=>[i.id,clone(i)]));for(const item of incoming[field])map.set(item.id,mergeScopedRecord(map.get(item.id),item,{replace:policy==='replace'}));result[field]=[...map.values()];}
+  if(local.scopeRelevance||incoming.scopeRelevance){const map=new Map((local.scopeRelevance??[]).map(item=>[item.id,clone(item)]));for(const item of incoming.scopeRelevance??[])if(policy==='replace'||!map.has(item.id))map.set(item.id,clone(item));result.scopeRelevance=[...map.values()];}
   if(local.positions||incoming.positions){result.positions=clone(local.positions??{});for(const [id,position] of Object.entries(incoming.positions??{}))if(policy==='replace'||!Object.hasOwn(result.positions,id))result.positions[id]=clone(position);}
   if(policy==='replace'&&incoming.lastContext)result.lastContext=clone(incoming.lastContext);
   return result;
@@ -175,10 +182,11 @@ export function mergeFocusedReview(local,incoming,{policy='keep'}={}) {
 export function selectedReview(review,selectedIds) {
   if(!review)return undefined;const ids=selectedIds instanceof Set?selectedIds:new Set(selectedIds),result=clone(review);
   for(const field of ['decisions','contacts','issues'])result[field]=review[field].filter(i=>ids.has(i.id)||ids.has(i.questionId)||ids.has(i.contactId));
+  if(review.scopeRelevance)result.scopeRelevance=review.scopeRelevance.filter(item=>ids.has(item.id)||ids.has(item.questionId)||ids.has(`question:${item.questionId}`));
   if(review.positions)result.positions=Object.fromEntries(Object.entries(review.positions).filter(([key,p])=>ids.has(key)||ids.has(p.context.questionId)||ids.has(p.context.contactId)));
   return result;
 }
-export function hasReviewWork(review){return !!review&&(['decisions','contacts','issues'].some(f=>review[f]?.length)||!!review.lastContext||Object.keys(review.positions??{}).length>0);}
+export function hasReviewWork(review){return !!review&&(['decisions','contacts','issues','scopeRelevance'].some(f=>review[f]?.length)||!!review.lastContext||Object.keys(review.positions??{}).length>0);}
 
 /** Load only the recipient contact files needed to validate existing explicit review. */
 export async function ensureReviewContactSources(tasks,catalog) {

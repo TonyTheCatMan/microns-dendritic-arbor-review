@@ -102,7 +102,7 @@ test('selected focused-review figures retain question, contact and issue links w
   const evidenceFiles=[{path:'question.png',data:png,taskId:'stem',reviewId:'question:stem',metadata:{plane:'xy',pixelSizeNm:[8,8],sourceHash:catalog.sourceHash}},{path:'contact.svg',data:svg,taskId:'stem',reviewId:'contact:'+contact.id},{path:'issue.png',data:png,taskId:'stem',reviewId:issue.id},{path:'unselected.png',data:png,taskId:'stem',reviewId:'question:absent'},{path:'plain.png',data:png,taskId:'stem'}];
   for(const reviewId of ['question:stem','contact:'+contact.id,issue.id]){
     const {blob,manifest}=await createExport(catalog,[a],{scope:'selected',selectedIds:[reviewId],evidenceFiles});const restored=await parseImport(blob,catalog);
-    assert.equal(manifest.evidence.length,1);assert.equal(manifest.evidence[0].reviewId,reviewId);assert.equal(restored.manifest.evidence[0].reviewId,reviewId);assert.ok(restored.files.has(manifest.evidence[0].path));assert.equal(restored.files.has('evidence/plain.png'),false);assert.equal(restored.files.has('evidence/unselected.png'),false);
+    const expectedIds=reviewId===issue.id?['question:stem',issue.id]:[reviewId];assert.deepEqual(manifest.evidence.map(item=>item.reviewId),expectedIds);assert.deepEqual(restored.manifest.evidence.map(item=>item.reviewId),expectedIds);for(const item of manifest.evidence)assert.ok(restored.files.has(item.path));assert.equal(restored.files.has('evidence/plain.png'),false);assert.equal(restored.files.has('evidence/unselected.png'),false);
   }
 });
 

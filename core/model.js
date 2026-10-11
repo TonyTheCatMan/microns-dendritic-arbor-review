@@ -1,3 +1,4 @@
+import {validateScopeSnapshot,reviewEvidenceRecords} from './review-scope.js';
 import {validateFocusedReview,hasReviewWork,reviewConflictDetails,mergeFocusedReview} from './focused-review.js';
 /** Pure, source-bound review records. Never modifies acquisition or catalog data. */
 export const PROJECT_ID = 'microns-dendritic-arbor-review';
@@ -193,6 +194,7 @@ export function validateState(state, catalog) {
   invariant(state.projectId === PROJECT_ID, 'PROJECT_MISMATCH', 'This file belongs to a different review project');
   invariant(state.catalogHash === ctx.catalogHash, 'CATALOG_MISMATCH', 'Catalog hash differs; automatic coordinate or task remapping is prohibited');
   invariant(state.sourceHash === ctx.sourceHash, 'SOURCE_MISMATCH', 'Source identity hash differs');
+  validateScopeSnapshot(state.reviewScope,catalog);
   invariant(plain(state.tasks), 'TASKS', 'Review package must contain a task map');
   for (const [id, task] of Object.entries(state.tasks)) { invariant(task.id === id, 'TASK_KEY', 'Task map key differs from its ID'); validateTask(task, ctx); }
   return clone(state);
@@ -206,17 +208,21 @@ export function previewConflicts(incoming, local) {
     return { taskId: task.id, conflict: !!existing && hasWork(existing) && !identical, identical, localRevision: existing?.revision ?? 0, incomingRevision: task.revision, localUpdatedAt: existing?.updatedAt ?? null, incomingUpdatedAt: task.updatedAt, localIsNewer: !!existing?.updatedAt && Date.parse(existing.updatedAt) > Date.parse(task.updatedAt ?? 0), defaultResolution: 'keep', ...reviewConflictDetails(existing,task) };
   });
 }
-export function mergeTask(local, incoming, { policy = 'keep', partial = false } = {}) {
+export function mergeTask(local, incoming, { policy = 'keep', partial = false, scopeMismatch = false } = {}) {
   invariant(!local || local.id === incoming.id, 'TASK_MISMATCH', 'Cannot combine different task IDs');
   invariant(['keep', 'replace', 'merge'].includes(policy), 'RESOLUTION', 'Choose keep, replace or merge');
+  if(scopeMismatch&&policy==='keep')return clone(local??createTask(incoming.id));
   if (!local || !hasWork(local)) return clone(incoming);
   if (policy === 'keep') return clone(local);
   if (!partial && policy === 'replace') {
     const replacement = {...clone(local),...clone(incoming)};
+    if(incoming.review&&local.review)replacement.review=mergeFocusedReview(local.review,incoming.review,{policy:'replace'});
     // An older v2 package has no focused-review field and cannot erase additive work.
     if (incoming.review === undefined && local.review !== undefined) {
       replacement.review = clone(local.review);
-      const items = [...local.review.decisions,...local.review.contacts,...local.review.issues];
+    }
+    if(replacement.review){
+      const items = reviewEvidenceRecords(replacement.review);
       const selectionIds = new Set(items.flatMap(item=>item.selectionIds));
       for (const selection of local.selections) if (selectionIds.has(selection.id) && !replacement.selections.some(item=>item.id===selection.id)) replacement.selections.push(clone(selection));
       const markIds = new Set([...items.flatMap(item=>item.markIds),...replacement.selections.flatMap(item=>item.markIds)]);

@@ -1,3 +1,4 @@
+import {scopeSnapshot,reviewScopeBinding,validateScopeSnapshot,validateScopeBinding,scopeImportCompatibility,reviewEvidenceRecords,recordScopeStatus} from './review-scope.js';
 import {selectedReview,ensureReviewContactSources} from './focused-review.js';
 import { PROJECT_ID, SCHEMA_VERSION, COORDINATE_SYSTEM, catalogContext, clone, createState, createTask, decisionAdapter, invariant, safeJSON, validateState, validateTask } from './model.js';
 import { bytesOf, createZip, readZip, safePath } from './zip.js';
@@ -20,20 +21,32 @@ export function selectExportTasks(catalog, input, { scope = 'all', selectedIds =
     const chosen=taskId ?? selectedIds.find(id=>ctx.taskMap.has(id)) ?? (supplied.length===1?supplied[0].id:null);
     invariant(chosen&&ctx.taskMap.has(chosen),'SCOPE_TASK','Current-task export requires a task ID or one task');ids.add(chosen);
   } else invariant(ids.size>0,'EMPTY_SELECTION','Choose at least one saved selection, mark or review item');
-  // Follow explicit anatomical dependency IDs, never coordinate proximity or contact membership.
+  // Follow explicit anatomical dependencies from each selected record's original pool.
+  // Broad domain context is not cut ancestry and must not add cut decisions here.
   const pending=questions.filter(q=>ids.has(q.id)||ids.has(q.ownerTaskId)||ids.has(q.groupId)||ids.has(`question:${q.id}`)).map(q=>q.id), visited=new Set();
+  for(const task of supplied){
+    const review=ids.has(task.id)?task.review:selectedReview(task.review,ids);
+    for(const record of reviewEvidenceRecords(review)){
+      if(record.questionId)pending.push(record.questionId);
+      if(!record.contactId||!record.scopeBinding)continue;
+      const pool=catalog.reviewScope?.pools.find(pool=>pool.id===record.scopeBinding.poolId);
+      const recipientId=record.recipientId??ctx.taskMap.get(task.id)?.recipientId;
+      const contact=pool?.contacts.find(contact=>contact.id===record.contactId&&contact.recipientId===recipientId);
+      if(contact)pending.push(...[contact.identityQuestionId,contact.originRouteQuestionId,...(contact.relationQuestionIds??[]),...(contact.exactCutQuestionIds??[])].filter(Boolean));
+    }
+  }
   while(pending.length){const id=pending.pop();if(visited.has(id))continue;visited.add(id);const q=qMap.get(id);if(!q)continue;ids.add(`question:${id}`);for(const d of q.dependencyQuestionIds??[])pending.push(d);}
   const requiredOwners=new Set([...visited].map(id=>qMap.get(id)?.ownerTaskId).filter(Boolean));
   const result=[];
   for(const [id] of ctx.taskMap) {
     const task=byId.get(id) ?? createTask(id);
     if(ids.has(task.id)) {result.push(task);continue;}
-    const review=selectedReview(task.review,ids), reviewItems=review?[...review.decisions,...review.contacts,...review.issues]:[];
+    const review=selectedReview(task.review,ids), reviewItems=reviewEvidenceRecords(review);
     const selectionIds=new Set([...ids,...reviewItems.flatMap(item=>item.selectionIds)]);
     const selections=task.selections.filter(item=>selectionIds.has(item.id));
     const markIds=new Set([...ids,...selections.flatMap(item=>item.markIds),...reviewItems.flatMap(item=>item.markIds)]);
     const marks=task.marks.filter(mark=>markIds.has(mark.id));
-    if(!selections.length&&!marks.length&&!reviewItems.length&&!Object.keys(review?.positions??{}).length&&!requiredOwners.has(task.id))continue;
+    if(!selections.length&&!marks.length&&!reviewItems.length&&!Object.keys(review?.positions??{}).length&&!(review?.scopeRelevance?.length)&&!requiredOwners.has(task.id))continue;
     const segmentIds=new Set([...selections.flatMap(item=>item.segments),...reviewItems.flatMap(item=>item.segments)].map(s=>s.id??s.segmentId));
     const selected={...task,marks,selections,segments:task.segments.filter(segment=>segmentIds.has(segment.id??segment.segmentId))};
     if(review)selected.review=review;
@@ -48,7 +61,18 @@ function sourceSnapshot(catalog, tasks) {
     coordinateContract: catalog.coordinateContract ?? catalog.coordinate_contract ?? null,
     sources: catalog.sources ?? catalog.sourceRegistry ?? catalog.provenance ?? null,
     focusedWorkflow: catalog.focusedWorkflow ? clone(catalog.focusedWorkflow) : null,
+    ...(catalog.reviewScope?{reviewScope:scopeSnapshot(catalog)}:{}),
     tasks: tasks.map(task => clone(ctx.taskMap.get(task.id))) };
+}
+
+function validateEvidenceScope(item,task,catalog){
+  const metadata=item.metadata;if(!metadata)return;
+  if(metadata.reviewScopeBinding)validateScopeBinding(metadata.reviewScopeBinding,catalog);
+  if(metadata.scopeBinding)validateScopeBinding(metadata.scopeBinding,catalog);
+  if(item.reviewId&&Object.hasOwn(metadata,'scopeBinding')){
+    const matching=reviewEvidenceRecords(task.review).find(record=>record.id===item.reviewId&&(metadata.scopeBinding?recordScopeStatus(record,catalog,metadata.scopeBinding.poolId)==='current':!record.scopeBinding)&&(!metadata.reviewUpdatedAt||record.updatedAt===metadata.reviewUpdatedAt));
+    invariant(matching&&(!metadata.reviewId||metadata.reviewId===item.reviewId),'EVIDENCE_SCOPE','Figure evidence does not match the original scoped review record');
+  }
 }
 
 /** evidenceFiles: [{path, blob|data, taskId, selectionId?, markId?, reviewId?, metadata?}].
@@ -58,7 +82,7 @@ function sourceSnapshot(catalog, tasks) {
 export async function createExport(catalog, input, options = {}) {
   const { scope = 'all', selectedIds = [], evidenceFiles = [], language = 'ru' } = options;
   const tasks = selectExportTasks(catalog, input, options), state = createState(catalog);
-  state.tasks = Object.fromEntries(tasks.map(task => [task.id, task])); validateState(state, catalog);
+  state.tasks = Object.fromEntries(tasks.map(task => [task.id, task])); if(catalog.reviewScope)state.reviewScope=scopeSnapshot(catalog); validateState(state, catalog);
   const selected = new Set(selectedIds), exported = new Map(tasks.map(task => [task.id, task]));
   const entries = [
     { path: 'review.json', data: json(state) },
@@ -72,6 +96,7 @@ export async function createExport(catalog, input, options = {}) {
     const reviewExists=!item.reviewId||['decisions','contacts','issues'].some(field=>exportedTask.review?.[field]?.some(record=>record.id===item.reviewId));
     if(scope==='selected'&&!reviewExists)continue;
     invariant(reviewExists,'EVIDENCE_REFERENCE','Evidence references an absent focused review item');
+    validateEvidenceScope(item,exportedTask,catalog);
     if (scope === 'selected' && !selected.has(item.taskId) && item.selectionId && !exported.get(item.taskId).selections.some(selection=>selection.id===item.selectionId)) continue;
     if (scope === 'selected' && !selected.has(item.taskId) && !item.selectionId && !item.markId && !item.reviewId) continue;
     if (scope === 'selected' && item.markId && !exported.get(item.taskId).marks.some(mark => mark.id === item.markId)) continue;
@@ -91,6 +116,7 @@ export async function createExport(catalog, input, options = {}) {
     selfContainedEvidence: evidence.some(item => /\.(png|tif|tiff|npy)$/i.test(item.path)),
     completeness: 'Only explicitly included regional files are self-contained; no complete volume or anatomical coverage is implied.',
     anatomicalCertification: false, reviewerIdentity: null, qualifications: null,
+    ...(catalog.reviewScope?{reviewScope:reviewScopeBinding(catalog)}:{}),
     ...(catalog.focusedWorkflow ? {workflowHash:catalog.focusedWorkflow.workflowHash} : {}) };
   entries.push({ path: 'manifest.json', data: json(manifest) });
   const readme = language === 'en'
@@ -102,8 +128,8 @@ export async function createExport(catalog, input, options = {}) {
 
 export function createAnnotationExport(catalog, input, options = {}) {
   const state = createState(catalog), tasks = selectExportTasks(catalog, input, options);
-  state.tasks = Object.fromEntries(tasks.map(task => [task.id, task])); validateState(state, catalog);
-  const payload = { format: FORMAT, schemaVersion: SCHEMA_VERSION, ...(catalog.focusedWorkflow ? {workflowHash:catalog.focusedWorkflow.workflowHash} : {}), scope: options.scope ?? 'all', partial: options.scope === 'selected', selectedIds: options.selectedIds ?? [], exportedAt: new Date().toISOString(), state };
+  state.tasks = Object.fromEntries(tasks.map(task => [task.id, task])); if(catalog.reviewScope)state.reviewScope=scopeSnapshot(catalog); validateState(state, catalog);
+  const payload = { format: FORMAT, schemaVersion: SCHEMA_VERSION, ...(catalog.reviewScope?{reviewScope:reviewScopeBinding(catalog)}:{}), ...(catalog.focusedWorkflow ? {workflowHash:catalog.focusedWorkflow.workflowHash} : {}), scope: options.scope ?? 'all', partial: options.scope === 'selected', selectedIds: options.selectedIds ?? [], exportedAt: new Date().toISOString(), state };
   return { blob: new Blob([json(payload)], { type: 'application/json' }), manifest: payload };
 }
 
@@ -142,6 +168,8 @@ export async function parseImport(file, catalog) {
   }
   await ensureReviewContactSources(Object.values(state.tasks ?? {}),catalog);
   const validated = validateState(state, catalog);
+  if(manifest.reviewScope){validateScopeBinding(manifest.reviewScope,catalog);invariant(state.reviewScope&&manifest.reviewScope.scopeHash===state.reviewScope.scopeHash&&manifest.reviewScope.poolId===state.reviewScope.poolId,'REVIEW_SCOPE_MANIFEST','Export manifest and state analysis pools differ');}
+  if(files.has('sources.json')){const sourceSnapshot=parseJSON(files.get('sources.json'),'sources.json');if(sourceSnapshot.reviewScope){validateScopeSnapshot(sourceSnapshot.reviewScope,catalog);invariant(state.reviewScope&&sourceSnapshot.reviewScope.poolId===state.reviewScope.poolId,'REVIEW_SCOPE_MANIFEST','Source snapshot and state analysis pools differ');}}
   if(manifest.workflowHash) invariant(manifest.workflowHash===catalog.focusedWorkflow?.workflowHash,'WORKFLOW_MISMATCH','Focused workflow version differs; no automatic question remapping is allowed');
   if (manifest.taskIds) invariant(Array.isArray(manifest.taskIds) && [...manifest.taskIds].sort().join('\n') === Object.keys(validated.tasks).sort().join('\n'), 'TASK_MANIFEST', 'Manifest task list differs from review state');
   if (manifest.catalogHash) invariant(manifest.catalogHash === state.catalogHash, 'MANIFEST_IDENTITY', 'Manifest catalog differs from review state');
@@ -150,10 +178,11 @@ export async function parseImport(file, catalog) {
   invariant(['all', 'current', 'selected'].includes(manifest.scope), 'SCOPE', 'Unknown import scope');
   invariant((manifest.scope === 'selected') === (manifest.partial === true), 'PARTIAL_SCOPE', 'Partial import flag differs from selected-item scope');
   for (const entry of manifest.evidence ?? []) {
+    validateEvidenceScope(entry,validated.tasks[entry.taskId]??{},catalog);
     invariant(Object.hasOwn(validated.tasks, entry.taskId), 'EVIDENCE_REFERENCE', 'Evidence references a task outside this package');
     if (entry.selectionId) invariant(validated.tasks[entry.taskId].selections.some(s => s.id === entry.selectionId), 'EVIDENCE_REFERENCE', 'Evidence references an absent selection');
     if (entry.markId) invariant(validated.tasks[entry.taskId].marks.some(m => m.id === entry.markId), 'EVIDENCE_REFERENCE', 'Evidence references an absent mark');
     if (entry.reviewId) invariant(['decisions','contacts','issues'].some(field=>validated.tasks[entry.taskId].review?.[field]?.some(record=>record.id===entry.reviewId)), 'EVIDENCE_REFERENCE', 'Evidence references an absent focused review item');
   }
-  return { tasks: Object.values(validated.tasks), state: validated, manifest, files, scope: manifest.scope, partial: manifest.partial === true, compatibility: { project: true, catalog: true, sources: true, schema: true }, conflicts: [] };
+  return { tasks: Object.values(validated.tasks), state: validated, manifest, files, scope: manifest.scope, partial: manifest.partial === true, compatibility: { project: true, catalog: true, sources: true, schema: true, ...scopeImportCompatibility(Object.values(validated.tasks),catalog,state.reviewScope) }, conflicts: [] };
 }

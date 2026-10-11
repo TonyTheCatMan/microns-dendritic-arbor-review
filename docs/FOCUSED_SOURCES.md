@@ -2,6 +2,8 @@
 
 This extension preserves the original catalog, scientific files, assignments and 50 task IDs. The generated `data/focused-workflow.json` supplies a blinded navigation index and independent decision scopes. Rebuild offline from this app directory with `python -X utf8 tools/build-focused-workflow.py`. The builder reads metadata and text only; it makes no image observations, requests no new data, runs no prior scientific helper and modifies no source record.
 
+The current default adds the source-quality restricted scope described in [RESTRICTED_SOURCES.md](RESTRICTED_SOURCES.md): 634 saved eligible contacts from 249 distinct sources under preferred14, with a separate 641-contact / 253-source all_export19 context. This document describes the preserved original navigation and raw-material index. Its wider inventory is optional context, not the current review denominator.
+
 ## Actual task grouping
 
 There are **15 navigation groups and 50 independent questions**. Four soma/stem groups contain 4 identity and 26 origin-route questions. Eleven branch groups contain 9 branch-relation, 4 compartment-cut and 7 boundary/damage questions. The original tasks have distinct decision scopes; none was discarded or declared an exact duplicate. Navigation grouping is by documented origin, cut and route-family identities, never spatial proximity. The source-nominated route families do not establish a common biological junction.
@@ -23,7 +25,7 @@ All **27,099 contacts and 22,844 recipient-specific source footprints** remain i
 
 The deterministic order is catalog recipient order, original crop coverage first, concern code, then exact numeric synapse ID. No effect, significance, favorable cell label, inferred attachment outcome or nearest-contact example is used. The queue is neither a representative audit sample nor a required manual-review quota. Every other contact remains accessible through search and whole-source footprints. Contact links to anatomical questions provide context only; they cannot propagate a decision to the contact.
 
-The authorized workflow specification supplies primary/broader analysis denominators of 1,170 / 1,182 unique eligible contacts. This UI extension does not recompute those denominators, use them to select contacts or convert them into review quotas. No justified contact sampling protocol, sample size or seed was found in the inspected preparation README/task catalog, inventory source notes or focused decision report. The exported workflow explicitly records the missing protocol and an empty audit set.
+The earlier unrestricted workflow recorded denominators of 1,170 / 1,182 unique eligible contacts. These remain historical source metadata; the current restricted default uses 634 / 641 from the completed quality ledgers. Neither denominator is a manual-review quota. No probability contact sampling protocol is defined. The preserved workflow records the missing protocol and an empty audit set; the new scope does not invent one.
 
 ## Exact-version curation metadata
 
@@ -41,7 +43,7 @@ The complete incoming-source string-root join covers **21,230 unique incoming ro
 
 The generated lookup records exact decimal-string roots, table row numbers/IDs, source hashes and release661 binding. This is a limited inherited-curation metadata lookup for all raw incoming roots; it is not an eligible-functional-pool quality audit, complete axon tracing, a native identity bridge, attachment review or a release661-to-m1300 mapping. Every entry retains pending native-quality status, including those with clean/extended inherited curation.
 
-The outstanding audit must freeze the exact incoming source pool and quality policy; reconcile release/version and identity; document missing or contradictory metadata; then review the required native source-axon routes and selected attachments with source-bound evidence. No new cohort, numerical quality threshold, sample quota or anatomy status is inferred by this extension.
+The subsequent source-quality audit completed the exact pool/policy freeze and release661 metadata reconciliation; its blinded result is bound separately in `data/review-scope.json`. Native membrane continuity, identity bridges and selected attachments remain expert questions. Metadata completion does not require re-tracing every included axon and does not certify its completeness or contacts. No new cohort, numerical quality threshold, sample quota or anatomy status is inferred by this extension.
 
 ## Coverage and provenance
 

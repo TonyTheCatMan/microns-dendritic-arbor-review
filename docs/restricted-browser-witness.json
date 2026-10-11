@@ -1,0 +1,140 @@
+{
+  "testedAt": "2026-10-11T11:30:56.563Z",
+  "baseRunTestedAt": "2026-10-11T11:27:30.155Z",
+  "origin": "http://127.0.0.1:8874/",
+  "browser": "Edge Chromium headless",
+  "checks": [
+    {
+      "name": "Russian default is the 634-contact / 249-root primary observed pool; broader 641 / 253 scope remains separate and all 50 canonical questions remain",
+      "passed": true,
+      "primary": {
+        "distinctSources": 249,
+        "memberships": 370,
+        "contacts": 634,
+        "preservedExclusions": 8,
+        "identityDependencies": 4,
+        "occupiedOriginRoutes": 23,
+        "relationQuestions": 9,
+        "consequentialCuts": 2,
+        "questionPriorities": {
+          "deferred": 2,
+          "excluded": 3,
+          "qualification": 7,
+          "required": 38
+        },
+        "originalCropContainedContacts": 5
+      },
+      "broader": {
+        "distinctSources": 253,
+        "memberships": 374,
+        "contacts": 641,
+        "preservedExclusions": 8,
+        "identityDependencies": 4,
+        "occupiedOriginRoutes": 23,
+        "relationQuestions": 9,
+        "consequentialCuts": 2,
+        "questionPriorities": {
+          "deferred": 2,
+          "excluded": 3,
+          "qualification": 7,
+          "required": 38
+        },
+        "originalCropContainedContacts": 5
+      },
+      "originalQuestions": 50
+    },
+    {
+      "name": "Shared plan has four identities, 23 occupied routes and nine separate relations; exact cut lineage is 62/48 and 1/1 while two zero-descendant cuts stay deferred",
+      "passed": true,
+      "applicableQuestions": 45,
+      "primaryCut4475": {
+        "contacts": 62,
+        "sources": 48,
+        "child": "4661"
+      },
+      "broaderCut4475": {
+        "contacts": 65,
+        "sources": 50
+      },
+      "excludedChild4315PredictedAxon": 13
+    },
+    {
+      "name": "Pool controls label the broader context separately, old 891-contact flags are optional, and default researcher content remains blinded",
+      "passed": true
+    },
+    {
+      "name": "Unbound old decisions, draft trace geometry, notes, viewer state and unknown fields survive migration without being certified in the restricted pool",
+      "passed": true
+    },
+    {
+      "name": "Deferred questions retain annotation and unresolved coverage; reasoned relevance, scoped gap requests and autosave-only edits survive reload without changing frozen contacts",
+      "passed": true
+    },
+    {
+      "name": "One source-bound route annotation is reused by dependency links while pair/triple decisions and all contact checks remain independent",
+      "passed": true,
+      "routeId": "MC264824.origin2601_to_soma",
+      "dependentQuestionIds": [
+        "MC264824.relation_2601_2710",
+        "MC264824.relation_2601_2710_2711",
+        "MC264824.relation_2601_2711"
+      ]
+    },
+    {
+      "name": "Existing Fit keeps the current section, traces close without a popup, wider zoom range and 3D camera survive reload, and warm revisits reuse image cache",
+      "passed": true,
+      "warmRevisit": {
+        "networkBytes": 0,
+        "cacheHits": 25,
+        "total": 25
+      },
+      "max3DZoom": 18,
+      "minZoomMenu": "33.3%"
+    },
+    {
+      "name": "Retained contacts keep exact source IDs and pre/post/center coordinates; raw contacts outside the pool stay accessible and unreviewed",
+      "passed": true,
+      "contactId": "173655835",
+      "sourceRootId": "864691134941194851",
+      "outsidePoolContactId": "164163900"
+    },
+    {
+      "name": "Current, selected and all exports bind chosen pool, materialization, complete scope manifest, original task/dependency/source IDs and hashes while keeping free text unchanged",
+      "passed": true
+    },
+    {
+      "name": "Selected review figures retain exact integer-sampled coordinates, raw pixels, physical aspect, scale and source receipts inside the bound scope package",
+      "passed": true
+    },
+    {
+      "name": "Current and selected JSON plus all-work ZIP restore exact drawings, drafts, scope histories, relevance reasons and camera/position state into fresh profiles",
+      "passed": true
+    },
+    {
+      "name": "Primary and broader answers remain distinct in scope history; import mismatch defaults to keep and explicit acceptance preserves both without changing the active pool",
+      "passed": true
+    },
+    {
+      "name": "An altered source-scope manifest is rejected without rewriting reviewer data",
+      "passed": true
+    },
+    {
+      "name": "Selected contact transfer includes saved canonical route evidence and exact dependency owners while omitting broad-context-only cut tasks",
+      "passed": true,
+      "contactId": "173860559",
+      "routeId": "MC298937.origin4480_to_soma",
+      "exportedTaskIds": [
+        "MC298937.soma_identity",
+        "MC298937.origin4480_to_soma"
+      ],
+      "contextOnlyCutIds": [
+        "MC298937.cut4475"
+      ]
+    }
+  ],
+  "errors": [],
+  "screenshotsTaken": 0,
+  "anatomicalReview": false,
+  "syntheticTemporaryProfileOnly": true,
+  "sourceRecordsModified": false
+}
