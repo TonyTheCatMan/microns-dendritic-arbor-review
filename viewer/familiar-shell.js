@@ -5,7 +5,17 @@ import {starterMeshManifest,loadStarterMesh} from './starter-meshes.js';
 const $=id=>document.getElementById(id);
 let host,api,language='ru',busy=false;
 const text=(ru,en)=>language==='en'?en:ru;
-export function renderShell(catalog,current,lang){language=lang;for(const n of document.querySelectorAll('[data-ru][data-en]'))n.textContent=n.dataset[lang];if(!catalog)return;const select=$('taskSelect');if(select){const filter=$('cellFilter').value;select.replaceChildren(...catalog.tasks.filter(t=>!filter||t.recipientId===filter).map(t=>new Option(`${t.id} · ${typeof t.title==='string'?t.title:t.title[lang]}`,t.id)));select.value=current?.id||'';}if(host?.surface){host.surface.language=lang;for(const m of host.surface.meshes){const label=m.control?.querySelector('span:last-child');if(label)label.textContent=m.id+' · '+text('Кандидат v1300','v1300 candidate');}host.surface.schedule();}}
+export function renderShell(catalog,current,lang,navigation,priorityLabel=()=> ''){
+ language=lang;for(const n of document.querySelectorAll('[data-ru][data-en]'))n.textContent=n.dataset[lang];if(!catalog)return;
+ const select=$('taskSelect');if(select){
+  const questions=navigation?.questions||[];
+  select.replaceChildren(...questions.map(q=>{const task=catalog.tasks.find(t=>t.id===q.id)||q;return new Option(`${task.id} · ${typeof task.title==='string'?task.title:task.title[lang]} · ${priorityLabel(task.id)}`,task.id);}));
+  const listed=questions.some(q=>q.id===current?.id);
+  if(!listed){const status=navigation?.currentStatus,label=!questions.length?text('Используйте список контактов или измените фильтры','Use contact search or change filters'):status&&!status.applicable?text('Дополнительный контекст вне очереди','Optional context outside queue'):text('Вне текущего фильтра','Outside current filter');const placeholder=new Option(`${current?.id?current.id+' · ':''}${label}`,current?.id||'',true,true);placeholder.disabled=true;select.prepend(placeholder);}
+  select.value=current?.id||'';select.disabled=questions.length===0;
+ }
+ if(host?.surface){host.surface.language=lang;for(const m of host.surface.meshes){const label=m.control?.querySelector('span:last-child');if(label)label.textContent=m.id+' · '+text('Кандидат v1300','v1300 candidate');}host.surface.schedule();}
+}
 export function renderShellView(view){if($('blackInput')){const [b,w]=view.displayWindow||[0,255];$('blackInput').value=b;$('whiteInput').value=w;}const slider=$('sliceSlider');if(slider){const axis={xy:2,xz:1,yz:0}[view.plane],step=[8,8,40][axis],value=Math.round(view.centerNm[axis]/step);if(value<Number(slider.min)||value>Number(slider.max)||slider.dataset.axis!==String(axis)){slider.min=value-32;slider.max=value+32;slider.dataset.axis=axis;}slider.value=value;}}
 function route(){const page=['viewer','neuroglancer','sources'].includes(location.hash.slice(1))?location.hash.slice(1):'viewer';for(const id of ['viewer','neuroglancer','sources']){const element=$('page-'+id);if(!element)continue;if(id==='neuroglancer'){element.hidden=false;element.classList.toggle('background-native',page!==id);element.inert=page!==id;element.setAttribute('aria-hidden',String(page!==id));}else element.hidden=page!==id;}for(const link of document.querySelectorAll('.main-nav a')){if(link.hash==='#'+page)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}if(page==='neuroglancer'&&host?.task)host.ensureNative();host?.draw();host?.surface?.resize();}
 export async function installFamiliarShell(viewer,callbacks){host=viewer;api=callbacks;host.surface=new LegacySurface(host);window.addEventListener('hashchange',route);route();

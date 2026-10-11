@@ -1,5 +1,13 @@
 # Анатомическая проверка / Anatomy review
 
+Навигация использует текущую группу, вид, фильтр клетки и поиск во всех элементах: выпадающем списке, кнопках «Предыдущая» / «Следующая» и списке нерешённых вопросов. Исходно актуальны 38 зависимостей и 7 уточнений анатомии: 27 записей в виде сомы/выходов и 18 в виде отношений ветвей. Это записи с повторно используемыми свидетельствами, не 45 независимых трассировок. Заголовок отдельно показывает число записей текущего списка и архив из 50 исходных вопросов. Экспертное изменение релевантности обновляет все счётчики.
+
+Исключённые выходы и отложенные разрезы доступны через «Все материалы» / «Все исходные задачи» и явно подписанный дополнительный контекст. При возобновлении такой записи сохраняются положение и разметка; плашка обозначает контекст и предлагает вернуться в актуальную очередь. Исходная формулировка вопроса остаётся в раскрывающемся блоке. Смена группы и фильтров сохраняет текущий срез и продолжение незавершённой трассы. В виде контактов обычные кнопки перехода между анатомическими вопросами отключены: используйте список или точный поиск контактов.
+
+Navigation uses one filtered queue for the ordinary dropdown, Previous/Next and next-unresolved controls. The default contains 38 dependencies plus seven anatomical qualifications: 27 soma/stem records and 18 branch records, not 45 independent tracing jobs. Cell, view, search, selected pool and explicit relevance changes update every navigation counter. The headline distinguishes the current list from the preserved archive of 50 original records. Optional/all-materials controls reveal excluded/deferred context with priority labels. Resuming such evidence retains its exact position and drawings, shows an optional-context notice, and offers a return to the applicable queue. Original anatomical wording remains available in a collapsed section. Pool/filter changes preserve the current slice and active trace continuation.
+
+The default saved-contact queue requires both retained membership and evidence bound to the current pool. Earlier/outside-pool inspections remain available in optional history or exact-ID search; both contact lookup interfaces label pool membership. Contact view disables anatomical-task traversal and uses its own queue/search.
+
 Русский выбран по умолчанию; English можно включить в переключателе языка. Задача — установить идентичность клетки, выходы дендритов из сомы и отношения ветвей по исходной ЭМ. Рисовать контур каждой мембраны или проверять все синапсы не требуется. Метки и заметки служат свидетельствами к конкретному вопросу. Привычные расположение панелей, связанные 2D/3D, инструменты разметки и перенос работы сохраняются.
 
 ## Область проверки
